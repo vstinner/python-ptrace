@@ -1,0 +1,13 @@
+SOURCES=stack_overflow.c div_zero.c call_null.c abort.c fork.c invalid_write.c invalid_read.c
+PROGRAMS=${SOURCES:S/.c//g} pthread
+CFLAGS=-Wall -O0 -g
+
+all: $(PROGRAMS)
+
+pthread: pthread.c
+	$(CC) -o $@ $(CFLAGS) pthread.c -lpthread
+
+
+clean:
+	rm -f $(PROGRAMS)
+

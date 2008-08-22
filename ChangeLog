@@ -1,0 +1,84 @@
+Changelog
+=========
+
+python-ptrace 0.4.0 (2008-08-19)
+--------------------------------
+
+Visible changes:
+
+ * Rename the project to "python-ptrace" (old name was "Ptrace)
+ * strace.py: create --ignore-regex option
+ * PtraceSignal: support SIGBUS, display the related registers and
+   the instruction
+ * Support execve() syscall tracing
+
+Developer changes:
+
+ * New API is incompatible with 0.3.2
+ * PtraceProcess.waitProcessEvent() accepts optional blocking=False argument
+ * PtraceProcess.getreg()/setreg() are able to read/write i386 and x86-64
+   "sub-registers" like al or bx
+ * Remove iterProc() function, replaced by openProc() with explicit
+   call to .close() to make sure that files are closed
+ * Create searchProcessesByName()
+ * Replace CPU_PPC constant by CPU_POWERPC and create CPU_PPC32 and CPU_PPC64
+ * Create MemoryMapping object, used by readMappings() and findStack() methods
+   of PtraceProcess
+ * Always define all PtraceProcess methods but raise an error if the function
+   is not implemented
+
+Version 0.3.2 (2008-07-25)
+--------------------------
+
+ * Rewrite ip_int2str() using inet_ntoa() to avoid IPy dependency
+ * Add kill() and unlink() syscall prototypes
+ * Fix sign conversion error in ptrace() to fix error detection
+ * Catch OSError in ptrace.disasm (unable to find libdistorm64.so)
+ * PtraceDebugger.addProcess(): detach the process on exception
+ * Breakpoint: don't store bytes if the process is not running anymore
+ * writeError() now re-raise KeyboardInterrupt
+ * PtraceProcess: don't detach or terminate process if it is was running
+ * PtraceProcess: never send SIGTRAP signal to a process!
+
+Version 0.3.1 (2008-07-08)
+--------------------------
+
+Minor update:
+
+ * ptrace.ctypes_errno: use ctypes_support.get_errno() when it's available
+ * Create RUNNING_PYPY constant is ptrace.os_tools
+ * Remove ptrace dependency from ptrace.pydistorm to be able to use
+   it outside ptrace
+
+Version 0.3 (2008-03-26)
+------------------------
+
+ * Support OpenBSD i386
+ * Use ptrace_io() on FreeBSD for faster readBytes()/writeBytes() methods
+ * Use ptrace_peekuser() to read registers on OS without ptrace_getregs()
+   (eg. Linux 2.4 on PPC)
+ * Breakpoint works on PPC CPU (use TRAP instruction)
+ * Delete process and raise ProcessExit on abnormal process death
+   (eg. detected by waitpid(pid))
+ * Write new Python binding to distorm64 library
+ * gdb.py: create "backtrace" command
+ * gdb.py: support operators in expressions (eg. $eip+4)
+
+
+Version 0.2 (2008-02-14)
+------------------------
+
+ * Able to trace multiple processes
+ * Many new gdb.py commands: hexdump, signal, print, etc.
+ * Support i386 (Linux, FreeBSD), x86_64 (Linux) and PPC (Linux)
+ * Guess reason why a signal is sent: invalid memory read, stack
+   overflow, division by zero, etc.
+ * Create simple C program to test strace.py and gdb.py
+ * Move files to three main modules: ptrace.binding, ptrace.syscall
+   and ptrace.debugger
+
+Version 0.1 (2008-02-08)
+------------------------
+
+ * First public release
+
