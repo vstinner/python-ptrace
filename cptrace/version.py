@@ -1,4 +1,4 @@
 PACKAGE = "ptrace"
 VERSION = "0.4"
-WEBSITE = "http://fusil.hachoir.org/trac/wiki/Ptrace"
+WEBSITE = "http://python-ptrace.hachoir.org/"
 LICENSE = "GNU GPL v2"
