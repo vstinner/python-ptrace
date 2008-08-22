@@ -17,7 +17,7 @@ Features:
  * Dump registers, memory mappings, stack, etc.
  * Syscall tracer and parser (strace command)
 
-Website: http://fusil.hachoir.org/trac/wiki/python-ptrace
+Website: http://python-ptrace.hachoir.org/
 
 
 Installation
