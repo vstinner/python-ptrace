@@ -1,9 +1,9 @@
-ptrace authors
-==============
+python-ptrace authors
+=====================
 
 Mickaël Guérin aka KAeL <mickael.guerin AT crocobox.org> - OpenBSD port
 T. Bursztyka aka Tuna <tuna AT lyua.org> - x86_64 port
-Victor Stinner <victor.stinner AT haypocalc.com>
+Victor Stinner <victor.stinner AT haypocalc.com> - python-ptrace author and maintainer
 
 
 Thanks
