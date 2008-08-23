@@ -58,9 +58,11 @@ def findMappings(addresses, process, size):
     return mappings
 
 class SignalInfo(Exception):
-    def __init__(self, text,
-    address=None, size=None, instr=None, process=None, registers=None):
+    def __init__(self, name, text,
+    address=None, size=None, instr=None,
+    process=None, registers=None):
         Exception.__init__(self, text)
+        self.name = name
         self.text = text
         self.instr = instr
         self.registers = extractRegisters(process, instr)
@@ -70,6 +72,7 @@ class SignalInfo(Exception):
 
     def display(self, log):
         log(self.text)
+        self.displayExtra(log)
         if self.instr:
             log("- instruction: %s" % self.instr)
         for mapping in self.mappings:
@@ -77,24 +80,30 @@ class SignalInfo(Exception):
         for name, value in self.registers.iteritems():
             log("- register %s=%s" % (name, formatWordHex(value)))
 
+    def displayExtra(self, log):
+        pass
+
 class DivisionByZero(SignalInfo):
     def __init__(self, instr=None, process=None):
-        SignalInfo.__init__(self, "Division by zero", instr=instr, process=process)
+        SignalInfo.__init__(self, "div_by_zero",
+            "Division by zero", instr=instr, process=process)
 
 class Abort(SignalInfo):
     def __init__(self):
-        SignalInfo.__init__(self, "Program received signal SIGABRT, Aborted.")
+        SignalInfo.__init__(self, "abort",
+            "Program received signal SIGABRT, Aborted.")
 
 class StackOverflow(SignalInfo):
     def __init__(self, stack_ptr, stack_map, instr=None, process=None):
         text = "STACK OVERFLOW! Stack pointer is in %s" % stack_map
-        SignalInfo.__init__(self, text,
+        SignalInfo.__init__(self, "stack_overflow", text,
             address=stack_ptr, registers={'<stack ptr>': stack_ptr},
             instr=instr, process=process)
         self.stack_ptr = stack_ptr
         self.stack_map = stack_map
 
 class InvalidMemoryAcces(SignalInfo):
+    NAME = "invalid_mem_access"
     PREFIX = "Invalid memory access"
     PREFIX_ADDR = "Invalid memory access to %s"
 
@@ -112,20 +121,23 @@ class InvalidMemoryAcces(SignalInfo):
             message = self.PREFIX
         if size:
             message += " (size=%s bytes)" % size
-        SignalInfo.__init__(self, message, address=address, size=size,
-            instr=instr, process=process, registers=registers)
+        SignalInfo.__init__(self, self.NAME, message,
+            address=address, size=size, instr=instr,
+            process=process, registers=registers)
 
 class InvalidRead(InvalidMemoryAcces):
+    NAME = "invalid_read"
     PREFIX = "Invalid read"
     PREFIX_ADDR = "Invalid read from %s"
 
 class InvalidWrite(InvalidMemoryAcces):
+    NAME = "invalid_write"
     PREFIX = "Invalid write"
     PREFIX_ADDR = "Invalid write to %s"
 
 class InstructionError(SignalInfo):
     def __init__(self, address, process=None):
-        SignalInfo.__init__(self,
+        SignalInfo.__init__(self, "instr_error",
             "UNABLE TO EXECUTE CODE AT %s (SEGMENTATION FAULT)" % formatAddress(address),
             address=address,
             process=process,
@@ -133,16 +145,16 @@ class InstructionError(SignalInfo):
 
 class ChildExit(SignalInfo):
     def __init__(self, pid=None, status=None, uid=None):
+        if self.pid is not None and self.status is not None:
+            message = formatProcessStatus(self.status, "Child process %s" % self.pid)
+        else:
+            message = "Child process exited"
+        SignalInfo.__init__(self, "child_exit", message)
         self.pid = pid
         self.status = status
         self.uid = uid
 
-    def display(self, log):
-        if self.pid is not None and self.status is not None:
-            message = formatProcessStatus(self.status, "Child process %s" % self.pid)
-            log(message)
-        else:
-            log("Child process exited")
+    def displayExtra(self, log):
         if self.uid is not None:
             log("Signal sent by user %s" % self.uid)
 
