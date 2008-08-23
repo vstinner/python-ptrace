@@ -1,6 +1,17 @@
 Changelog
 =========
 
+python-ptrace 0.4.1 (2008-08-23)
+--------------------------------
+
+ * The project has a new dedicated website: http://python-ptrace.hachoir.org/
+ * Create cptrace: optional Python binding of ptrace written in C (faster
+   than ptrace, the Python binding written in Python with ctypes)
+ * Add name attribute to SignalInfo classes
+ * Fixes to help Python 3.0 compatibility: don't use sys.exc_clear()
+   (was useless) in writeBacktrace()
+ * ProcessState: create utime, stime, starttime attributes
+
 python-ptrace 0.4.0 (2008-08-19)
 --------------------------------
 
