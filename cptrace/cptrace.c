@@ -1,7 +1,6 @@
 #include <Python.h>
 #include <stdbool.h>
 #include <sys/ptrace.h>
-#include <linux/user.h>
 
 #define UNUSED(arg) arg __attribute__((unused))
 
