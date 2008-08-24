@@ -210,7 +210,7 @@ class Gdb(Application):
         elif command == "proclist":
             self.procList()
         elif command.startswith("attach "):
-            self.attachProcess(command[7:])
+            errmsg = self.attachProcess(command[7:])
         elif command == "regs":
             self.process.dumpRegs()
         elif command == "stack":
@@ -693,7 +693,7 @@ class Gdb(Application):
                 command = command.strip()
                 ok &= self.execute(command)
             if ok:
-                self.previous_command = commands
+                self.previous_command = command_str
         except KeyboardInterrupt:
             self.interrupt()
         except NewProcessEvent, event:
