@@ -145,8 +145,8 @@ class InstructionError(SignalInfo):
 
 class ChildExit(SignalInfo):
     def __init__(self, pid=None, status=None, uid=None):
-        if self.pid is not None and self.status is not None:
-            message = formatProcessStatus(self.status, "Child process %s" % self.pid)
+        if pid is not None and status is not None:
+            message = formatProcessStatus(status, "Child process %s" % pid)
         else:
             message = "Child process exited"
         SignalInfo.__init__(self, "child_exit", message)
