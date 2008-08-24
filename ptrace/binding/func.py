@@ -1,6 +1,5 @@
 from os import strerror
 from ctypes import addressof, c_int
-from ptrace.ctypes_tools import bytes2type
 from ptrace import PtraceError
 from ptrace.ctypes_errno import get_errno
 from ptrace.ctypes_tools import formatAddress
