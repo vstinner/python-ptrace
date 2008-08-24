@@ -8,4 +8,4 @@ patch -p0 < patch
 patch -p0 < patch
 rm patch
 
-patch -p1 < ptrace3000.patch
+patch -p1 < python3.0.patch
