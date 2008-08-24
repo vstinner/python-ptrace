@@ -1,6 +1,15 @@
 Changelog
 =========
 
+python-ptrace 0.4.2
+-------------------
+
+ * BUGFIX: Fix typo in gdb.py (commands => command_str), it wasn't possible to
+   write more than one command...
+ * BUGIFX: Fix typo in SignalInfo class (remove "self."). When a process
+   received a signal SIGCHLD (because of a fork), the debugger exited because
+   of this bug.
+
 python-ptrace 0.4.1 (2008-08-23)
 --------------------------------
 
