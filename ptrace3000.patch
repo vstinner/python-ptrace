@@ -1,0 +1,75 @@
+diff -r -u ptrace2to3/ptrace/debugger/breakpoint.py fusil3000/ptrace/debugger/breakpoint.py
+--- ptrace2to3/ptrace/debugger/breakpoint.py	2008-08-22 13:39:22.000000000 +0200
++++ fusil3000/ptrace/debugger/breakpoint.py	2008-08-20 19:03:29.000000000 +0200
+@@ -25,7 +25,7 @@
+             new_bytes = word2bytes(0x0cc00000)
+         else:
+             # Replace instruction with "INT 3"
+-            new_bytes = "\xCC" * size
++            new_bytes = b"\xCC" * size
+         process.writeBytes(address, new_bytes)
+         self._installed = True
+
+diff -r -u ptrace2to3/ptrace/debugger/process.py fusil3000/ptrace/debugger/process.py
+--- ptrace2to3/ptrace/debugger/process.py	2008-08-23 20:20:51.000000000 +0200
++++ fusil3000/ptrace/debugger/process.py	2008-08-20 19:03:29.000000000 +0200
+@@ -407,7 +407,7 @@
+             size -= subsize
+             address += CPU_WORD_SIZE
+         else:
+-            data = ''
++            data = b''
+
+         while size:
+             # Read word
+@@ -534,9 +534,9 @@
+         while True:
+             done = False
+             data = self.readBytes(address, chunk_length)
+-            if '\0' in data:
++            if 0 in data:
+                 done = True
+-                data = data[:data.index('\0')]
++                data = data[:data.index(b'\0')]
+             if max_size <= size+chunk_length:
+                 data = data[:(max_size-size)]
+                 string.append(data)
+@@ -547,7 +547,7 @@
+                 break
+             size += chunk_length
+             address += chunk_length
+-        return ''.join(string), truncated
++        return b''.join(string), truncated
+
+     def dumpStack(self, log=None):
+         if not log:
+diff -r -u ptrace2to3/ptrace/pydistorm.py fusil3000/ptrace/pydistorm.py
+--- ptrace2to3/ptrace/pydistorm.py	2008-08-23 20:20:51.000000000 +0200
++++ fusil3000/ptrace/pydistorm.py	2008-08-20 19:03:29.000000000 +0200
+@@ -75,8 +75,8 @@
+     # Check arguments
+     if not isinstance(codeOffset, (int, int)):
+         raise TypeError("codeOffset have to be an integer")
+-    if not isinstance(code, str):
+-        raise TypeError("code have to be a string")
++    if not isinstance(code, bytes):
++        raise TypeError("code have to be bytes")
+     if dt not in DECODERS:
+         raise IndexError("Decoding-type must be either Decode16Bits, Decode32Bits or Decode64Bits.")
+
+--- p2to3/gdb.py	2008-08-24 12:02:48.000000000 +0200
++++ p/gdb.py	2008-08-24 11:59:37.000000000 +0200
+@@ -337,10 +337,10 @@
+                 bytes = self.process.readBytes(address, size)
+ 
+                 # Format bytes
+-                hexa = ' '.join( "%02x" % ord(byte) for byte in bytes )
++                hexa = ' '.join( ("%02x" % byte) for byte in bytes )
+                 def toAscii(byte):
+-                    if 32 <= ord(byte) <= 127:
+-                        return byte
++                    if 32 <= byte <= 127:
++                        return chr(byte)
+                     else:
+                         return '.'
+                 ascii = ''.join(toAscii(byte) for byte in bytes)
