@@ -6,7 +6,8 @@ from ptrace.signames import signalName
 from os import (
     WIFSTOPPED, WSTOPSIG,
     WIFSIGNALED, WTERMSIG,
-    WIFEXITED, WEXITSTATUS)
+    WIFEXITED, WEXITSTATUS,
+    WCOREDUMP)
 
 def dumpProcessInfo(log, pid, max_length=None):
     if not RUNNING_LINUX:
@@ -88,18 +89,20 @@ def dumpProcessInfo(log, pid, max_length=None):
 def formatProcessStatus(status, title="Process"):
     if WIFSTOPPED(status):
         signum = WSTOPSIG(status)
-        return "%s stopped by signal %s" % (title, signalName(signum))
-
-    if WIFSIGNALED(status):
+        text = "%s stopped by signal %s" % (title, signalName(signum))
+    elif WIFSIGNALED(status):
         signum = WTERMSIG(status)
-        return "%s killed by signal %s" % (title, signalName(signum))
-
-    if not WIFEXITED(status):
-        raise ValueError("Invalid status: %r" % status)
-
-    exitcode = WEXITSTATUS(status)
-    if exitcode:
-        return "%s exited with code %s" % (title, exitcode)
+        text = "%s killed by signal %s" % (title, signalName(signum))
     else:
-        return "%s exited normally" % title
+        if not WIFEXITED(status):
+            raise ValueError("Invalid status: %r" % status)
+
+        exitcode = WEXITSTATUS(status)
+        if exitcode:
+            text = "%s exited with code %s" % (title, exitcode)
+        else:
+            text = "%s exited normally" % title
+    if WCOREDUMP(status):
+        text += " (core dumped)"
+    return text
 
