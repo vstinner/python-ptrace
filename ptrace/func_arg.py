@@ -24,7 +24,9 @@ class FunctionArgument:
                 else:
                     self.text = repr(self.value)
             except PTRACE_ERRORS, err:
-                writeError(getLogger(), err, "Format argument value error")
+                writeError(getLogger(), err,
+                    "Format argument %s of function %s() value error"
+                    % (self.name, self.function.name))
                 self.text = repr(self.value)
         return self.text
 
