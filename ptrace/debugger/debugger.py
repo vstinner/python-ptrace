@@ -65,14 +65,7 @@ class PtraceDebugger:
             if wanted_pid not in self.dict:
                 raise DebuggerError("Unknown PID: %r" % wanted_pid, pid=wanted_pid)
 
-            try:
-                pid, status = waitpid(wanted_pid, flags)
-            except OSError, err:
-                if err.errno == ECHILD:
-                    process = self[wanted_pid]
-                    raise process.processTerminated()
-                else:
-                    raise err
+            pid, status = waitpid(wanted_pid, flags)
         else:
             pid, status = waitpid(-1, flags)
         if (blocking or pid) and wanted_pid and (pid != wanted_pid):
@@ -86,7 +79,15 @@ class PtraceDebugger:
         """
         process = None
         while not process:
-            pid, status = self._waitpid(wanted_pid, blocking)
+
+            try:
+                pid, status = self._waitpid(wanted_pid, blocking)
+            except OSError, err:
+                if err.errno == ECHILD:
+                    process = self.dict[wanted_pid]
+                    return process.processTerminated()
+                else:
+                    raise err
             if not blocking and not pid:
                 return None
             try:
