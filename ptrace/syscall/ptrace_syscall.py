@@ -8,6 +8,12 @@ from ptrace.syscall.socketcall_call import setupSocketCall
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD
 from ptrace.cpu_info import CPU_WORD_SIZE
 
+PREFORMAT_ARGUMENTS = {
+    "select": (2, 3, 4),
+    "execve": (0, 1),
+    "clone": (0, 1),
+}
+
 class PtraceSyscall(FunctionCall):
     def __init__(self, process, options, regs=None):
         FunctionCall.__init__(self, "syscall", options, SyscallArgument)
@@ -28,14 +34,10 @@ class PtraceSyscall(FunctionCall):
         if self.name == "socketcall" and self.options.replace_socketcall:
             setupSocketCall(self, self.process, self[0], self[1].value)
 
-        # Format arguments before syscall exit
-        if self.name == "select":
-            for argument in self.arguments[1:4]:
-                # Read argument content of arguments 2, 3 and 4
-                argument.format()
-        elif self.name in ("execve", "clone"):
-            # Pre-format all arguments
-            for argument in self.arguments:
+        # Some arguments are lost after the syscall, so format them now
+        if self.name in PREFORMAT_ARGUMENTS:
+            for index in PREFORMAT_ARGUMENTS[self.name]:
+                argument = self.arguments[index]
                 argument.format()
 
     def readSyscall(self, regs):
@@ -77,9 +79,17 @@ class PtraceSyscall(FunctionCall):
                 self.addArgument(value=value)
 
     def exit(self):
+        if self.name in PREFORMAT_ARGUMENTS:
+            preformat = set(PREFORMAT_ARGUMENTS[self.name])
+        else:
+            preformat = set()
+
         # Data pointed by arguments may have changed during the syscall
         # eg. uname() syscall
         for index, argument in enumerate(self.arguments):
+            if index in preformat:
+                # Don't lose preformatted arguments
+                continue
             if argument.type and not argument.type.endswith("*"):
                 continue
             argument.text = None
