@@ -1,14 +1,17 @@
 Changelog
 =========
 
-python-ptrace 0.4.2
--------------------
+python-ptrace 0.4.2 (2008-08-28)
+--------------------------------
 
  * BUGFIX: Fix typo in gdb.py (commands => command_str), it wasn't possible to
    write more than one command...
  * BUGIFX: Fix typo in SignalInfo class (remove "self."). When a process
    received a signal SIGCHLD (because of a fork), the debugger exited because
    of this bug.
+ * BUGFIX: Debugger._wait() return abnormal process exit as a normal event,
+   the event is not raised as an exception
+ * PtraceSignal: don't clear preformatted arguments (eg. arguments of execve)
 
 python-ptrace 0.4.1 (2008-08-23)
 --------------------------------
