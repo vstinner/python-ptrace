@@ -40,13 +40,13 @@ def formatSockaddr(argument, argtype):
     family = value.family
     if family == AF_INET:
         return argument.readStruct(address, sockaddr_in)
-    elif family == AF_FILE:
+    if family == AF_FILE:
         return argument.readStruct(address, sockaddr_un)
-    elif family == AF_NETLINK:
-        return argument.readStruct(address, sockaddr_nl)
-    else:
-        family = SOCKET_FAMILY.get(family, family)
-        return argument.formatPointer("<sockaddr family=%s>" % family, address)
+    if RUNNING_LINUX:
+        if family == AF_NETLINK:
+            return argument.readStruct(address, sockaddr_nl)
+    family = SOCKET_FAMILY.get(family, family)
+    return argument.formatPointer("<sockaddr family=%s>" % family, address)
 
 def setupSocketCall(function, process, socketcall, address):
     # Reset function call
