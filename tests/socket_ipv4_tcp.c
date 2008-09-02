@@ -19,7 +19,7 @@ int main()
 
     addr.sin_family = AF_INET;
     addr.sin_port = htons(80);
-    addr.sin_addr.s_addr = 0xff010203;
+    addr.sin_addr.s_addr = 0x7f000001;
     ret = connect(fd, (struct sockaddr*)&addr, sizeof(addr));
     if (ret < 0)
         perror("connect");
