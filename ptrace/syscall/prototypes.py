@@ -361,6 +361,30 @@ SYSCALL_PROTOTYPES = {
             ("struct timespec*", "rmtp"),
         )),
     "restart_syscall" : ("long", tuple()),
+    "getsockname" : ("long", (
+            ("int", "fd"),
+            ("struct sockaddr*", "name"),
+            ("socklen_t*", "namelen"),
+        )),
+    "getsockopt" : ("long", (
+            ("int", "fd"),
+            ("int", "level"),
+            ("int", "optname"),
+            ("void*", "optval"),
+            ("socklen_t*", "optlen"),
+        )),
+    "setsockopt" : ("long", (
+            ("int", "fd"),
+            ("int", "level"),
+            ("int", "optname"),
+            ("void*", "optval"),
+            ("socklen_t*", "optlen"),
+        )),
+    "bind" : ("long", (
+            ("int", "fd"),
+            ("const struct sockaddr*", "addr"),
+            ("socklen_t", "addrlen"),
+        )),
 }
 
 for orig, copies in ALIASES.iteritems():
