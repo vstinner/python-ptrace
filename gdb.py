@@ -174,7 +174,7 @@ class Gdb(Application):
         text = re.sub(r"(?:0x)?[0-9a-f]+", readHexadecimal, text)
 
         # Reject invalid characters
-        if not re.match(r"^[()<>+*/0-9-]+$", text):
+        if not re.match(r"^[()<>+*/&0-9-]+$", text):
             raise ValueError("Invalid expression: %r" % orig_text)
 
         # Use integer division (a//b) instead of float division (a/b)

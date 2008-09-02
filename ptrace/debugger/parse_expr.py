@@ -7,7 +7,10 @@ REGISTER_REGEX = re.compile(r"([a-z]+[a-z0-9_]+)")
 HEXADECIMAL_REGEX = re.compile(r"0x[0-9a-f]+")
 
 # Make sure that the expression does not contain invalid characters
-EXPR_REGEX = re.compile(r"^[()<>+*/0-9-]+$")
+# Examples:
+#  (1-2)<<5
+#  340&91
+EXPR_REGEX = re.compile(r"^[()<>+*/&0-9-]+$")
 
 # Replace hexadecimal numbers by decimal numbers
 def replaceHexadecimal(regs):
