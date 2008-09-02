@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/utsname.h>
 
-int main(int argc, char *argv[])
+int main()
 {
     char *arg[]= {"/bin/ls", NULL };
     int pid;

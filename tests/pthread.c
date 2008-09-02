@@ -1,11 +1,13 @@
 #include <pthread.h>
 #include <stdio.h>
 
+#define UNUSED(x) x __attribute__((unused))
+
 pthread_t thread;
 pthread_mutex_t mutex;
 int global_counter;
 
-void* nothing(void *data)
+void* nothing(void *UNUSED(data))
 {
     printf("[thread] exit thread\n");
     pthread_exit(NULL);
