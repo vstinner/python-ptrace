@@ -101,7 +101,7 @@ class ProcessSignal(ProcessEvent):
             return
 
         # MOVS* and SCAS* instructions (eg. "MOVSB" or "REP SCASD")
-        match = re.search(r"^(?:REP )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
+        match = re.search(r"^(?:REP(?:NZ)? )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
         if match:
             self.reason = self.movsInstr(fault_address, instr, match)
             return
@@ -185,8 +185,7 @@ class ProcessSignal(ProcessEvent):
                 return
 
         # Last chance: use generic invalid memory access error
-        if fault_address is not None:
-            self.reason = InvalidMemoryAcces(fault_address, instr=instr, process=self.process)
+        self.reason = InvalidMemoryAcces(fault_address, instr=instr, process=self.process)
 
     def mathError(self):
         instr = self.getInstruction()
