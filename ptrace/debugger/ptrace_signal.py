@@ -10,10 +10,11 @@ from ptrace.debugger.signal_reason import (
     DivisionByZero, Abort, StackOverflow,
     InvalidMemoryAcces, InvalidRead, InvalidWrite,
     InstructionError, ChildExit)
+from ptrace.debugger.parse_expr import parseExpression
 import re
 
 # Match a pointer dereference (eg. "DWORD [EDX+0x8]")
-DEREF_REGEX = r'(?:(BYTE|WORD|DWORD|DQWORD) )?\[([^]]+)\]'
+DEREF_REGEX = r'(?P<deref_size>(BYTE|WORD|DWORD|DQWORD) )?\[(?P<deref>[^]]+)\]'
 
 NAMED_WORD_SIZE = {
     'BYTE': 1,
@@ -26,10 +27,20 @@ NAMED_WORD_SIZE = {
 INSTR_REGEX = '(?:[A-Z]{3,10})'
 
 def findDerefSize(match):
-    name = match.group(1)
+    name = match.group("deref_size")
     try:
         return NAMED_WORD_SIZE[name]
     except KeyError:
+        return None
+
+def evalFaultAddress(process, match):
+    expr = match.group('deref')
+    if not expr:
+        return None
+    try:
+        return parseExpression(process, expr)
+    except ValueError, err:
+        print "err: %s" % err
         return None
 
 class ProcessSignal(ProcessEvent):
@@ -79,6 +90,8 @@ class ProcessSignal(ProcessEvent):
         # Invalid read (eg. "MOV reg, [...]")
         match = re.match(r"%s [^,]+, %s" % (INSTR_REGEX, DEREF_REGEX), asm)
         if match:
+            if fault_address is None:
+                fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidRead(fault_address, size=findDerefSize(match),
                 instr=instr, process=self.process)
             return
