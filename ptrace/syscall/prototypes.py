@@ -385,6 +385,16 @@ SYSCALL_PROTOTYPES = {
             ("const struct sockaddr*", "addr"),
             ("socklen_t", "addrlen"),
         )),
+    "connect" : ("long", (
+            ("int", "fd"),
+            ("const struct sockaddr*", "addr"),
+            ("socklen_t", "addrlen"),
+        )),
+    "socket" : ("long", (
+            ("int", "domain"),
+            ("int", "type"),
+            ("int", "protocol"),
+        )),
     "alarm" : ("long", (
             ("unsigned int", "seconds"),
         )),
