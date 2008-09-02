@@ -100,33 +100,46 @@ class ProcessSignal(ProcessEvent):
                 instr=instr, process=self.process)
             return
 
-        # MOVS* instructions (eg. "MOVSB" or "REP MOVSD")
-        match = re.search(r"^(?:REP )?MOVS([BWD])?", asm)
+        # MOVS* and SCAS* instructions (eg. "MOVSB" or "REP SCASD")
+        match = re.search(r"^(?:REP )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
         if match:
-            suffix = match.group(1)
-            size = {'B': 1, 'W': 2, 'D': 4}.get(suffix)
-            error_cls = InvalidMemoryAcces
-            try:
-                if CPU_64BITS:
-                    di = self.process.getreg('rdi')
-                    si = self.process.getreg('rsi')
-                    registers = {'rdi': di, 'rsi': si}
-                else:
-                    di = self.process.getreg('edi')
-                    si = self.process.getreg('esi')
-                    registers = {'edi': di, 'esi': si}
-                if fault_address is not None:
-                    if fault_address == di:
-                        error_cls = InvalidRead
-                    elif fault_address == si:
-                        error_cls = InvalidWrite
-                else:
-                    fault_address = (di, si)
-            except PtraceError:
-                registers = {}
-            self.reason = error_cls(fault_address, size=size, instr=instr,
-                registers=registers, process=self.process)
+            self.reason = self.movsInstr(fault_address, instr, match)
             return
+
+    def movsInstr(self, fault_address, instr, match):
+        operator = match.group("operator")
+        suffix = match.group("suffix")
+        size = {'B': 1, 'W': 2, 'D': 4}.get(suffix)
+        error_cls = InvalidMemoryAcces
+        try:
+            process = self.process
+            if CPU_64BITS:
+                source_reg = 'rdi'
+                dest_reg = 'rdi'
+            else:
+                source_reg = 'edi'
+                dest_reg = 'esi'
+            source_addr = process.getreg(source_reg)
+            registers = {source_reg: source_addr}
+            write = (operator == 'MOVS')
+            if write:
+                dest_addr = process.getreg(dest_reg)
+                registers[dest_reg] = dest_addr
+
+            if fault_address is not None:
+                if fault_address == source_addr:
+                    error_cls = InvalidRead
+                if write and fault_address == dest_addr:
+                    error_cls = InvalidWrite
+            else:
+                if write:
+                    fault_address = (source_addr, dest_addr)
+                else:
+                    fault_address = (source_addr,)
+        except PtraceError:
+            registers = {}
+        return error_cls(fault_address, size=size, instr=instr,
+            registers=registers, process=self.process)
 
     def getSignalInfo(self):
         if RUNNING_LINUX:
