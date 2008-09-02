@@ -43,6 +43,8 @@ def findMappings(addresses, process, size):
     if not size:
         size = 0
     process_mappings = process.readMappings()
+    if not process_mappings:
+        return mappings
     for address in addresses:
         address_str = formatAddress(address)
         if 1 < size:
