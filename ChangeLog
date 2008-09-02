@@ -1,6 +1,13 @@
 Changelog
 =========
 
+python-ptrace 0.4.3
+-------------------
+
+ * Parse socket syscalls on FreeBSD
+ * On invalid memory access (SIGSEGV), eval the dereference expression to get
+   the fault address on OS without siginfo (eg. FreeBSD)
+
 python-ptrace 0.4.2 (2008-08-28)
 --------------------------------
 
