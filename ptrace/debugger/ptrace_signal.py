@@ -76,6 +76,8 @@ class ProcessSignal(ProcessEvent):
         # Invalid write (eg. "MOV [...], value")
         match = re.search(r"^(?:MOV|TEST)[A-Z]* %s," % DEREF_REGEX, asm)
         if match:
+            if fault_address is None:
+                fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidWrite(fault_address, size=findDerefSize(match),
                 instr=instr, process=self.process)
             return
@@ -83,6 +85,8 @@ class ProcessSignal(ProcessEvent):
         # Invalid read (eg. "CMP BYTE [EAX+EDX-0x1], 0x0")
         match = re.search(r"^%s %s," % (INSTR_REGEX, DEREF_REGEX), asm)
         if match:
+            if fault_address is None:
+                fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidRead(fault_address, size=findDerefSize(match),
                 instr=instr, process=self.process)
             return
