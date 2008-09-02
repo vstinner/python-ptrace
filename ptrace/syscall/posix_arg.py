@@ -10,8 +10,8 @@ MMAP_PROT_BITMASK = (
     (0x02000000, "PROT_GROWSUP"),
 )
 
-def formatMmapProt(prot):
-    return formatBits(prot, MMAP_PROT_BITMASK, "PROT_NONE")
+def formatMmapProt(argument):
+    return formatBits(argument.value, MMAP_PROT_BITMASK, "PROT_NONE")
 
 # From /usr/include/bits/mman.h (Ubuntu Feisty, i386)
 ACCESS_MODE_BITMASK = (
@@ -20,8 +20,8 @@ ACCESS_MODE_BITMASK = (
     (4, "R_OK"),
 )
 
-def formatAccessMode(mode):
-    return formatBits(mode, ACCESS_MODE_BITMASK, "F_OK")
+def formatAccessMode(argument):
+    return formatBits(argument.value, ACCESS_MODE_BITMASK, "F_OK")
 
 # From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
 OPEN_MODE_BITMASK = (
@@ -42,8 +42,8 @@ OPEN_MODE_BITMASK = (
     (01000000, "O_NOATIME"),
 )
 
-def formatOpenMode(mode):
-    return formatBits(int(mode), OPEN_MODE_BITMASK, "O_RDONLY", oct)
+def formatOpenMode(argument):
+    return formatBits(int(argument.value), OPEN_MODE_BITMASK, "O_RDONLY", oct)
 
 CLONE_FLAGS_BITMASK = (
     (0x00000100, "CLONE_VM"),
@@ -67,7 +67,8 @@ CLONE_FLAGS_BITMASK = (
     (0x08000000, "CLONE_NEWIPC"),
 )
 
-def formatCloneFlags(flags):
+def formatCloneFlags(argument):
+    flags = argument.value
     bits = readBits(flags, CLONE_FLAGS_BITMASK)
     signum = flags & 0xFF
     if signum:

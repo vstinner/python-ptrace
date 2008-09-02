@@ -1,3 +1,7 @@
+from ptrace.syscall.socketcall import (
+    SOCKET_FAMILY, SOCKET_TYPE, SOCKET_PROTOCOL,
+    SETSOCKOPT_LEVEL, SETSOCKOPT_OPTNAME)
+
 SYSCALL_ARG_DICT = {
     "lseek": {
         "origin": {0: "SEEK_SET", 1: "SEEK_CUR", 2: "SEEK_END"},
@@ -45,5 +49,16 @@ SYSCALL_ARG_DICT = {
             24: "SHMCTL",
         },
     },
+    "socket": {
+        "family": SOCKET_FAMILY,
+        "type": SOCKET_TYPE,
+        "protocol": SOCKET_PROTOCOL,
+    },
+    "getsockopt": {
+        "level": SETSOCKOPT_LEVEL,
+        "optname": SETSOCKOPT_OPTNAME,
+    },
 }
+
+SYSCALL_ARG_DICT["setsockopt"] = SYSCALL_ARG_DICT["getsockopt"]
 

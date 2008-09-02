@@ -385,6 +385,9 @@ SYSCALL_PROTOTYPES = {
             ("const struct sockaddr*", "addr"),
             ("socklen_t", "addrlen"),
         )),
+    "alarm" : ("long", (
+            ("unsigned int", "seconds"),
+        )),
 }
 
 for orig, copies in ALIASES.iteritems():

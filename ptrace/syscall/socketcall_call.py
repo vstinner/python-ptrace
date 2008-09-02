@@ -24,60 +24,34 @@ def ip_int2str(ip):
 
 AF_FILE = 1
 
-class SocketCallArgument(FunctionArgument):
-    def createText(self):
-        syscall = self.function.name
-        name = self.name
-        argtype = self.type
-        value = self.value
-        if syscall == "socket":
-            if name == "family":
-                return SOCKET_FAMILY.get(value, value)
-            if name == "type":
-                return SOCKET_TYPE.get(value, value)
-            if name == "protocol":
-                return SOCKET_PROTOCOL.get(value, value)
-        if syscall == "setsockopt":
-            if name == "level":
-                return SETSOCKOPT_LEVEL.get(value, value)
-            if name == "optname":
-                return SETSOCKOPT_OPTNAME.get(value, value)
-            if name == "optval":
-                optlen = self.function["optlen"].value
-                if optlen == 4:
-                    text = self.function.process.readStruct(self.value, c_int)
-                    return self.formatPointer("<%s>" % text, self.value)
-        if argtype == "struct sockaddr*":
-            address = self.value
-            addr = self.function.process.readStruct(address, sockaddr)
-            family = addr.family
-            if family == AF_INET:
-                return self.readStruct(self.value, sockaddr_in)
-            elif family == AF_FILE:
-                return self.readStruct(self.value, sockaddr_un)
-            elif family == AF_NETLINK:
-                return self.readStruct(self.value, sockaddr_nl)
-            else:
-                family = SOCKET_FAMILY.get(family, family)
-                return self.formatPointer("<sockaddr family=%s>" % family, address)
+def formatOptVal(argument):
+    function = argument.function
+    optlen = function["optlen"].value
+    if optlen == 4:
+        addr = argument.value
+        text = function.process.readStruct(addr, c_int)
+        return argument.formatPointer("<%s>" % text, addr)
+    else:
         return None
 
-    def formatStructValue(self, struct, name, value):
-        if struct.startswith("sockaddr") and name.endswith("family"):
-            return SOCKET_FAMILY.get(value, value)
-        if struct == "sockaddr_in":
-            if name == "sin_port":
-                return ntoh_ushort(value)
-            if name == "sin_addr":
-                ip = ntoh_uint(value.s_addr)
-                return ip_int2str(ip)
-        return None
-
+def formatSockaddr(argument, argtype):
+    address = argument.value
+    value = argument.function.process.readStruct(address, sockaddr)
+    family = value.family
+    if family == AF_INET:
+        return argument.readStruct(address, sockaddr_in)
+    elif family == AF_FILE:
+        return argument.readStruct(address, sockaddr_un)
+    elif family == AF_NETLINK:
+        return argument.readStruct(address, sockaddr_nl)
+    else:
+        family = SOCKET_FAMILY.get(family, family)
+        return argument.formatPointer("<sockaddr family=%s>" % family, address)
 
 def setupSocketCall(function, process, socketcall, address):
     # Reset function call
     function.clearArguments()
-    function.argument_class = SocketCallArgument
+#    function.argument_class = SocketCallArgument
 
     # Setup new function call
     function.process = process
@@ -89,4 +63,12 @@ def setupSocketCall(function, process, socketcall, address):
         value = process.readWord(address)
         function.addArgument(value, argname, argtype)
         address += CPU_WORD_SIZE
+
+def formatSockaddrInStruct(argument, name, value):
+    if name == "sin_port":
+        return ntoh_ushort(value)
+    if name == "sin_addr":
+        ip = ntoh_uint(value.s_addr)
+        return ip_int2str(ip)
+    return None
 

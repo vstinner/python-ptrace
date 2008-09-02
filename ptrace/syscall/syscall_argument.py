@@ -8,7 +8,9 @@ from ptrace.func_arg import FunctionArgument
 from ptrace.syscall.posix_arg import (
     formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags)
 from ptrace.func_call import FunctionCall
-from ptrace.syscall.socketcall_call import setupSocketCall
+from ptrace.syscall.socketcall_call import (
+    setupSocketCall,
+    formatOptVal, formatSockaddr, formatSockaddrInStruct)
 from ptrace.syscall.socketcall import SOCKETCALL
 import re
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
@@ -28,14 +30,29 @@ if RUNNING_LINUX:
 KNOWN_STRUCTS = dict( (struct.__name__, struct) for struct in KNOWN_STRUCTS )
 
 ARGUMENT_CALLBACK = {
+    # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
     "open": {"mode": formatOpenMode},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},
+    "setsockopt": {"optval": formatOptVal},
 }
 
-INTEGER_TYPES = ("int", "size_t", "clockid_t", "long", "socklen_t", "pid_t", "uid_t", "gid_t")
+POINTER_CALLBACK = {
+    # Prototype: callback(argument, argtype) -> str
+    "sockaddr": formatSockaddr,
+}
+
+STRUCT_CALLBACK = {
+    # Prototype: callback(argument, attr_name, attr_value) -> str
+    "sockaddr_in": formatSockaddrInStruct,
+}
+
+INTEGER_TYPES = set((
+    "int", "size_t", "clockid_t", "long",
+    "socklen_t", "pid_t", "uid_t", "gid_t",
+))
 
 def iterBits(data):
     for char in data:
@@ -63,7 +80,7 @@ class SyscallArgument(FunctionArgument):
         except KeyError:
             callback = None
         if callback:
-            return callback(value)
+            return callback(self)
         if syscall == "execve":
             if name in ("argv", "envp"):
                 return self.readCStringArray(value)
@@ -120,13 +137,21 @@ class SyscallArgument(FunctionArgument):
         return formatWordHex(self.value)
 
     def formatValuePointer(self, argtype):
-        syscall = self.function.name
         address = self.value
 
         if not address:
             return "NULL"
         if argtype.startswith("struct "):
             argtype = argtype[7:]
+
+        # Try a callback
+        try:
+            callback = POINTER_CALLBACK[argtype]
+        except KeyError:
+            callback = None
+        if callback:
+            return callback(self, argtype)
+
         if argtype == "int":
             pointee = self.function.process.readStruct(address, c_int)
             return self.formatPointer("<%s>" % pointee, address)
@@ -136,6 +161,8 @@ class SyscallArgument(FunctionArgument):
         if RUNNING_LINUX and argtype == "fd_set":
             fd_set = self.readBits(address, FD_SETSIZE)
             return self.formatPointer("<fdset=(%s)>" % fd_set, address)
+
+        syscall = self.function.name
         if syscall == "rt_sigprocmask" and argtype == "sigset_t":
             size = self.function["sigsetsize"].value * 8
             def formatter(key):
@@ -191,4 +218,10 @@ class SyscallArgument(FunctionArgument):
                 break
         text = "<(%s)>" % ", ".join(text)
         return self.formatPointer(text, address0)
+
+    def formatStructValue(self, struct, name, value):
+        if struct in STRUCT_CALLBACK:
+            callback = STRUCT_CALLBACK[struct]
+            return callback(self, name, value)
+        return None
 
