@@ -4,13 +4,14 @@ from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
 from ptrace.syscall.socketcall import (
     SOCKETCALL, SOCKET_FAMILY, SOCKET_TYPE, SOCKET_PROTOCOL,
     SETSOCKOPT_LEVEL, SETSOCKOPT_OPTNAME,
-    sockaddr, sockaddr_in, sockaddr_un, sockaddr_nl)
+    sockaddr, sockaddr_in, sockaddr_un)
 from ctypes import c_int
 from ptrace.os_tools import RUNNING_LINUX
 from socket import AF_INET, inet_ntoa
 from struct import pack
 if RUNNING_LINUX:
     from socket import AF_NETLINK
+    from ptrace.syscall.socketcall import sockaddr_nl
 
 def ip_int2str(ip):
     """

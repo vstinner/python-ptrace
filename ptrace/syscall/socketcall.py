@@ -1,5 +1,6 @@
-from ctypes import Structure, c_char, c_ushort
+from ctypes import Structure, c_char, c_ushort, c_ubyte
 from ptrace.ctypes_stdint import uint16_t, uint32_t
+from ptrace.os_tools import RUNNING_BSD, RUNNING_LINUX
 
 SOCKETCALL = {
     1: ("socket", (
@@ -158,12 +159,21 @@ SETSOCKOPT_OPTNAME = {
     21: "SO_SNDTIMEO",
 }
 
-sa_family_t = c_ushort
+if RUNNING_BSD:
+    sa_family_t = c_ubyte
+else:
+    sa_family_t = c_ushort
 
 class sockaddr(Structure):
-    _fields_ = (
-        ("family", sa_family_t),
-    )
+    if RUNNING_BSD:
+        _fields_ = (
+            ("len", c_ubyte),
+            ("family", sa_family_t),
+        )
+    else:
+        _fields_ = (
+            ("family", sa_family_t),
+        )
 
 class in_addr(Structure):
     _fields_ = (
@@ -172,11 +182,19 @@ class in_addr(Structure):
 
 # INET socket
 class sockaddr_in(Structure):
-    _fields_ = (
-        ("sin_family", sa_family_t),
-        ("sin_port", uint16_t),
-        ("sin_addr", in_addr),
-    )
+    if RUNNING_BSD:
+        _fields_ = (
+            ("sin_len", c_ubyte),
+            ("sin_family", sa_family_t),
+            ("sin_port", uint16_t),
+            ("sin_addr", in_addr),
+        )
+    else:
+        _fields_ = (
+            ("sin_family", sa_family_t),
+            ("sin_port", uint16_t),
+            ("sin_addr", in_addr),
+        )
 
 # UNIX socket
 class sockaddr_un(Structure):
@@ -186,11 +204,12 @@ class sockaddr_un(Structure):
     )
 
 # Netlink socket
-class sockaddr_nl(Structure):
-    _fields_ = (
-        ("nl_family", sa_family_t),
-        ("nl_pad", c_ushort),
-        ("nl_pid", uint32_t),
-        ("nl_groups", uint32_t),
-    )
+if RUNNING_LINUX:
+    class sockaddr_nl(Structure):
+        _fields_ = (
+            ("nl_family", sa_family_t),
+            ("nl_pad", c_ushort),
+            ("nl_pid", uint32_t),
+            ("nl_groups", uint32_t),
+        )
 
