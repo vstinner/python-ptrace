@@ -1,6 +1,14 @@
 from logging import error
 from ptrace.disasm import HAS_DISASSEMBLER
-from signal import SIGFPE, SIGCHLD, SIGSEGV, SIGBUS, SIGABRT
+from signal import SIGFPE, SIGSEGV, SIGABRT
+try:
+    from signal import SIGCHLD
+except ImportError:
+    SIGCHLD = None
+try:
+    from signal import SIGBUS
+except ImportError:
+    SIGBUS = None
 from ptrace.os_tools import RUNNING_LINUX
 from ptrace.cpu_info import CPU_64BITS
 from ptrace.debugger import ProcessEvent
