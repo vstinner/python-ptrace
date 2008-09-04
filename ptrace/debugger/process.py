@@ -116,7 +116,7 @@ class PtraceProcess:
                 size = stop - start + 1
             else:
                 size = None
-            code = self.readCode(start, size)
+            code = self.readBytes(start, size)
             text = " ".join( "%02x" % ord(byte) for byte in code )
             log("CODE: %s" % text)
             return
@@ -578,13 +578,6 @@ class PtraceProcess:
             log = error
         for map in self.readMappings():
             log("MAPS: %s" % map)
-
-    def readCode(self, address=None, size=None):
-        if address is None:
-            address = self.getInstrPointer(),
-        if size is None:
-            size = DEFAULT_CODE_SIZE
-        return self.readBytes(address, size)
 
     def writeWord(self, address, word):
         """
