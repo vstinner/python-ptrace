@@ -64,7 +64,7 @@ def _write_no_intr(fd, s):
             else:
                 raise
 
-def _traceCommandParent(pid, errpipe_read):
+def _createParent(pid, errpipe_read):
     # Wait for exec to fail or succeed; possibly raising exception
     data = _read_no_intr(errpipe_read, 1048576) # Exceptions limited to 1 MB
     close(errpipe_read)
@@ -73,7 +73,7 @@ def _traceCommandParent(pid, errpipe_read):
         child_exception = pickle.loads(data)
         raise child_exception
 
-def _traceCommandChild(arguments, no_stdout, errpipe_write):
+def _createChild(arguments, no_stdout, errpipe_write):
     # Child code
     try:
         ptrace_traceme()
@@ -89,7 +89,7 @@ def _traceCommandChild(arguments, no_stdout, errpipe_write):
         except OSError:
             pass
     try:
-        _traceCommandExec(arguments, no_stdout)
+        _execChild(arguments, no_stdout)
     except:
         exc_type, exc_value, tb = exc_info()
         # Save the traceback and attach it to the exception object
@@ -98,7 +98,7 @@ def _traceCommandChild(arguments, no_stdout, errpipe_write):
         _write_no_intr(errpipe_write, pickle.dumps(exc_value))
     exit(255)
 
-def _traceCommandExec(arguments, no_stdout):
+def _execChild(arguments, no_stdout):
     if no_stdout:
         try:
             null = open(DEV_NULL_FILENAME , 'wb')
@@ -113,7 +113,7 @@ def _traceCommandExec(arguments, no_stdout):
     except Exception, err:
         raise ChildError(str(err))
 
-def traceCommand(arguments, no_stdout):
+def createChild(arguments, no_stdout):
     errpipe_read, errpipe_write = pipe()
     _set_cloexec_flag(errpipe_write)
 
@@ -121,9 +121,9 @@ def traceCommand(arguments, no_stdout):
     pid = fork()
     if pid:
         close(errpipe_write)
-        _traceCommandParent(pid, errpipe_read)
+        _createParent(pid, errpipe_read)
         return pid
     else:
         close(errpipe_read)
-        _traceCommandChild(arguments, no_stdout, errpipe_write)
+        _createChild(arguments, no_stdout, errpipe_write)
 

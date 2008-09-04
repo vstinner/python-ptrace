@@ -7,7 +7,7 @@ from logging import error
 from ptrace.tools import locateProgram
 from ptrace.debugger import ProcessExit, DebuggerError
 from errno import EPERM
-from ptrace.debugger.trace_cmd import traceCommand
+from ptrace.debugger.child import createChild
 
 class Application:
     def __init__(self):
@@ -42,7 +42,7 @@ class Application:
         parser.add_option_group(log)
 
     def createChild(self, program):
-        return traceCommand(program, self.options.no_stdout)
+        return createChild(program, self.options.no_stdout)
 
     def setupDebugger(self):
         # Set ptrace options
