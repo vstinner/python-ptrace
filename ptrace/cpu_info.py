@@ -1,8 +1,23 @@
+"""
+Constants about the CPU:
+
+ - CPU_BIGENDIAN (bool)
+ - CPU_64BITS (bool)
+ - CPU_WORD_SIZE (int)
+ - CPU_MAX_UINT (int)
+ - CPU_PPC32 (bool)
+ - CPU_PPC64 (bool)
+ - CPU_I386 (bool)
+ - CPU_X86_64 (bool)
+ - CPU_INTEL (bool)
+ - CPU_POWERPC (bool)
+"""
+
 try:
     from os import uname
-    HAS_UNAME = True 
+    HAS_UNAME = True
 except ImportError:
-    HAS_UNAME = False 
+    HAS_UNAME = False
     from platform import architecture
 from sys import byteorder
 from ctypes import sizeof, c_void_p
@@ -28,17 +43,17 @@ if HAS_UNAME:
 else:
     # uname() fallback for Windows
     # I hope that your Windows doesn't run on PPC32/PPC64
-    CPU_PPC32 = False 
-    CPU_PPC64 = False 
-    CPU_I386 = False 
-    CPU_X86_64 = False 
+    CPU_PPC32 = False
+    CPU_PPC64 = False
+    CPU_I386 = False
+    CPU_X86_64 = False
     bits, linkage = architecture()
     if bits == '32bit':
         CPU_I386 = True
     elif bits == '64bit':
         CPU_X86_64 = True
     else:
-        raise ValueError("Unknown architecture bits: %r" % bits) 
+        raise ValueError("Unknown architecture bits: %r" % bits)
 
 CPU_INTEL = (CPU_I386 or CPU_X86_64)
 CPU_POWERPC = (CPU_PPC32 or CPU_PPC64)

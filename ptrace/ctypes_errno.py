@@ -1,8 +1,10 @@
 """
-Function get_errno(): get current errno value.
+Function get_errno(): get the current errno value.
 
-Use __errno_location_sym symbol from libc,
-or PyErr_SetFromErrno() from CPython API.
+Try different implementations:
+ - ctypes_support.get_errno() function
+ - __errno_location_sym symbol from the C library
+ - PyErr_SetFromErrno() from the C Python API
 """
 
 get_errno = None

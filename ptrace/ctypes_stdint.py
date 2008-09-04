@@ -1,11 +1,26 @@
+"""
+Define standard (integers) types.
+
+Signed types:
+ - int8_t
+ - int16_t
+ - int32_t
+ - int64_t
+ - size_t
+
+Unsigned types:
+ - uint8_t
+ - uint16_t
+ - uint32_t
+ - uint64_t
+"""
+
 from ctypes import sizeof, \
     c_byte, c_ubyte, \
     c_short, c_ushort, \
     c_int, c_uint, \
     c_long, c_ulong, \
     c_longlong, c_ulonglong
-
-#------------- ctypes types: uint8_t, int16_t, size_t, ... ---------------
 
 # 8-bit integers
 uint8_t = c_ubyte

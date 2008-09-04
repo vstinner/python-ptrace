@@ -1,3 +1,7 @@
+"""
+Disassembler: only enabled if HAS_DISASSEMBLER is True.
+"""
+
 try:
     from ptrace.cpu_info import CPU_I386, CPU_X86_64
     from ptrace.pydistorm import Decode
@@ -12,6 +16,17 @@ try:
     from ptrace import PtraceError
 
     class Instruction:
+        """
+        A CPU instruction.
+
+        Attributes:
+         - address (int): address of the instruction
+         - size (int): size of the instruction in bytes
+         - mnemonic (str): name of the instruction
+         - operands (str): string describing the operands
+         - hexa (str): bytes of the instruction as an hexadecimal string
+         - text (str): string representing the whole instruction
+        """
         def __init__(self, instr):
             self.address = instr.offset
             self.size = instr.size
@@ -24,10 +39,18 @@ try:
             return self.text
 
     def disassemble(code, address=0x100):
+        """
+        Disassemble the specified byte string, where address is the
+        address of the first instruction.
+        """
         for instr in Decode(address, code, DecodeBits):
             yield Instruction(instr)
 
     def disassembleOne(code, address=0x100):
+        """
+        Disassemble the first instruction of the byte string, where
+        address is the address of the instruction.
+        """
         for instr in disassemble(code, address):
             return instr
         raise PtraceError("Unable to disassemble %r" % code)

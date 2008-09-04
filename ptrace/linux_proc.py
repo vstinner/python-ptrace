@@ -1,3 +1,11 @@
+"""
+Functions and variables to access to Linux proc directory.
+
+Variables:
+ - PROC_DIRNAME: Name of the directory ('/proc')
+ - PAGE_SIZE: size of a memory page
+"""
+
 from os import readlink, listdir
 from os.path import join as path_join
 from resource import getpagesize
@@ -5,15 +13,24 @@ from ptrace.tools import timestampUNIX
 from datetime import timedelta
 
 class ProcError(Exception):
+    """
+    Linux proc directory error.
+    """
     pass
 
 PROC_DIRNAME = '/proc'
 PAGE_SIZE = getpagesize()
 
 def procFilename(*args):
+    """
+    Create a filename in proc directory.
+    """
     return path_join(PROC_DIRNAME, *args)
 
 def openProc(path):
+    """
+    Open a proc entry in read only mode.
+    """
     try:
         filename = procFilename(path)
         return open(filename)
@@ -21,12 +38,20 @@ def openProc(path):
         raise ProcError("Unable to open %r: %s" % (filename, err))
 
 def readProc(path):
+    """
+    Read the content of a proc entry.
+    Eg. readProc("stat") to read /proc/stat.
+    """
     procfile = openProc(path)
     content = procfile.read()
     procfile.close()
     return content
 
 def readProcessProc(pid, key):
+    """
+    Read the content of a process entry in the proc directory.
+    Eg. readProcessProc(pid, "status") to read /proc/pid/status.
+    """
     try:
         return readProc(path_join(str(pid), str(key)))
     except ProcError, error:
@@ -35,11 +60,18 @@ def readProcessProc(pid, key):
 
 class ProcessState:
     """
-    Attributes:
-    - pid, ppid, pgrp (int)
-    - program (str)
-    - state (str)
-    - queue (list of int)
+    Processus state. Attributes:
+    - state (str): process status ('R', 'S', 'T', ...)
+    - program (str): program name
+    - pid (int): process identifier
+    - ppid (int): parent process identifier
+    - pgrp (int): process group
+    - session (int): session identifier
+    - tty_nr (int): tty number
+    - tpgid (int)
+    - utime (int): user space time (jiffies)
+    - stime (int): kernel space time (jiffies)
+    - starttime (int): start time
     """
     STATE_NAMES = {
         "R": "running",
@@ -71,15 +103,25 @@ class ProcessState:
         self.starttime = stat[18]
 
 def readProcessStat(pid):
+    """
+    Read the process state ('stat') as a ProcessState object.
+    """
     stat = readProcessProc(pid, 'stat')
     return ProcessState(stat)
 
 def readProcessStatm(pid):
+    """
+    Read the process memory status ('statm') as a list of integers.
+    Values are in bytes (and not in pages).
+    """
     statm = readProcessProc(pid, 'statm')
     statm = [ int(item)*PAGE_SIZE for item in statm.split() ]
     return statm
 
 def readProcessProcList(pid, key):
+    """
+    Read a process entry as a list of strings.
+    """
     data = readProcessProc(pid, key)
     if not data:
         # Empty file: empty list
@@ -90,6 +132,9 @@ def readProcessProcList(pid, key):
     return data
 
 def readProcessLink(pid, key):
+    """
+    Read a process link.
+    """
     try:
         filename = procFilename(str(pid), str(key))
         return readlink(filename)
@@ -98,7 +143,10 @@ def readProcessLink(pid, key):
 
 def readProcesses():
     """
-    Iterate on process directories from /proc
+    Read all processes identifiers. The function is a generator,
+    use it with: ::
+
+       for pid in readProcesses(): ...
     """
     for filename in listdir(PROC_DIRNAME):
         try:
@@ -108,6 +156,10 @@ def readProcesses():
             continue
 
 def readProcessCmdline(pid, escape_stat=True):
+    """
+    Read the process command line. If escape_stat is True, format program name
+    with "[%s]" if the process has no command line, eg. "[khelper]".
+    """
     # Try /proc/42/cmdline
     try:
         cmdline = readProcessProcList(pid, 'cmdline')
@@ -128,9 +180,14 @@ def readProcessCmdline(pid, escape_stat=True):
 
 def searchProcessesByName(process_name):
     """
-    Find all processes have the specified name
-    (eg. "ssh" to find "/usr/bin/ssh").
-    This function is a generating yielding the process identifier.
+    Find all processes matching the program name pattern.
+    Eg. pattern "ssh" will find the program "/usr/bin/ssh".
+
+    This function is a generator yielding the process identifier,
+    use it with: ::
+
+       for pid in searchProcessByName(pattern):
+          ...
     """
     suffix = '/'+process_name
     for pid in readProcesses():
@@ -143,8 +200,9 @@ def searchProcessesByName(process_name):
 
 def searchProcessByName(process_name):
     """
-    Find process identifier (PID) using its name
-    (eg. "ssh" to find "/usr/bin/ssh").
+    Function similar to searchProcessesByName() but only return the identifier
+    of the first matching process. Raise a ProcError if there is no matching
+    process.
     """
     for pid in searchProcessesByName(process_name):
         return pid
@@ -152,7 +210,7 @@ def searchProcessByName(process_name):
 
 def getUptime():
     """
-    Get system uptime: return datetime.timedelta object.
+    Get the system uptime as a datetime.timedelta object.
     """
     uptime = readProc('uptime')
     uptime = uptime.strip().split()
@@ -161,7 +219,7 @@ def getUptime():
 
 def getSystemBoot():
     """
-    Get system boot date, return datetime.datetime object.
+    Get the system boot date as a datetime.datetime object.
     """
     if getSystemBoot.value is None:
         stat_file = openProc('stat')

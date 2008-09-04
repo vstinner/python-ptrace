@@ -1,3 +1,17 @@
+"""
+Constants about the operating system:
+
+ - RUNNING_PYPY (bool)
+ - RUNNING_WINDOWS (bool)
+ - RUNNING_LINUX (bool)
+ - RUNNING_FREEBSD (bool)
+ - RUNNING_OPENBSD (bool)
+ - RUNNING_MACOSX (bool)
+ - RUNNING_BSD (bool)
+ - HAS_PROC (bool)
+ - HAS_PTRACE (bool)
+"""
+
 from sys import platform, version
 
 RUNNING_PYPY = ("pypy" in version.lower())

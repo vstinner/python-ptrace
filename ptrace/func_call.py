@@ -1,6 +1,9 @@
 from ptrace.func_arg import FunctionArgument
 
 class FunctionCallOptions:
+    """
+    Options to format a function call and its arguments.
+    """
     def __init__(self,
     write_types=False, write_argname=False,
     replace_socketcall=True, string_max_length=300,
@@ -13,6 +16,19 @@ class FunctionCallOptions:
         self.max_array_count = max_array_count
 
 class FunctionCall:
+    """
+    A function call. Attributes:
+     - name (str): function name
+     - arguments: list of FunctionArgument objects
+     - restype (str, optional): result type
+     - resvalue (optional): result value
+     - argument_class: class used to build the new arguments
+
+    Methods:
+     - format(): create a string representation of the call
+     - addArgument(): add a new argument
+     - clearArguments(): remove all arguments
+    """
     def __init__(self, name, options, argument_class=FunctionArgument):
         self.name = name
         self.options = options

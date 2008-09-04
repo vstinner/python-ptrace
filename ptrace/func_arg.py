@@ -3,6 +3,18 @@ from logging import getLogger
 from ptrace.ctypes_tools import formatAddress
 
 class FunctionArgument:
+    """
+    Description of a function argument. Attributes:
+     - function: a Function objet
+     - index (int): index of the argument (starting at zero)
+     - options: a FunctionCallOptions objet
+     - value (int)
+     - type (str, optional)
+     - text (str): string describing the argument
+
+    Don't use text attribute directly, use getText() to format the
+    argument instead.
+    """
     def __init__(self, function, index, options,
     value=None, type=None, name=None):
         self.function = function
