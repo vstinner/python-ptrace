@@ -1,4 +1,4 @@
-from ptrace.syscall.socketcall import (
+from ptrace.syscall.socketcall_constants import (
     SOCKET_FAMILY, SOCKET_TYPE, SOCKET_PROTOCOL,
     SETSOCKOPT_LEVEL, SETSOCKOPT_OPTNAME)
 

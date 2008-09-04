@@ -1,6 +1,6 @@
 from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
-from ptrace.syscall.socketcall import (
+from ptrace.syscall.socketcall_constants import (
     SOCKETCALL, SOCKET_FAMILY,
     sockaddr, sockaddr_in, sockaddr_un)
 from ctypes import c_int
@@ -9,7 +9,7 @@ from socket import AF_INET, inet_ntoa
 from struct import pack
 if RUNNING_LINUX:
     from socket import AF_NETLINK
-    from ptrace.syscall.socketcall import sockaddr_nl
+    from ptrace.syscall.socketcall_constants import sockaddr_nl
 
 def ip_int2str(ip):
     """

@@ -7,7 +7,7 @@ from ptrace.func_call import FunctionCallOptions
 from sys import stderr, exit
 from optparse import OptionParser
 from logging import getLogger, error
-from ptrace.syscall.socketcall import SOCKETCALL
+from ptrace.syscall.socketcall_constants import SOCKETCALL
 from ptrace.compatibility import any
 from ptrace.error import PTRACE_ERRORS, writeError
 import re

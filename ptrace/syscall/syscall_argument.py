@@ -11,7 +11,7 @@ from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall_call import (
     setupSocketCall,
     formatOptVal, formatSockaddr, formatSockaddrInStruct)
-from ptrace.syscall.socketcall import SOCKETCALL
+from ptrace.syscall.socketcall_constants import SOCKETCALL
 import re
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS
