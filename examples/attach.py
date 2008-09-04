@@ -2,8 +2,13 @@ from ptrace.debugger.debugger import PtraceDebugger
 from sys import stderr, argv, exit
 
 def playWithProcess(process):
-    print "== REGISTERS =="
+    print "Dump process registers"
     process.dumpRegs()
+    print "Continue process execution"
+    process.cont()
+    print "Wait next process event..."
+    event = process.waitEvent()
+    print "New process event: %s" % event
 
 def main():
     # Get the process identifier
