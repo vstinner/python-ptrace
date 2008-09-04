@@ -14,7 +14,7 @@ def main():
 
     # Create the debugger and attach the process
     dbg = PtraceDebugger()
-    process = dbg.tracePID(pid)
+    process = dbg.addProcess(pid, False)
 
     # Play with the process and then quit
     playWithProcess(process)
