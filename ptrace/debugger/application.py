@@ -41,8 +41,8 @@ class Application:
             action="store_true", default=False)
         parser.add_option_group(log)
 
-    def createChild(self, program):
-        return createChild(program, self.options.no_stdout)
+    def createChild(self, arguments, env=None):
+        return createChild(arguments, self.options.no_stdout, env)
 
     def setupDebugger(self):
         # Set ptrace options

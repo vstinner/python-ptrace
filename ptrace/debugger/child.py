@@ -1,7 +1,10 @@
 """
 Error pipe and serialization code comes from Python 2.5 subprocess module.
 """
-from os import fork, execv, close, dup2, pipe, waitpid, read, write
+from os import (
+    fork, execv, execve, waitpid,
+    close, dup2, pipe,
+    read, write)
 from sys import exc_info
 from traceback import format_exception
 from ptrace.os_tools import RUNNING_WINDOWS
@@ -73,7 +76,7 @@ def _createParent(pid, errpipe_read):
         child_exception = pickle.loads(data)
         raise child_exception
 
-def _createChild(arguments, no_stdout, errpipe_write):
+def _createChild(arguments, no_stdout, env, errpipe_write):
     # Child code
     try:
         ptrace_traceme()
@@ -89,7 +92,7 @@ def _createChild(arguments, no_stdout, errpipe_write):
         except OSError:
             pass
     try:
-        _execChild(arguments, no_stdout)
+        _execChild(arguments, no_stdout, env)
     except:
         exc_type, exc_value, tb = exc_info()
         # Save the traceback and attach it to the exception object
@@ -98,7 +101,7 @@ def _createChild(arguments, no_stdout, errpipe_write):
         _write_no_intr(errpipe_write, pickle.dumps(exc_value))
     exit(255)
 
-def _execChild(arguments, no_stdout):
+def _execChild(arguments, no_stdout, env):
     if no_stdout:
         try:
             null = open(DEV_NULL_FILENAME , 'wb')
@@ -109,11 +112,24 @@ def _execChild(arguments, no_stdout):
             close(2)
             close(1)
     try:
-        execv(arguments[0], arguments)
+        if env is not None:
+            execve(arguments[0], arguments, env)
+        else:
+            execv(arguments[0], arguments)
     except Exception, err:
         raise ChildError(str(err))
 
-def createChild(arguments, no_stdout):
+def createChild(arguments, no_stdout, env=None):
+    """
+    Create a child process:
+     - arguments: list of string where (eg. ['ls', '-la'])
+     - no_stdout: if True, use null device for stdout/stderr
+     - env: environment variables dictionary
+
+    Use:
+     - env={} to start with an empty environment
+     - env=None (default) to copy the environment
+    """
     errpipe_read, errpipe_write = pipe()
     _set_cloexec_flag(errpipe_write)
 
@@ -125,5 +141,5 @@ def createChild(arguments, no_stdout):
         return pid
     else:
         close(errpipe_read)
-        _createChild(arguments, no_stdout, errpipe_write)
+        _createChild(arguments, no_stdout, env, errpipe_write)
 
