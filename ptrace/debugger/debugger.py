@@ -23,13 +23,13 @@ class PtraceDebugger:
         self.trace_sysgood = False
         self.traceSysgood()
 
-    def addProcess(self, pid, is_attached, parent=None):
+    def addProcess(self, pid, is_attached):
         """
         ptrace: Parent PtraceProcess() object
         """
         if pid in self.dict:
             raise KeyError("Process % is already registered!" % pid)
-        process = PtraceProcess(self, pid, is_attached, parent=parent)
+        process = PtraceProcess(self, pid, is_attached)
         info("Attach %s to debugger" % process)
         self.dict[pid] = process
         self.list.append(process)
