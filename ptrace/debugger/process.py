@@ -58,6 +58,97 @@ DEFAULT_NB_INSTR = 10
 DEFAULT_CODE_SIZE = 24
 
 class PtraceProcess:
+    """
+    Process traced by a PtraceDebugger.
+
+    Methods
+    =======
+
+     * control execution:
+
+       - singleStep(): execute one instruction
+       - cont(): continue the execution
+       - syscall(): break at next syscall
+       - setInstrPointer(): change the instruction pointer
+       - kill(): send a signal to the process
+       - terminate(): kill the process
+
+     * wait an event:
+
+      - waitEvent(): wait next process event
+      - waitSignals(): wait a signal
+
+     * get status
+
+       - getreg(): get a register
+       - getInstrPointer(): get the instruction pointer
+       - getStackPointer(): get the stack pointer
+       - getFramePointer(): get the stack pointer
+       - getregs(): get all registers, eg. regs=getregs(); print regs.eax
+       - disassemble(): assembler code of the next instructions
+       - disassembleOne(): assembler code of the next instruction
+       - findStack(): get stack memory mapping
+       - getsiginfo(): get signal informations
+       - getBacktrace(): get the current backtrace
+
+     * set status
+
+       - setreg(): set a register
+       - setregs(): set all registers
+
+     * memory access:
+
+       - readWord(): read a memory word
+       - readBytes(): read some bytes
+       - readStruct(): read a structure
+       - readArray(): read an array
+       - readCString(): read a C string
+       - readMappings(): get all memory mappings
+       - writeWord(): write a memory word
+       - writeBytes(): write some bytes
+
+     * display status:
+
+       - dumpCore(): display the next instructions
+       - dumpStack(): display some memory words around the stack pointer
+       - dumpMaps(): display memory mappings
+       - dumpRegs(): display all registers
+
+     * breakpoint:
+
+       - createBreakpoint(): set a breakpoint
+       - findBreakpoint(): find a breakpoint
+       - removeBreakpoint(): remove a breakpoint
+
+     * other:
+
+       - setoptions(): set ptrace options
+
+    See each method to get better documentation. You are responsible
+    to manage the process state: some methods may fail or crash your
+    processus if they are called when the process is in the wrong
+    state.
+
+    Attributes
+    ==========
+
+     * main attributes:
+       - pid: identifier of the process
+       - debugger: PtraceDebugger instance
+       - breakpoints: dictionary of active breakpoints
+
+     * state:
+       - running: if True, the process is alive, otherwise the process
+         doesn't exist anymore
+       - is_attached: if True, the process is attached by ptrace
+       - was_attached: if True, the process will be detached at exit
+       - is_stopped: if True, the process is stopped, otherwise it's
+         running
+       - syscall_state: control syscall tracing
+
+    Sometimes, is_stopped value is wrong. You might use isTraced() to
+    make sure that the process is stopped.
+    """
     def __init__(self, debugger, pid, is_attached):
         self.debugger = debugger
         self.breakpoints = {}
@@ -175,7 +266,6 @@ class PtraceProcess:
         return disassembleOne(code, address)
 
     def findStack(self):
-        regex = re.compile(r'^([0-9a-f]+)-([0-9a-f]+).*\[stack\]$')
         for map in self.readMappings():
             if map.pathname == "[stack]":
                 return map
