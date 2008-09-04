@@ -14,18 +14,60 @@ class DebuggerError(PtraceError):
     pass
 
 class PtraceDebugger:
+    """
+    Debugger managing one or multiple processes at the same time.
+
+    Methods
+    =======
+
+     * Process list:
+       - addProcess(): add a new process
+       - deleteProcess(): remove a process from the debugger
+
+     * Wait for an event:
+       - waitProcessEvent(): wait for a process event
+       - waitSignals(): wait for a signal
+       - waitSyscall(): wait for the next syscall event
+
+     * Options:
+      - traceForks(): enable fork tracing
+      - traceExec(): enable exec() tracing
+      - enableSysgood(): enable sysgood option
+
+     * Other:
+       - quit(): quit the debugger, terminate all processes
+
+    Operations
+    ==========
+
+     - iterarate on all processes: "for process in debugger: ..."
+     - get a process by its identifier: "process = debugger[pid]"
+     - get the number of processes: len(debugger)
+
+    Attributes
+    ==========
+
+     - dict: processes dictionary (pid -> PtraceProcess)
+     - list: processes list
+     - options: ptrace options
+     - trace_fork (bool): fork() tracing is enabled?
+     - trace_exec (bool): exec() tracing is enabled?
+     - use_sysgood (bool): sysgood option is enabled?
+    """
     def __init__(self):
         self.dict = {}   # pid -> PtraceProcess object
         self.list = []
         self.options = 0
         self.trace_fork = False
         self.trace_exec = False
-        self.trace_sysgood = False
-        self.traceSysgood()
+        self.use_sysgood = False
+        self.enableSysgood()
 
     def addProcess(self, pid, is_attached):
         """
-        ptrace: Parent PtraceProcess() object
+        Add a new process using its identifier. Use is_attached=False to
+        attach an existing (running) process, and is_attached=True to trace
+        a new (stopped) process.
         """
         if pid in self.dict:
             raise KeyError("Process % is already registered!" % pid)
@@ -49,6 +91,9 @@ class PtraceDebugger:
         return process
 
     def quit(self):
+        """
+        Quit the debugger: terminate all processes in reverse order.
+        """
         info("Quit debugger")
         # Terminate processes in reverse order
         # to kill children before parents
@@ -58,6 +103,13 @@ class PtraceDebugger:
             process.detach()
 
     def _waitpid(self, wanted_pid, blocking=True):
+        """
+        Wait for a process event from a specific process (if wanted_pid is
+        set) or any process (wanted_pid=None). The call is blocking is
+        blocking option is True. Return the tuple (pid, status).
+
+        See os.waitpid() documentation for explainations about the result.
+        """
         flags = 0
         if not blocking:
             flags |= WNOHANG
@@ -75,11 +127,12 @@ class PtraceDebugger:
 
     def _wait(self, wanted_pid, blocking=True):
         """
-        Return None if there is no new event.
+        Wait for a process event from the specified process identifier. If
+        blocking=False, return None if there is no new event, otherwise return
+        an objet based on ProcessEvent.
         """
         process = None
         while not process:
-
             try:
                 pid, status = self._waitpid(wanted_pid, blocking)
             except OSError, err:
@@ -97,11 +150,18 @@ class PtraceDebugger:
         return process.processStatus(status)
 
     def waitProcessEvent(self, pid=None, blocking=True):
+        """
+        Wait for a process event from a specific process (if pid option is
+        set) or any process (default). If blocking=False, return None if there
+        is no new event, otherwise return an objet based on ProcessEvent.
+        """
         return self._wait(pid, blocking)
 
     def waitSignals(self, *signals, **kw):
         """
-        No signal means "any signal"
+        Wait for any signal or some specific signals (if specified) from a
+        specific process (if pid keyword is set) or any process (default).
+        Return a ProcessSignal object or raise an unexpected ProcessEvent.
         """
         pid = kw.get('pid', None)
         while True:
@@ -114,8 +174,13 @@ class PtraceDebugger:
             raise event
 
     def waitSyscall(self, process=None):
+        """
+        Wait for the next syscall event (enter or exit) for a specific process
+        (if specified) or any process (default). Return a ProcessSignal object
+        or raise an unexpected ProcessEvent.
+        """
         signum = SIGTRAP
-        if self.trace_sysgood:
+        if self.use_sysgood:
             signum |= 0x80
         if process:
             return self.waitSignals(signum, pid=process.pid)
@@ -123,6 +188,9 @@ class PtraceDebugger:
             return self.waitSignals(signum)
 
     def deleteProcess(self, process=None, pid=None):
+        """
+        Delete a process from the process list.
+        """
         if not process:
             try:
                 process = self.dict[pid]
@@ -138,6 +206,9 @@ class PtraceDebugger:
             pass
 
     def traceFork(self):
+        """
+        Enable fork() tracing. Do nothing if it's not supported.
+        """
         if not HAS_PTRACE_EVENTS:
             raise DebuggerError("Tracing fork events is not supported on this architecture or operating system")
         self.options |= PTRACE_O_TRACEFORK | PTRACE_O_TRACEVFORK
@@ -145,17 +216,25 @@ class PtraceDebugger:
         info("Debugger trace forks (options=%s)" % self.options)
 
     def traceExec(self):
+        """
+        Enable exec() tracing. Do nothing if it's not supported.
+        """
         if not HAS_PTRACE_EVENTS:
             # no effect on OS without ptrace events
             return
         self.trace_exec = True
         self.options |= PTRACE_O_TRACEEXEC
 
-    def traceSysgood(self):
+    def enableSysgood(self):
+        """
+        Enable sysgood option: ask the kernel to set bit #7 of the signal
+        number if the signal comes from the kernel space. If the signal comes
+        from the user space, the bit is unset.
+        """
         if not HAS_PTRACE_EVENTS:
             # no effect on OS without ptrace events
             return
-        self.trace_sysgood = True
+        self.use_sysgood = True
         self.options |= PTRACE_O_TRACESYSGOOD
 
     def __getitem__(self, pid):

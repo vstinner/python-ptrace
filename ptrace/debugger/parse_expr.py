@@ -12,8 +12,11 @@ HEXADECIMAL_REGEX = re.compile(r"0x[0-9a-f]+")
 #  340&91
 EXPR_REGEX = re.compile(r"^[()<>+*/&0-9-]+$")
 
-# Replace hexadecimal numbers by decimal numbers
 def replaceHexadecimal(regs):
+    """
+    Convert an hexadecimal number to decimal number (as string).
+    Callback used by parseExpression().
+    """
     text = regs.group(0)
     if text.startswith("0x"):
         text = text[2:]
@@ -24,7 +27,19 @@ def replaceHexadecimal(regs):
 
 def parseExpression(process, text):
     """
-    Parse an expression
+    Parse an expression. Syntax:
+     - "10": decimal number
+     - "0x10": hexadecimal number
+     - "eax": register value
+     - "a+b", "a-b", "a*b", "a/b", "a**b", "a<<b", "a>>b": operators
+
+    >>> from ptrace.mockup import FakeProcess
+    >>> process = FakeProcess()
+    >>> parseExpression(process, "1+1")
+    2
+    >>> process.setreg("eax", 3)
+    >>> parseExpression(process, "eax*0x10")
+    48
     """
     # Remove spaces and convert to lower case
     text = text.strip()

@@ -20,6 +20,22 @@ PROC_MAP_REGEX = re.compile(
     r'(?: +(.*))?')
 
 class MemoryMapping:
+    """
+    Process memory mapping (metadata about the mapping).
+
+    Attributes:
+     - start (int): first byte address
+     - end (int): last byte address + 1
+     - permissions (str)
+     - offset (int): for file, offset in bytes from the file start
+     - major_device / minor_device (int): major / minor device number
+     - inode (int)
+     - pathname (str)
+
+    Operations:
+     - "address in mapping" checks the address is in the mapping.
+     - "str(mapping)" create one string describing the mapping
+    """
     def __init__(self, start, end, permissions, offset, major_device, minor_device, inode, pathname):
         self.start = start
         self.end = end
@@ -41,6 +57,14 @@ class MemoryMapping:
         return text
 
 def readProcessMappings(process):
+    """
+    Read all memory mappings of the specified process.
+
+    Return a list of MemoryMapping objects, or empty list if it's not possible
+    to read the mappings.
+
+    May raise a ProcessError.
+    """
     maps = []
     if not HAS_PROC:
         return maps

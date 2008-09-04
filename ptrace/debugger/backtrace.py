@@ -3,6 +3,14 @@ from ptrace.cpu_info import CPU_WORD_SIZE, CPU_MAX_UINT
 from ptrace import PtraceError
 
 class BacktraceFrame:
+    """
+    Backtrace frame.
+
+    Attributes:
+     - ip: instruction pointer
+     - name: name of the function
+     - arguments: value of the arguments
+    """
     def __init__(self, ip):
         self.ip = ip
         self.name = u"???"
@@ -13,6 +21,9 @@ class BacktraceFrame:
         return u"IP=%s: %s (%s)" % (formatAddress(self.ip), self.name, ", ".join(arguments))
 
 class Backtrace:
+    """
+    Backtrace: all process frames since the start function.
+    """
     def __init__(self):
         self.frames = []
         self.truncated = False
@@ -27,6 +38,13 @@ class Backtrace:
         return len(self.frames)
 
 def getBacktrace(process, max_args=6, max_depth=20):
+    """
+    Get the current backtrace of the specified process:
+     - max_args: maximum number of arguments in a frame
+     - max_depth: maximum number of frames
+
+    Return a Backtrace object.
+    """
     backtrace = Backtrace()
 
     # Get current instruction and frame pointer
@@ -70,6 +88,14 @@ def getBacktrace(process, max_args=6, max_depth=20):
     return backtrace
 
 def getBacktraceFrame(process, ip, fp, nargs):
+    """
+    Get a backtrace frame:
+     - ip: instruction pointer
+     - fp: frame pointer
+     - nargs: number of arguments
+
+    Return a BacktraceFrame object.
+    """
     frame = BacktraceFrame(ip)
     address = fp + CPU_WORD_SIZE
     try:

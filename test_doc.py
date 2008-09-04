@@ -36,7 +36,8 @@ def main():
     # Test documentation of some functions/classes
     testModule("ptrace.compatibility")
     testModule("ptrace.tools")
-    testModule("ptrace.syscall.socketcall_call")
+    testModule("ptrace.debugger.parse_expr")
+    testModule("ptrace.syscall.socketcall")
 
 if __name__ == "__main__":
     main()

@@ -1,13 +1,19 @@
 Changelog
 =========
 
-python-ptrace 0.4.3
--------------------
+python-ptrace 0.5
+-----------------
+
+ * BREAK API:
+   - Rename PtraceDebugger.traceSysgood() to PtraceDebugger.enableSysgood()
+   - Rename PtraceDebugger.trace_sysgood to PtraceDebugger.use_sysgood
+   - Remove PtraceProcess.readCode()
 
  * Parse socket syscalls on FreeBSD
  * On invalid memory access (SIGSEGV), eval the dereference expression to get
    the fault address on OS without siginfo (eg. FreeBSD)
  * Fix imports to get a minimal support of Windows
+ * Write an example (the most simple debugger) and begin to document the code
 
 python-ptrace 0.4.2 (2008-08-28)
 --------------------------------
