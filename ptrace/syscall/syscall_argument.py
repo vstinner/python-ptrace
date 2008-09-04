@@ -8,8 +8,7 @@ from ptrace.func_arg import FunctionArgument
 from ptrace.syscall.posix_arg import (
     formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags)
 from ptrace.func_call import FunctionCall
-from ptrace.syscall.socketcall_call import (
-    setupSocketCall,
+from ptrace.syscall.socketcall import (setupSocketCall,
     formatOptVal, formatSockaddr, formatSockaddrInStruct)
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 import re

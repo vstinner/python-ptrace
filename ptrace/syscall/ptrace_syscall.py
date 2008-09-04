@@ -4,7 +4,7 @@ from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
 from ptrace.func_call import FunctionCall
 from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, SyscallArgument
-from ptrace.syscall.socketcall_call import setupSocketCall
+from ptrace.syscall.socketcall import setupSocketCall
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD
 from ptrace.cpu_info import CPU_WORD_SIZE
 
