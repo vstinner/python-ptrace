@@ -2,12 +2,14 @@ from optparse import OptionGroup
 from logging import (getLogger, StreamHandler,
     DEBUG, INFO, WARNING, ERROR)
 from os import fork, execv, close, dup2
+from subprocess import MAXFD
 from sys import stderr, exit
 from ptrace import PtraceError
 from ptrace.binding import ptrace_traceme
 from logging import error
 from ptrace.tools import locateProgram
 from ptrace.debugger import ProcessExit, DebuggerError
+from ptrace.process_tools import DEV_NULL_FILENAME
 from errno import EPERM
 
 class Application:
@@ -54,12 +56,17 @@ class Application:
         except PtraceError, err:
             print >>stderr, "CHILD PTRACE ERROR! %s" % err
             exit(1)
+        for fd in xrange(3, MAXFD):
+            try:
+                close(fd)
+            except OSError:
+                pass
         if self.options.no_stdout:
             try:
-                null = open('/dev/null', 'w')
+                null = open(DEV_NULL_FILENAME , 'wb')
                 dup2(null.fileno(), 1)
-                del null
                 dup2(1, 2)
+                null.close()
             except IOError, err:
                 close(2)
                 close(1)

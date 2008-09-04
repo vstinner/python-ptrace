@@ -10,6 +10,11 @@ if not RUNNING_WINDOWS:
         WIFEXITED, WEXITSTATUS,
         WCOREDUMP)
 
+if RUNNING_WINDOWS:
+    DEV_NULL_FILENAME = ':NUL'
+else:
+    DEV_NULL_FILENAME = '/dev/null'
+
 def dumpProcessInfo(log, pid, max_length=None):
     if not RUNNING_LINUX:
         log("Process ID: %s" % pid)
