@@ -21,6 +21,7 @@ from signal import SIGTRAP, SIGINT
 from ptrace.terminal import enableEchoMode, terminalWidth
 from errno import ESRCH
 from ptrace.cpu_info import CPU_POWERPC
+from ptrace.debugger import ChildError
 import re
 try:
     # Use readline for better raw_input()
@@ -721,25 +722,33 @@ class Gdb(Application):
                 self.deleteProcess(err.pid)
         return False
 
+    def runDebugger(self):
+        self.setupDebugger()
+
+        # Create new process
+        try:
+            self.process = self.createProcess()
+        except ChildError, err:
+            writeError(getLogger(), err, "Unable to create child process")
+            return
+        if not self.process:
+            return
+
+        # Trace syscalls
+        self.invite = '(gdb) '
+        self.previous_command = None
+        while True:
+            if not self.debugger:
+                # There is no more process: quit
+                return
+            done = self.mainLoop()
+            if done:
+                return
+
     def main(self):
         self.debugger = PtraceDebugger()
         try:
-            self.setupDebugger()
-
-            # Create new process
-            self.process = self.createProcess()
-            if not self.process:
-                return
-
-            # Trace syscalls
-            self.invite = '(gdb) '
-            self.previous_command = None
-            done = False
-            while not done:
-                if not self.debugger:
-                    # There is no more process: quit
-                    break
-                done = self.mainLoop()
+            self.runDebugger()
         except KeyboardInterrupt:
             error("Interrupt debugger: quit!")
         except PTRACE_ERRORS, err:
