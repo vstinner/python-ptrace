@@ -1,16 +1,13 @@
 from optparse import OptionGroup
 from logging import (getLogger, StreamHandler,
     DEBUG, INFO, WARNING, ERROR)
-from os import fork, execv, close, dup2
-from subprocess import MAXFD
 from sys import stderr, exit
 from ptrace import PtraceError
-from ptrace.binding import ptrace_traceme
 from logging import error
 from ptrace.tools import locateProgram
 from ptrace.debugger import ProcessExit, DebuggerError
-from ptrace.process_tools import DEV_NULL_FILENAME
 from errno import EPERM
+from ptrace.debugger.trace_cmd import traceCommand
 
 class Application:
     def __init__(self):
@@ -45,40 +42,7 @@ class Application:
         parser.add_option_group(log)
 
     def createChild(self, program):
-        # Fork process
-        pid = fork()
-        if pid:
-            return pid
-
-        # Child code
-        try:
-            ptrace_traceme()
-        except PtraceError, err:
-            print >>stderr, "CHILD PTRACE ERROR! %s" % err
-            exit(1)
-        for fd in xrange(3, MAXFD):
-            try:
-                close(fd)
-            except OSError:
-                pass
-        if self.options.no_stdout:
-            try:
-                null = open(DEV_NULL_FILENAME , 'wb')
-                dup2(null.fileno(), 1)
-                dup2(1, 2)
-                null.close()
-            except IOError, err:
-                close(2)
-                close(1)
-        try:
-            execv(program[0], program)
-        except OSError, err:
-            print >>stderr, "CHILD EXECVE ERROR! %s" % err
-            code = err.errno
-        except Exception, err:
-            print >>stderr, "CHILD EXECVE ERROR! %s" % err
-            code = 1
-        exit(code)
+        return traceCommand(program, self.options.no_stdout)
 
     def setupDebugger(self):
         # Set ptrace options
