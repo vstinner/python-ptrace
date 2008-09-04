@@ -1,9 +1,7 @@
-from ptrace.func_arg import FunctionArgument
 from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
 from ptrace.syscall.socketcall import (
-    SOCKETCALL, SOCKET_FAMILY, SOCKET_TYPE, SOCKET_PROTOCOL,
-    SETSOCKOPT_LEVEL, SETSOCKOPT_OPTNAME,
+    SOCKETCALL, SOCKET_FAMILY,
     sockaddr, sockaddr_in, sockaddr_un)
 from ctypes import c_int
 from ptrace.os_tools import RUNNING_LINUX

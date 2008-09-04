@@ -41,7 +41,6 @@ from os import (kill,
     WIFSTOPPED, WSTOPSIG,
     WIFSIGNALED, WTERMSIG,
     WIFEXITED, WEXITSTATUS)
-import re
 from ptrace.disasm import HAS_DISASSEMBLER
 if HAS_DISASSEMBLER:
     from ptrace.disasm import disassemble, disassembleOne, MAX_INSTR_SIZE
