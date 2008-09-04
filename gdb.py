@@ -4,8 +4,10 @@ from ptrace.debugger import (PtraceDebugger, Application,
     ProcessExit, NewProcessEvent, ProcessSignal,
     ProcessExecution, ProcessError)
 from optparse import OptionParser
+from os import getpid
 from sys import stdout, stderr, exit
 from logging import getLogger, info, warning, error
+from ptrace.version import VERSION, WEBSITE
 from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.binding import HAS_PTRACE_SINGLESTEP
 from ptrace.disasm import HAS_DISASSEMBLER
@@ -64,6 +66,7 @@ COMMANDS = (
     ("switch", "switch active process (switch or switch <pid>)"),
 
     # other
+    ("dbginfo", "informations about the debugger"),
     ("quit", "quit debugger"),
     ("help", "display this help"),
 )
@@ -223,6 +226,8 @@ class Gdb(Application):
             errmsg = self.where(command[7:], manage_bp=True)
         elif command == "maps":
             self.process.dumpMaps()
+        elif command == "dbginfo":
+            self.debuggerInfo()
         elif command == "step":
             errmsg = self.step(False)
         elif command == "stepi":
@@ -622,6 +627,11 @@ class Gdb(Application):
         error(event)
         self.switchProcess(event.process)
         self.interrupt()
+
+    def debuggerInfo(self):
+        error("Debugger process ID: %s" % getpid())
+        error("python-ptrace version %s" % VERSION)
+        error("Website: %s" % WEBSITE)
 
     def interrupt(self):
         waitlist = []
