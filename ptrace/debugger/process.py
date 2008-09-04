@@ -303,11 +303,10 @@ class PtraceProcess:
         else:
             raise ProcessError(self, "Unknown ptrace event: %r" % event)
 
-    if HAS_PTRACE_GETREGS:
-        def getregs(self):
+    def getregs(self):
+        if HAS_PTRACE_GETREGS:
             return ptrace_getregs(self.pid)
-    else:
-        def getregs(self):
+        else:
             # FIXME: Optimize getreg() when used with this function
             words = []
             nb_words = sizeof(ptrace_registers_t) // CPU_WORD_SIZE
@@ -462,14 +461,16 @@ class PtraceProcess:
             except (IOError, ValueError), err:
                 raise ProcessError(self, "readBytes(%s, %s) error: %s" % (
                     formatAddress(address), size, err))
-
-        def getsiginfo(self):
-            return ptrace_getsiginfo(self.pid)
     else:
         readBytes = _readBytes
 
-    if HAS_PTRACE_IO:
-        def writeBytes(self, address, bytes):
+    def getsiginfo(self):
+        if not HAS_PTRACE_SIGINFO:
+            self.notImplementedError()
+        return ptrace_getsiginfo(self.pid)
+
+    def writeBytes(self, address, bytes):
+        if HAS_PTRACE_IO:
             size = len(bytes)
             bytes = create_string_buffer(bytes)
             io_desc = ptrace_io_desc(
@@ -478,8 +479,7 @@ class PtraceProcess:
                 piod_addr=addressof(bytes),
                 piod_len=size)
             ptrace_io(self.pid, io_desc)
-    else:
-        def writeBytes(self, address, bytes):
+        else:
             offset = address % CPU_WORD_SIZE
             if offset:
                 # Write partial word (end)
@@ -511,7 +511,7 @@ class PtraceProcess:
             # Write partial word (begin)
             size = len(bytes)
             word = self.readBytes(address, CPU_WORD_SIZE)
-            # FIXME: Write big endian version of next line
+            # FIXME: Write big endian version of the next line
             word = bytes + word[size:]
             self.writeWord(address, bytes2word(word))
 
