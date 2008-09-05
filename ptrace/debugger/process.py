@@ -135,6 +135,7 @@ class PtraceProcess:
        - pid: identifier of the process
        - debugger: PtraceDebugger instance
        - breakpoints: dictionary of active breakpoints
+       - parent: parent PtraceProcess (None if process has no parent)
 
      * state:
        - running: if True, the process is alive, otherwise the process
@@ -148,11 +149,12 @@ class PtraceProcess:
     Sometimes, is_stopped value is wrong. You might use isTraced() to
     make sure that the process is stopped.
     """
-    def __init__(self, debugger, pid, is_attached):
+    def __init__(self, debugger, pid, is_attached, parent=None):
         self.debugger = debugger
         self.breakpoints = {}
         self.pid = pid
         self.running = True
+        self.parent = parent
         self.was_attached = is_attached
         self.is_attached = False
         self.is_stopped = True
@@ -384,7 +386,7 @@ class PtraceProcess:
             self.notImplementedError()
         if event in NEW_PROCESS_EVENT:
             new_pid = ptrace_geteventmsg(self.pid)
-            new_process = self.debugger.addProcess(new_pid, is_attached=True)
+            new_process = self.debugger.addProcess(new_pid, is_attached=True, parent=self)
             return NewProcessEvent(new_process)
         elif event == PTRACE_EVENT_EXEC:
             return ProcessExecution(self)
