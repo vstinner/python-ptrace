@@ -9,6 +9,9 @@ except ImportError:
 def runProfiler(logger, func, args=tuple(), kw={},
 verbose=True, nb_func=25,
 sort_by=('time',)):
+    """
+    Run a function in a profiler and then display the functions sorted by time.
+    """
     profile_filename = "/tmp/profiler"
     prof = Profile(profile_filename)
     try:

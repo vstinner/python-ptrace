@@ -5,6 +5,9 @@ from os import getenv, access, X_OK
 from os.path import join as path_join
 
 def dumpRegs(log, regs):
+    """
+    Dump all registers using log callback (write one line).
+    """
     width = max( len(name) for name, type in regs._fields_ )
     name_format = "%% %us" % width
     for name, type in regs._fields_:
@@ -19,15 +22,41 @@ def dumpRegs(log, regs):
         log("%s = %s" % (name, value))
 
 def readBits(value, bitmasks):
-    text = []
+    """
+    Extract bits from the integer value using a list of bit masks.
+    bitmasks is a list of tuple (mask, text).
+
+    >>> bitmask = (
+    ...    (1, "exec"),
+    ...    (2, "write"),
+    ...    (4, "read"))
+    ...
+    >>> readBits(5, bitmask)
+    ['exec', 'read']
+    """
+    bitset = []
     for mask, item in bitmasks:
         if not value & mask:
             continue
-        text.append(item)
+        bitset.append(item)
         value = value & ~mask
-    return text
+    return bitset
 
 def formatBits(value, bitmasks, empty_text=None, format_value=str):
+    """
+    Format a value using a bitmask: see readBits() functions.
+
+    >>> bitmask = (
+    ...    (1, "exec"),
+    ...    (2, "write"),
+    ...    (4, "read"))
+    ...
+    >>> formatBits(5, bitmask, empty_text="no permission")
+    '<exec|read> (5)'
+    >>> formatBits(0, bitmask, empty_text="no permission")
+    'no permission'
+    """
+
     orig_value = value
     text = readBits(value, bitmasks)
     if text:
@@ -65,6 +94,11 @@ def timestampUNIX(value, is_local):
     return timestamp
 
 def locateProgram(program):
+    """
+    Locate a program using the PATH environment variable. Return the
+    unchanged program value if it's not possible to get the full
+    program path.
+    """
     # FIXME: Fix for Windows
     if program[0] == '/':
         return program
@@ -91,6 +125,12 @@ def minmax(min_value, value, max_value):
     return min(max(min_value, value), max_value)
 
 def inverseDict(data):
+    """
+    Inverse a dictionary.
+
+    >>> inverseDict({"0x10": 16, "0x20": 32})
+    {32: '0x20', 16: '0x10'}
+    """
     result = {}
     for key, value in data.iteritems():
         result[value] = key

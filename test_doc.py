@@ -36,6 +36,8 @@ def main():
     # Test documentation of some functions/classes
     testModule("ptrace.compatibility")
     testModule("ptrace.tools")
+    testModule("ptrace.signames")
+    testModule("ptrace.logging_tools")
     testModule("ptrace.debugger.parse_expr")
     testModule("ptrace.syscall.socketcall")
 

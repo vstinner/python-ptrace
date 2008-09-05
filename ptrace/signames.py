@@ -1,3 +1,11 @@
+"""
+Name of process signals.
+
+SIGNAMES contains a dictionary mapping a signal number to it's name. But you
+should better use signalName() instead of SIGNAMES since it returns a string
+even if the signal is unknown.
+"""
+
 PREFERRED_NAMES = ("SIGABRT", "SIGHUP", "SIGCHLD", "SIGPOLL")
 
 def getSignalNames():
@@ -33,6 +41,15 @@ def getSignalNames():
 SIGNAMES = getSignalNames()
 
 def signalName(signum):
+    """
+    Get the name of a signal
+
+    >>> from signal import SIGINT
+    >>> signalName(SIGINT)
+    'SIGINT'
+    >>> signalName(404)
+    'signal<404>'
+    """
     try:
         return SIGNAMES[signum]
     except KeyError:

@@ -16,6 +16,12 @@ else:
     DEV_NULL_FILENAME = '/dev/null'
 
 def dumpProcessInfo(log, pid, max_length=None):
+    """
+    Dump all informations about a process:
+     - log: callback to write display one line
+     - pid: process identifier
+     - max_length (default: None): maximum number of environment variables
+    """
     if not RUNNING_LINUX:
         log("Process ID: %s" % pid)
         return
@@ -93,6 +99,9 @@ def dumpProcessInfo(log, pid, max_length=None):
         pass
 
 def formatProcessStatus(status, title="Process"):
+    """
+    Format a process status (integer) as a string.
+    """
     if RUNNING_WINDOWS:
         raise NotImplementedError()
     if WIFSTOPPED(status):

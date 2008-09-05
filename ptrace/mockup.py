@@ -1,3 +1,7 @@
+"""
+Mockup classes used in unit tests.
+"""
+
 class FakeProcess:
     def __init__(self):
         self.regs = {}

@@ -5,7 +5,7 @@ Copyright RageStorm (C) 2007, Gil Dabah
 diStorm is licensed under the BSD license.
 http://ragestorm.net/distorm/
 ---
-Python binding for diStorm64 written by Victor Stinner
+Python binding of diStorm64 library written by Victor Stinner
 """
 
 from ctypes import cdll, c_long, c_ulong, c_int, c_uint, c_char, POINTER, Structure, addressof, byref, c_void_p, create_string_buffer, sizeof, cast
