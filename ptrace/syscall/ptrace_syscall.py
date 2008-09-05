@@ -10,7 +10,7 @@ from ptrace.cpu_info import CPU_WORD_SIZE
 
 PREFORMAT_ARGUMENTS = {
     "select": (2, 3, 4),
-    "execve": (0, 1),
+    "execve": (0, 1, 2),
     "clone": (0, 1),
 }
 
