@@ -70,7 +70,7 @@ class PtraceDebugger:
         a new (stopped) process.
         """
         if pid in self.dict:
-            raise KeyError("Process % is already registered!" % pid)
+            raise KeyError("The process %s is already registered!" % pid)
         process = PtraceProcess(self, pid, is_attached, parent=parent)
         info("Attach %s to debugger" % process)
         self.dict[pid] = process
