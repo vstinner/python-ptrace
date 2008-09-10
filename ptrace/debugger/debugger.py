@@ -1,4 +1,4 @@
-from logging import info, warning
+from logging import info, warning, error
 from ptrace import PtraceError
 from os import waitpid, WNOHANG
 from signal import SIGTRAP, SIGSTOP
@@ -77,9 +77,12 @@ class PtraceDebugger:
         self.list.append(process)
         try:
             process.waitSignals(SIGTRAP, SIGSTOP)
+            raise KeyboardInterrupt()
         except KeyboardInterrupt:
-            # Force attach without waiting for SIGTRAP or SIGSTOP signal
-            pass
+            error(
+                "User interrupt! Force the process %s attach "
+                "(don't wait for signals)."
+                % pid)
         except ProcessSignal, event:
             event.display()
         except:
