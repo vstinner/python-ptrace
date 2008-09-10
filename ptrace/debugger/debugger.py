@@ -77,7 +77,6 @@ class PtraceDebugger:
         self.list.append(process)
         try:
             process.waitSignals(SIGTRAP, SIGSTOP)
-            raise KeyboardInterrupt()
         except KeyboardInterrupt:
             error(
                 "User interrupt! Force the process %s attach "
