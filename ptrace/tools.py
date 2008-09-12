@@ -1,8 +1,8 @@
 from ctypes import sizeof
 from ptrace.ctypes_tools import formatUintHex16, formatUintHex32, formatWordHex
 from datetime import datetime, timedelta
-from os import getenv, access, X_OK
-from os.path import join as path_join
+from os import getenv, access, X_OK, pathsep
+from os.path import join as path_join, isabs
 
 def dumpRegs(log, regs):
     """
@@ -99,13 +99,12 @@ def locateProgram(program):
     unchanged program value if it's not possible to get the full
     program path.
     """
-    # FIXME: Fix for Windows
-    if program[0] == '/':
+    if isabs(program):
         return program
     path = getenv('PATH')
     if not path:
         return program
-    for dirname in path.split(":"):
+    for dirname in path.split(pathsep):
         filename = path_join(dirname, program)
         if access(filename, X_OK):
             return filename

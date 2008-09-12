@@ -4,12 +4,11 @@ Error pipe and serialization code comes from Python 2.5 subprocess module.
 from os import (
     fork, execv, execve, waitpid,
     close, dup2, pipe,
-    read, write)
+    read, write, devnull)
 from sys import exc_info
 from traceback import format_exception
 from ptrace.os_tools import RUNNING_WINDOWS
 from subprocess import MAXFD
-from ptrace.process_tools import DEV_NULL_FILENAME
 from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
@@ -104,7 +103,7 @@ def _createChild(arguments, no_stdout, env, errpipe_write):
 def _execChild(arguments, no_stdout, env):
     if no_stdout:
         try:
-            null = open(DEV_NULL_FILENAME , 'wb')
+            null = open(devnull, 'wb')
             dup2(null.fileno(), 1)
             dup2(1, 2)
             null.close()
