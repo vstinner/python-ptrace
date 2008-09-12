@@ -9,10 +9,15 @@ python-ptrace 0.5
    - Rename PtraceDebugger.trace_sysgood to PtraceDebugger.use_sysgood
    - Remove PtraceProcess.readCode()
 
+ * Document the API
+ * Create an example (a very simple debugger)
+ * Create createChild() function which close all files except stdin,
+   stdout and stderr
  * Parse socket syscalls on FreeBSD
  * On invalid memory access (SIGSEGV), eval the dereference expression to get
    the fault address on OS without siginfo (eg. FreeBSD)
- * Fix imports to get a minimal support of Windows
+ * Fixes to get minimal Windows support: fix imports, fix locateProgram()
+ * gdb.py: create "dbginfo" command
  * Write an example (the most simple debugger) and begin to document the code
  * On FreeBSD, on process exit recalls waitpid(pid) to avoid zombi process
 

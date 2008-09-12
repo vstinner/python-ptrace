@@ -140,6 +140,8 @@ class PtraceProcess:
      * state:
        - running: if True, the process is alive, otherwise the process
          doesn't exist anymore
+       - exited: if True, the process has exited (attributed only used
+         on BSD operation systems)
        - is_attached: if True, the process is attached by ptrace
        - was_attached: if True, the process will be detached at exit
        - is_stopped: if True, the process is stopped, otherwise it's
