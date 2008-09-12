@@ -25,7 +25,7 @@ if HAS_PTRACE_GETREGS:
     from ptrace.binding import ptrace_getregs
 else:
     from ptrace.binding import ptrace_peekuser, ptrace_registers_t
-from ptrace.os_tools import HAS_PROC
+from ptrace.os_tools import HAS_PROC, RUNNING_BSD
 from ptrace.tools import dumpRegs
 from ptrace.cpu_info import CPU_WORD_SIZE, CPU_64BITS
 from ptrace.ctypes_tools import bytes2word, word2bytes, bytes2type, bytes2array
@@ -154,6 +154,7 @@ class PtraceProcess:
         self.breakpoints = {}
         self.pid = pid
         self.running = True
+        self.exited = False
         self.parent = parent
         self.was_attached = is_attached
         self.is_attached = False
@@ -370,6 +371,11 @@ class PtraceProcess:
         return ProcessExit(self)
 
     def processExited(self, code):
+        if RUNNING_BSD and not self.exited:
+            # on FreeBSD, we have to waitpid() twice
+            # to avoid zombi process!?
+            self.exited = True
+            self.waitExit()
         self._notRunning()
         return ProcessExit(self, exitcode=code)
 
