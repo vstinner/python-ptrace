@@ -14,6 +14,7 @@ python-ptrace 0.5
    the fault address on OS without siginfo (eg. FreeBSD)
  * Fix imports to get a minimal support of Windows
  * Write an example (the most simple debugger) and begin to document the code
+ * On FreeBSD, on process exit recalls waitpid(pid) to avoid zombi process
 
 python-ptrace 0.4.2 (2008-08-28)
 --------------------------------
