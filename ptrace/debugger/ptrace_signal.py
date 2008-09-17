@@ -122,11 +122,11 @@ class ProcessSignal(ProcessEvent):
         try:
             process = self.process
             if CPU_64BITS:
-                source_reg = 'rdi'
+                source_reg = 'rsi'
                 dest_reg = 'rdi'
             else:
-                source_reg = 'edi'
-                dest_reg = 'esi'
+                source_reg = 'esi'
+                dest_reg = 'edi'
             source_addr = process.getreg(source_reg)
             registers = {source_reg: source_addr}
             write = (operator == 'MOVS')
