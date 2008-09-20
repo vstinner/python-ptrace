@@ -123,7 +123,10 @@ class InvalidMemoryAcces(SignalInfo):
             message = self.PREFIX
         if size:
             message += " (size=%s bytes)" % size
-        SignalInfo.__init__(self, self.NAME, message,
+        name = self.NAME
+        if address is not None:
+            name += "-" + formatAddress(address).lower()
+        SignalInfo.__init__(self, name, message,
             address=address, size=size, instr=instr,
             process=process, registers=registers)
 
