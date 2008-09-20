@@ -1,8 +1,8 @@
 from ctypes import sizeof
 from ptrace.ctypes_tools import formatUintHex16, formatUintHex32, formatWordHex
 from datetime import datetime, timedelta
-from os import getenv, access, X_OK, pathsep
-from os.path import join as path_join, isabs
+from os import getenv, access, X_OK, pathsep, getcwd
+from os.path import join as path_join, isabs, dirname, normpath
 
 def dumpRegs(log, regs):
     """
@@ -101,11 +101,15 @@ def locateProgram(program):
     """
     if isabs(program):
         return program
-    path = getenv('PATH')
-    if not path:
+    if dirname(program):
+        program = path_join(getcwd(), program)
+        program = normpath(program)
         return program
-    for dirname in path.split(pathsep):
-        filename = path_join(dirname, program)
+    paths = getenv('PATH')
+    if not paths:
+        return program
+    for path in paths.split(pathsep):
+        filename = path_join(path, program)
         if access(filename, X_OK):
             return filename
     return program
