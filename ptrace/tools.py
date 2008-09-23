@@ -102,6 +102,8 @@ def locateProgram(program):
     if isabs(program):
         return program
     if dirname(program):
+        # ./test => $PWD/./test
+        # ../python => $PWD/../python
         program = path_join(getcwd(), program)
         program = normpath(program)
         return program
