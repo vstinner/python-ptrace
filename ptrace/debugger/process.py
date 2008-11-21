@@ -52,6 +52,7 @@ from ptrace.debugger.syscall_state import SyscallState
 if HAS_PROC:
     from ptrace.linux_proc import readProcessStat
 
+MIN_CODE_SIZE = 32
 MAX_CODE_SIZE = 1024
 DEFAULT_NB_INSTR = 10
 DEFAULT_CODE_SIZE = 24
@@ -210,7 +211,7 @@ class PtraceProcess:
             if stop is not None:
                 size = stop - start + 1
             else:
-                size = None
+                size = MIN_CODE_SIZE
             code = self.readBytes(start, size)
             text = " ".join( "%02x" % ord(byte) for byte in code )
             log("CODE: %s" % text)
