@@ -1,11 +1,6 @@
 #!/bin/bash
 set -e
 set -x
-2to3 . > patch
-patch -p0 < patch
-
-2to3 -d . > patch
-patch -p0 < patch
-rm patch
-
+2to3 -w .
+2to3 -w -d .
 patch -p1 < python3.0.patch
