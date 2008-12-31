@@ -8,6 +8,7 @@ python-ptrace 0.5.1
  * Fix interpretation of memory fault on MOSVW instruction (source is ESI and
    destination is EDI, and not the inverse!)
  * Fix locateProgram() for relative path
+ * Fix support of Python 3.0 final
 
 python-ptrace 0.5 (2008-09-13)
 ------------------------------
