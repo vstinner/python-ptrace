@@ -7,6 +7,7 @@ from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, SyscallArgument
 from ptrace.syscall.socketcall import setupSocketCall
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD
 from ptrace.cpu_info import CPU_WORD_SIZE
+from ptrace.binding.cpu import CPU_INSTR_POINTER
 
 PREFORMAT_ARGUMENTS = {
     "select": (2, 3, 4),
@@ -21,6 +22,7 @@ class PtraceSyscall(FunctionCall):
         self.restype = "long"
         self.result = None
         self.result_text = None
+        self.instr_pointer = None
         if not regs:
             regs = self.process.getregs()
         self.readSyscall(regs)
@@ -39,6 +41,9 @@ class PtraceSyscall(FunctionCall):
             for index in PREFORMAT_ARGUMENTS[self.name]:
                 argument = self.arguments[index]
                 argument.format()
+
+        if self.options.instr_pointer:
+            self.instr_pointer = getattr(regs, CPU_INSTR_POINTER)
 
     def readSyscall(self, regs):
         # Read syscall number

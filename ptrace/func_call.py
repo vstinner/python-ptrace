@@ -14,6 +14,7 @@ class FunctionCallOptions:
         self.replace_socketcall = replace_socketcall
         self.string_max_length = string_max_length
         self.max_array_count = max_array_count
+        self.instr_pointer = False
 
 class FunctionCall:
     """

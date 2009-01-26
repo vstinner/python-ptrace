@@ -10,6 +10,7 @@ from logging import getLogger, error
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 from ptrace.compatibility import any
 from ptrace.error import PTRACE_ERRORS, writeError
+from ptrace.ctypes_tools import formatAddress
 import re
 
 class SyscallTracer(Application):
@@ -61,6 +62,8 @@ class SyscallTracer(Application):
         parser.add_option("--show-pid", help="Prefix line with process identifier",
             action="store_true", default=False)
         parser.add_option("--list-syscalls", help="Display system calls and exit",
+            action="store_true", default=False)
+        parser.add_option("--ip", help="print instruction pointer at time of syscall",
             action="store_true", default=False)
 
         self.createLogOptions(parser)
@@ -136,8 +139,13 @@ class SyscallTracer(Application):
         text = syscall.format()
         if syscall.result is not None:
             text = "%-40s = %s" % (text, syscall.result_text)
+        prefix = []
         if self.options.show_pid:
-            text = "[%s] %s" % (syscall.process.pid, text)
+            prefix.append("[%s]" % syscall.process.pid)
+        if self.options.ip:
+            prefix.append("[%s]" % formatAddress(syscall.instr_pointer))
+        if prefix:
+            text = ''.join(prefix) + ' ' + text
         error(text)
 
     def syscallTrace(self, process):
@@ -220,6 +228,7 @@ class SyscallTracer(Application):
             write_address=self.options.address,
             max_array_count=self.options.array_count,
         )
+        self.syscall_options.instr_pointer = self.options.ip
 
         self.syscallTrace(process)
 
