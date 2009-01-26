@@ -59,11 +59,14 @@ class SyscallTracer(Application):
             action="store_true", default=False)
         parser.add_option("--filename", help="Show only syscall using filename",
             action="store_true", default=False)
-        parser.add_option("--show-pid", help="Prefix line with process identifier",
+        parser.add_option("--show-pid",
+            help="Prefix line with process identifier",
             action="store_true", default=False)
-        parser.add_option("--list-syscalls", help="Display system calls and exit",
+        parser.add_option("--list-syscalls",
+            help="Display system calls and exit",
             action="store_true", default=False)
-        parser.add_option("--ip", help="print instruction pointer at time of syscall",
+        parser.add_option("-i", "--show-ip",
+            help="print instruction pointer at time of syscall",
             action="store_true", default=False)
 
         self.createLogOptions(parser)
