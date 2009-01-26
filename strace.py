@@ -145,7 +145,7 @@ class SyscallTracer(Application):
         prefix = []
         if self.options.show_pid:
             prefix.append("[%s]" % syscall.process.pid)
-        if self.options.ip:
+        if self.options.show_ip:
             prefix.append("[%s]" % formatAddress(syscall.instr_pointer))
         if prefix:
             text = ''.join(prefix) + ' ' + text
@@ -231,7 +231,7 @@ class SyscallTracer(Application):
             write_address=self.options.address,
             max_array_count=self.options.array_count,
         )
-        self.syscall_options.instr_pointer = self.options.ip
+        self.syscall_options.instr_pointer = self.options.show_ip
 
         self.syscallTrace(process)
 
