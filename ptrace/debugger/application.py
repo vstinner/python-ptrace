@@ -9,7 +9,7 @@ from ptrace.debugger import ProcessExit, DebuggerError
 from errno import EPERM
 from ptrace.debugger.child import createChild
 
-class Application:
+class Application(object):
     def __init__(self):
         pass
 
