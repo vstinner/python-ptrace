@@ -1,16 +1,17 @@
 """
 Functions and variables to access to Linux proc directory.
 
-Variables:
- - PROC_DIRNAME: Name of the directory ('/proc')
- - PAGE_SIZE: size of a memory page
-"""
+Constant:
 
+   - PAGE_SIZE: size of a memory page
+"""
+from __future__ import with_statement
 from os import readlink, listdir
-from os.path import join as path_join
 from resource import getpagesize
 from ptrace.tools import timestampUNIX
 from datetime import timedelta
+
+PAGE_SIZE = getpagesize()
 
 class ProcError(Exception):
     """
@@ -18,21 +19,12 @@ class ProcError(Exception):
     """
     pass
 
-PROC_DIRNAME = '/proc'
-PAGE_SIZE = getpagesize()
-
-def procFilename(*args):
-    """
-    Create a filename in proc directory.
-    """
-    return path_join(PROC_DIRNAME, *args)
-
 def openProc(path):
     """
     Open a proc entry in read only mode.
     """
+    filename = "/proc/%s" % path
     try:
-        filename = procFilename(path)
         return open(filename)
     except IOError, err:
         raise ProcError("Unable to open %r: %s" % (filename, err))
@@ -42,10 +34,8 @@ def readProc(path):
     Read the content of a proc entry.
     Eg. readProc("stat") to read /proc/stat.
     """
-    procfile = openProc(path)
-    content = procfile.read()
-    procfile.close()
-    return content
+    with openProc(path) as procfile:
+        return procfile.read()
 
 def readProcessProc(pid, key):
     """
@@ -53,10 +43,11 @@ def readProcessProc(pid, key):
     Eg. readProcessProc(pid, "status") to read /proc/pid/status.
     """
     try:
-        return readProc(path_join(str(pid), str(key)))
-    except ProcError, error:
-        raise ProcError("Process %s doesn't exist: %s" % (
-            pid, error))
+        filename = "/proc/%s/%s" % (pid, key)
+        with open(filename) as proc:
+            return proc.read()
+    except IOError, err:
+        raise ProcError("Process %s doesn't exist: %s" % (pid, err))
 
 class ProcessState:
     """
@@ -136,7 +127,7 @@ def readProcessLink(pid, key):
     Read a process link.
     """
     try:
-        filename = procFilename(str(pid), str(key))
+        filename = "/proc/%s/%s" % (pid, key)
         return readlink(filename)
     except OSError, err:
         raise ProcError("Unable to read proc link %r: %s" % (filename, err))
@@ -148,7 +139,7 @@ def readProcesses():
 
        for pid in readProcesses(): ...
     """
-    for filename in listdir(PROC_DIRNAME):
+    for filename in listdir('/proc'):
         try:
             yield int(filename)
         except ValueError:

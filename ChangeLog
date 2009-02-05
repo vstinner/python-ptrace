@@ -1,14 +1,16 @@
 Changelog
 =========
 
-python-ptrace 0.5.1
--------------------
+python-ptrace 0.6
+-----------------
 
+ * python-ptrace now depends on Python 2.5
  * Invalid memory access: add fault address in the name
  * Fix interpretation of memory fault on MOSVW instruction (source is ESI and
    destination is EDI, and not the inverse!)
  * Fix locateProgram() for relative path
  * Fix support of Python 3.0 final
+ * Remove PROC_DIRNAME and procFilename() from ptrace.linux_proc
 
 python-ptrace 0.5 (2008-09-13)
 ------------------------------
