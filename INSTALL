@@ -1,10 +1,8 @@
 ptrace dependencies
 ===================
 
- * Python 2.4:
+ * Python 2.5+:
    http://python.org/
- * ctypes Python module (part of Python 2.5+)
-   (Debian package: python-ctypes)
  * distorm disassembler (optional)
    http://www.ragestorm.net/distorm/
 
@@ -12,11 +10,20 @@ ptrace dependencies
 Installation
 ============
 
-Type as root:
+Type as root: ::
 
    ./setup.py install
 
-Or using sudo program:
+Or using sudo program: ::
 
    sudo python setup.py install
+
+
+cptrace
+=======
+
+For faster debug, you can also install cptrace: Python binding of the ptrace()
+function written in C: ::
+
+    ./setup_cptrace.py install
 
