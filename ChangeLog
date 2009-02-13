@@ -4,13 +4,26 @@ Changelog
 python-ptrace 0.6
 -----------------
 
+User visible changes:
+
  * python-ptrace now depends on Python 2.5
  * Invalid memory access: add fault address in the name
+ * Update Python 3.0 conversion patch
+ * Create -i (--show-ip) option to strace.py: show instruction pointer
+ * Add a new example (itrace.py) written by Mark Seaborn and based
+   on strace.py
+
+API changes:
+
+ * PtraceSyscall: store the instruction pointer at syscall enter (if the
+   option instr_pointer=True, disabled by default)
+ * Remove PROC_DIRNAME and procFilename() from ptrace.linux_proc
+
+Bugfixes:
+
+ * Fix locateProgram() for relative path
  * Fix interpretation of memory fault on MOSVW instruction (source is ESI and
    destination is EDI, and not the inverse!)
- * Fix locateProgram() for relative path
- * Fix support of Python 3.0 final
- * Remove PROC_DIRNAME and procFilename() from ptrace.linux_proc
 
 python-ptrace 0.5 (2008-09-13)
 ------------------------------
