@@ -4,6 +4,7 @@ if HAS_PROC:
 from ptrace.debugger.process_error import ProcessError
 from ptrace.ctypes_tools import formatAddress
 import re
+from weakref import ref
 
 PROC_MAP_REGEX = re.compile(
     # Address range: '08048000-080b0000 '
@@ -31,7 +32,7 @@ class MemoryMapping:
      - major_device / minor_device (int): major / minor device number
      - inode (int)
      - pathname (str)
-     - pid (int)
+     - _process: weak reference to the process
 
     Operations:
      - "address in mapping" checks the address is in the mapping.
@@ -40,7 +41,8 @@ class MemoryMapping:
      - "repr(mapping)" create a string representation of the mapping,
        useful in list contexts
     """
-    def __init__(self, start, end, permissions, offset, major_device, minor_device, inode, pathname, pid):
+    def __init__(self, process, start, end, permissions, offset, major_device, minor_device, inode, pathname):
+        self._process = ref(process)
         self.start = start
         self.end = end
         self.permissions = permissions
@@ -49,7 +51,6 @@ class MemoryMapping:
         self.minor_device = minor_device
         self.inode = inode
         self.pathname = pathname
-        self.pid = pid
 
     def __contains__(self, address):
         return self.start <= address < self.end
@@ -60,28 +61,20 @@ class MemoryMapping:
             text += " => %s" % self.pathname
         text += " (%s)" % self.permissions
         return text
-    
+    __repr__ = __str__
+
     def search(self, bytestr):
-        retlist = []
+        process = self._process()
         bytestr_len = len(bytestr)
-        proc_mem = open("/proc/%i/mem" % self.pid, "r")
-        proc_mem.seek(self.start)
         covered = self.start
-        data = proc_mem.read(self.end - self.start)
+        data = process.readBytes(self.start, self.end - self.start)
         while (data != ""):
             offset = data.find(bytestr)
             if (offset == -1):
                 break
-            else:
-                retlist.append(offset + covered)
-                covered += offset + bytestr_len
-                proc_mem.seek(covered)
-                data = proc_mem.read(self.end - covered)
-        proc_mem.close()
-        return retlist
-
-    def __repr__(self):
-        return self.__str__()
+            yield (offset + covered)
+            covered += offset + bytestr_len
+            data = process.readBytes(covered, self.end - covered)
 
 def readProcessMappings(process):
     """
@@ -106,6 +99,7 @@ def readProcessMappings(process):
             if not match:
                 raise ProcessError(process, "Unable to parse memoy mapping: %r" % line)
             map = MemoryMapping(
+                process,
                 int(match.group(1), 16),
                 int(match.group(2), 16),
                 match.group(3),
@@ -113,7 +107,7 @@ def readProcessMappings(process):
                 int(match.group(5), 16),
                 int(match.group(6), 16),
                 int(match.group(7)),
-                match.group(8), process.pid)
+                match.group(8))
             maps.append(map)
     finally:
         mapsfile.close()
