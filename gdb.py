@@ -34,6 +34,8 @@ except ImportError:
 # Match a register name: $eax, $gp0, $orig_eax
 REGISTER_REGEX = re.compile(r"\$[a-z]+[a-z0-9_]+")
 
+BYTES_REGEX = re.compile(r"""(?:'([^'\\]*)'|"([^"\\]*)")""")
+
 SIGNALS = inverseDict(SIGNAMES)   # name -> signum
 
 COMMANDS = (
@@ -223,18 +225,17 @@ class Gdb(Application):
             values.append(value)
         return values
 
-    def addfollowterm(self, term):
-        # Allow terms of the form 'string', "string", '\x04', "\x01\x14"
-        #
-        # fixme: this is not really safe, since the user can always
-        # input a string like 'bla\'
-        if ((term.startswith("'") and term.endswith("'")) or
-            (term.startswith('"') and term.endswith('"'))):
-            eval("self.followterms.append(%s)" % term)
-        else:
-            return 'Follow term must be enclosed in quotes!'
+    def parseBytes(self, text):
+        if not BYTES_REGEX.match(text):
+            raise ValueError('Follow text must be enclosed in quotes!')
+        return eval(text)
 
-    def showfollowterms(self):
+    def addFollowTerm(self, text):
+        # Allow terms of the form 'string', "string", '\x04', "\x01\x14"
+        term = self.parseBytes(text)
+        self.followterms.append(term)
+
+    def showFollowTerms(self):
         print self.followterms
 
     def _xray(self):
@@ -308,9 +309,9 @@ class Gdb(Application):
         elif command.startswith("print "):
             errmsg = self.print_(command[6:])
         elif command.startswith("follow "):
-            errmsg = self.addfollowterm(command[7:])
+            errmsg = self.addFollowTerm(command[7:])
         elif command == "showfollow":
-            self.showfollowterms()
+            self.showFollowTerms()
         elif command == "resetfollow":
             self.followterms = []
         elif command == "xray":
@@ -760,7 +761,13 @@ class Gdb(Application):
             ok = True
             for command in command_str.split(";"):
                 command = command.strip()
-                ok &= self.execute(command)
+                try:
+                    ok &= self.execute(command)
+                except Exception, err:
+                    print "Command error: %s" % err
+                    ok = False
+                if not ok:
+                    break
             if ok:
                 self.previous_command = command_str
         except KeyboardInterrupt:
