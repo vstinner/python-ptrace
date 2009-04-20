@@ -79,15 +79,14 @@ COMMANDS = (
     ("help", "display this help"),
 )
 
-# finds possible pointer values in process memory space, 
+# finds possible pointer values in process memory space,
 # pointing to address
 def getPointers(process, address):
-    retlist = []
+    address = word2bytes(address)
     procmaps = readProcessMappings(process)
     for pm in procmaps:
-        for found in pm.search(word2bytes(address)):
-            retlist.append(found)
-    return retlist
+        for found in pm.search(address):
+            yield found
 
 class Gdb(Application):
     def __init__(self):
@@ -238,18 +237,23 @@ class Gdb(Application):
     def showfollowterms(self):
         print self.followterms
 
-    # displays the offsets of all terms found in the process memory mappings
-    # along with possible addresses of pointers pointing to these terms
-    def xray(self):
+    def _xray(self):
         for term in self.followterms:
             for process in self.debugger:
                 for procmap in readProcessMappings(process):
-                    for found in procmap.search(term):
-                        print "term[%s] pid[%i] %s %s pointers: %s" % (
-                            repr(term), process.pid, procmap, 
-                            formatAddress(found),
-                            " ".join([formatAddress(x) for x in 
-                                      getPointers(process, found)]))
+                    for address in procmap.search(term):
+                        yield (process, procmap, address, term)
+
+    # displays the offsets of all terms found in the process memory mappings
+    # along with possible addresses of pointers pointing to these terms
+    def xray(self):
+        for process, procmap, address, term in self._xray():
+            pointers = " ".join(formatAddress(ptr_addr)
+                for ptr_addr in getPointers(process, address))
+            print "term[%s] pid[%i] %s %s pointers: %s" % (
+                repr(term), process.pid, procmap,
+                formatAddress(address),
+                pointers)
 
     def execute(self, command):
         errmsg = None
