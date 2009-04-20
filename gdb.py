@@ -34,7 +34,7 @@ except ImportError:
 # Match a register name: $eax, $gp0, $orig_eax
 REGISTER_REGEX = re.compile(r"\$[a-z]+[a-z0-9_]+")
 
-BYTES_REGEX = re.compile(r"""(?:'([^'\\]*)'|"([^"\\]*)")""")
+#BYTES_REGEX = re.compile(r"""(?:'([^'\\]*)'|"([^"\\]*)")""")
 
 SIGNALS = inverseDict(SIGNAMES)   # name -> signum
 
@@ -226,9 +226,13 @@ class Gdb(Application):
         return values
 
     def parseBytes(self, text):
-        if not BYTES_REGEX.match(text):
-            raise ValueError('Follow text must be enclosed in quotes!')
-        return eval(text)
+        # FIXME: Validate input
+#        if not BYTES_REGEX.match(text):
+#            raise ValueError('Follow text must be enclosed in quotes!')
+        value = eval(text)
+        if not isinstance(value, str):
+            raise TypeError("Input is not a bytes string!")
+        return value
 
     def addFollowTerm(self, text):
         # Allow terms of the form 'string', "string", '\x04', "\x01\x14"
