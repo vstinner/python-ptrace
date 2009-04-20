@@ -12,7 +12,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.binding import HAS_PTRACE_SINGLESTEP
 from ptrace.disasm import HAS_DISASSEMBLER
 from ptrace.ctypes_tools import (truncateWord,
-    formatWordHex, formatAddress, formatAddressRange)
+    formatWordHex, formatAddress, formatAddressRange, word2bytes)
 from ptrace.process_tools import dumpProcessInfo
 from ptrace.tools import inverseDict
 from ptrace.func_call import FunctionCallOptions
@@ -22,6 +22,8 @@ from ptrace.terminal import enableEchoMode, terminalWidth
 from errno import ESRCH
 from ptrace.cpu_info import CPU_POWERPC
 from ptrace.debugger import ChildError
+from ptrace.debugger.memory_mapping import readProcessMappings
+
 import re
 try:
     # Use readline for better raw_input()
@@ -66,11 +68,26 @@ COMMANDS = (
     ("proclist", "list of traced processes"),
     ("switch", "switch active process (switch or switch <pid>)"),
 
+    ("follow", 'follow a term (eg. "follow \'\\x12\\x14\\x27\\x13\'")'),
+    ("showfollow", 'show all "followed" terms'),
+    ("resetfollow", 'reset all "followed" terms'),
+    ("xray", 'show addresses of (and pointers to) "followed" terms'),
+
     # other
     ("dbginfo", "informations about the debugger"),
     ("quit", "quit debugger"),
     ("help", "display this help"),
 )
+
+# finds possible pointer values in process memory space, 
+# pointing to address
+def getPointers(process, address):
+    retlist = []
+    procmaps = readProcessMappings(process)
+    for pm in procmaps:
+        for found in pm.search(word2bytes(address)):
+            retlist.append(found)
+    return retlist
 
 class Gdb(Application):
     def __init__(self):
@@ -93,6 +110,8 @@ class Gdb(Application):
 
         # FIXME: Remove self.breaks!
         self.breaks = dict()
+
+        self.followterms = []
 
     def setupLog(self):
         self._setupLog(stdout)
@@ -205,6 +224,33 @@ class Gdb(Application):
             values.append(value)
         return values
 
+    def addfollowterm(self, term):
+        # Allow terms of the form 'string', "string", '\x04', "\x01\x14"
+        #
+        # fixme: this is not really safe, since the user can always
+        # input a string like 'bla\'
+        if ((term.startswith("'") and term.endswith("'")) or
+            (term.startswith('"') and term.endswith('"'))):
+            eval("self.followterms.append(%s)" % term)
+        else:
+            return 'Follow term must be enclosed in quotes!'
+
+    def showfollowterms(self):
+        print self.followterms
+
+    # displays the offsets of all terms found in the process memory mappings
+    # along with possible addresses of pointers pointing to these terms
+    def xray(self):
+        for term in self.followterms:
+            for process in self.debugger:
+                for procmap in readProcessMappings(process):
+                    for found in procmap.search(term):
+                        print "term[%s] pid[%i] %s %s pointers: %s" % (
+                            repr(term), process.pid, procmap, 
+                            formatAddress(found),
+                            " ".join([formatAddress(x) for x in 
+                                      getPointers(process, found)]))
+
     def execute(self, command):
         errmsg = None
         if command == "cont":
@@ -257,6 +303,14 @@ class Gdb(Application):
             errmsg = self.signal(command[7:])
         elif command.startswith("print "):
             errmsg = self.print_(command[6:])
+        elif command.startswith("follow "):
+            errmsg = self.addfollowterm(command[7:])
+        elif command == "showfollow":
+            self.showfollowterms()
+        elif command == "resetfollow":
+            self.followterms = []
+        elif command == "xray":
+            self.xray()
         else:
             errmsg = "Unknown command: %r" % command
         if errmsg:

@@ -31,12 +31,16 @@ class MemoryMapping:
      - major_device / minor_device (int): major / minor device number
      - inode (int)
      - pathname (str)
+     - pid (int)
 
     Operations:
      - "address in mapping" checks the address is in the mapping.
+     - "search(somestring)" returns the offsets of "somestring" in the mapping
      - "str(mapping)" create one string describing the mapping
+     - "repr(mapping)" create a string representation of the mapping,
+       useful in list contexts
     """
-    def __init__(self, start, end, permissions, offset, major_device, minor_device, inode, pathname):
+    def __init__(self, start, end, permissions, offset, major_device, minor_device, inode, pathname, pid):
         self.start = start
         self.end = end
         self.permissions = permissions
@@ -45,6 +49,7 @@ class MemoryMapping:
         self.minor_device = minor_device
         self.inode = inode
         self.pathname = pathname
+        self.pid = pid
 
     def __contains__(self, address):
         return self.start <= address < self.end
@@ -55,6 +60,28 @@ class MemoryMapping:
             text += " => %s" % self.pathname
         text += " (%s)" % self.permissions
         return text
+    
+    def search(self, bytestr):
+        retlist = []
+        bytestr_len = len(bytestr)
+        proc_mem = open("/proc/%i/mem" % self.pid, "r")
+        proc_mem.seek(self.start)
+        covered = self.start
+        data = proc_mem.read(self.end - self.start)
+        while (data != ""):
+            offset = data.find(bytestr)
+            if (offset == -1):
+                break
+            else:
+                retlist.append(offset + covered)
+                covered += offset + bytestr_len
+                proc_mem.seek(covered)
+                data = proc_mem.read(self.end - covered)
+        proc_mem.close()
+        return retlist
+
+    def __repr__(self):
+        return self.__str__()
 
 def readProcessMappings(process):
     """
@@ -86,7 +113,7 @@ def readProcessMappings(process):
                 int(match.group(5), 16),
                 int(match.group(6), 16),
                 int(match.group(7)),
-                match.group(8))
+                match.group(8), process.pid)
             maps.append(map)
     finally:
         mapsfile.close()

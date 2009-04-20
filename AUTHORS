@@ -1,6 +1,7 @@
 python-ptrace authors
 =====================
 
+Dimitris Glynos <dimitris AT census-labs.com> - follow gdb.py commands
 Mark Seaborn <mrs AT mythic-beasts.com> - Create -i option for strace
 Mickaël Guérin aka KAeL <mickael.guerin AT crocobox.org> - OpenBSD port
 T. Bursztyka aka Tuna <tuna AT lyua.org> - x86_64 port
