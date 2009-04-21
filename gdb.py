@@ -73,7 +73,7 @@ COMMANDS = (
     ("follow", 'follow a term (eg. "follow \'\\x12\\x14\\x27\\x13\'")'),
     ("showfollow", 'show all "followed" terms'),
     ("resetfollow", 'reset all "followed" terms'),
-    ("xray", 'show addresses of (and pointers to) "followed" terms'),
+    ("xray", 'show addresses of (and possible pointers to) "followed" terms'),
 
     # other
     ("dbginfo", "informations about the debugger"),
