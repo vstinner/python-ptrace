@@ -65,16 +65,36 @@ class MemoryMapping:
 
     def search(self, bytestr):
         process = self._process()
+
         bytestr_len = len(bytestr)
+        buf_len = 64 * 1024 
+
+        if buf_len < bytestr_len:
+            buf_len = bytestr_len
+
+        remaining = self.end - self.start
         covered = self.start
-        data = process.readBytes(self.start, self.end - self.start)
-        while (data != ""):
+
+        while remaining >= bytestr_len:
+            if remaining > buf_len:
+                requested = buf_len
+            else:
+                requested = remaining
+
+            data = process.readBytes(covered, requested)
+
+            if data == "":
+                break
+
             offset = data.find(bytestr)
             if (offset == -1):
-                break
-            yield (offset + covered)
-            covered += offset + bytestr_len
-            data = process.readBytes(covered, self.end - covered)
+                skip = requested - bytestr_len + 1
+            else:
+                yield (covered + offset)
+                skip = offset + bytestr_len
+
+            covered += skip
+            remaining -= skip
 
 def readProcessMappings(process):
     """
