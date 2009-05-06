@@ -4,6 +4,8 @@ TODO
 Main tasks
 ----------
 
+ * Fix strace.py --socketcall: SyscallState.enter() calls ignore_callback
+   before socketcall are proceed
  * Support other backends:
 
     - GDB MI: http://code.google.com/p/pygdb/
