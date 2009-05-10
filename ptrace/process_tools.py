@@ -12,7 +12,7 @@ if not RUNNING_WINDOWS:
 
 def dumpProcessInfo(log, pid, max_length=None):
     """
-    Dump all informations about a process:
+    Dump all information about a process:
      - log: callback to write display one line
      - pid: process identifier
      - max_length (default: None): maximum number of environment variables

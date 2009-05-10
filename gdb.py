@@ -57,7 +57,7 @@ COMMANDS = (
     ("where2", "display original code content (don't show effects of breakpoint on code)"),
     ("stack", "display stack content"),
     ("backtrace", "dump the backtrace"),
-    ("proc", "display process informations"),
+    ("proc", "display process information"),
     ("maps", "display memory mappings"),
 
     # breakpoints
@@ -76,7 +76,7 @@ COMMANDS = (
     ("xray", 'show addresses of (and possible pointers to) "followed" terms'),
 
     # other
-    ("dbginfo", "informations about the debugger"),
+    ("dbginfo", "information about the debugger"),
     ("quit", "quit debugger"),
     ("help", "display this help"),
 )
@@ -102,7 +102,7 @@ class Gdb(Application):
 
         self.last_signal = {}
 
-        # We assume user wants all possible informations
+        # We assume user wants all possible information
         self.syscall_options = FunctionCallOptions(
             write_types=True,
             write_argname=True,

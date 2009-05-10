@@ -88,7 +88,7 @@ class PtraceProcess:
        - disassemble(): assembler code of the next instructions
        - disassembleOne(): assembler code of the next instruction
        - findStack(): get stack memory mapping
-       - getsiginfo(): get signal informations
+       - getsiginfo(): get signal information
        - getBacktrace(): get the current backtrace
 
      * set status
