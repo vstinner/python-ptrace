@@ -56,7 +56,7 @@ COMMANDS = (
     ("hexdump", "dump memory as specified address or address range (hexdump <address> or hexdump <start> <stop>)"),
     ("where2", "display original code content (don't show effects of breakpoint on code)"),
     ("stack", "display stack content"),
-    ("backtrace", "dump the bakctrace"),
+    ("backtrace", "dump the backtrace"),
     ("proc", "display process informations"),
     ("maps", "display memory mappings"),
 
