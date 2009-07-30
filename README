@@ -19,7 +19,7 @@ Features:
  * Dump registers, memory mappings, stack, etc.
  * Syscall tracer and parser (strace command)
 
-Website: http://python-ptrace.hachoir.org/
+Website: http://bitbucket.org/haypo/python-ptrace/wiki/Home
 
 
 Installation

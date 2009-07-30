@@ -6,6 +6,7 @@ python-ptrace 0.6.1
 
  * Create follow, showfollow, resetfollow, xray commands in gdb.py. Patch
    written by Dimitris Glynos
+ * Project website moved to http://bitbucket.org/haypo/python-ptrace/
 
 python-ptrace 0.6 (2009-02-13)
 ------------------------------
