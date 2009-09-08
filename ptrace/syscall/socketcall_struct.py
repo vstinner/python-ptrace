@@ -1,5 +1,4 @@
-from ctypes import Structure, c_char, c_ushort, c_ubyte
-from ptrace.ctypes_stdint import uint16_t, uint32_t
+from ctypes import Structure, c_char, c_ushort, c_ubyte, c_uint16, c_uint32
 from ptrace.os_tools import RUNNING_BSD, RUNNING_LINUX
 
 if RUNNING_BSD:
@@ -20,7 +19,7 @@ class sockaddr(Structure):
 
 class in_addr(Structure):
     _fields_ = (
-        ("s_addr", uint32_t),
+        ("s_addr", c_uint32),
     )
 
 # INET socket
@@ -29,13 +28,13 @@ class sockaddr_in(Structure):
         _fields_ = (
             ("sin_len", c_ubyte),
             ("sin_family", sa_family_t),
-            ("sin_port", uint16_t),
+            ("sin_port", c_uint16),
             ("sin_addr", in_addr),
         )
     else:
         _fields_ = (
             ("sin_family", sa_family_t),
-            ("sin_port", uint16_t),
+            ("sin_port", c_uint16),
             ("sin_addr", in_addr),
         )
 
@@ -52,7 +51,7 @@ if RUNNING_LINUX:
         _fields_ = (
             ("nl_family", sa_family_t),
             ("nl_pad", c_ushort),
-            ("nl_pid", uint32_t),
-            ("nl_groups", uint32_t),
+            ("nl_pid", c_uint32),
+            ("nl_groups", c_uint32),
         )
 

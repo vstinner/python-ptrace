@@ -1,7 +1,7 @@
 from ctypes import (Structure, Union, sizeof,
-    c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p)
+    c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
+    c_uint16, c_uint32, c_uint64)
 from ptrace.cpu_info import CPU_64BITS, CPU_PPC32
-from ptrace.ctypes_stdint import uint16_t, uint32_t, uint64_t
 
 pid_t = c_int
 uid_t = c_ushort
@@ -116,17 +116,17 @@ class user_regs_struct(Structure):
 class user_fpregs_struct(Structure):
     if CPU_64BITS:
         _fields_ = (
-            ("cwd", uint16_t),
-            ("swd", uint16_t),
-            ("ftw", uint16_t),
-            ("fop", uint16_t),
-            ("rip", uint64_t),
-            ("rdp", uint64_t),
-            ("mxcsr", uint32_t),
-            ("mxcr_mask", uint32_t),
-            ("st_space", uint32_t * 32),
-            ("xmm_space", uint32_t * 64),
-            ("padding", uint32_t * 24)
+            ("cwd", c_uint16),
+            ("swd", c_uint16),
+            ("ftw", c_uint16),
+            ("fop", c_uint16),
+            ("rip", c_uint64),
+            ("rdp", c_uint64),
+            ("mxcsr", c_uint32),
+            ("mxcr_mask", c_uint32),
+            ("st_space", c_uint32 * 32),
+            ("xmm_space", c_uint32 * 64),
+            ("padding", c_uint32 * 24)
             )
     else:
         _fields_ = (
