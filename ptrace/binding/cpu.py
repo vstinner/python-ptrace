@@ -14,6 +14,7 @@ elif CPU_X86_64:
     CPU_STACK_POINTER = "rsp"
     CPU_FRAME_POINTER = "rbp"
     CPU_SUB_REGISTERS = {
+        # main register name, shift, mask
         'al':  ('rax', 0, 0xff),
         'bl':  ('rbx', 0, 0xff),
         'cl':  ('rcx', 0, 0xff),
@@ -26,10 +27,10 @@ elif CPU_X86_64:
         'bx':  ('rbx', 0, 0xffff),
         'cx':  ('rcx', 0, 0xffff),
         'dx':  ('rdx', 0, 0xffff),
-        'eax': ('rax', 32),
-        'ebx': ('rbx', 32),
-        'ecx': ('rcx', 32),
-        'edx': ('rdx', 32),
+        'eax': ('rax', 32, None),
+        'ebx': ('rbx', 32, None),
+        'ecx': ('rcx', 32, None),
+        'edx': ('rdx', 32, None),
     }
 elif CPU_I386:
     CPU_INSTR_POINTER = "eip"

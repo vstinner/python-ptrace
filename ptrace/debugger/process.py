@@ -420,14 +420,14 @@ class PtraceProcess:
         try:
             name, shift, mask = CPU_SUB_REGISTERS[name]
         except KeyError:
-            mask = 0
             shift = 0
+            mask = None
         if name not in REGISTER_NAMES:
             raise ProcessError(self, "Unknown register: %r" % name)
         regs = self.getregs()
         value = getattr(regs, name)
+        value >>= shift
         if mask:
-            value >>= shift
             value &= mask
         return value
 
