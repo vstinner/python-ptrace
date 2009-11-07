@@ -70,7 +70,7 @@ COMMANDS = (
     ("proclist", "list of traced processes"),
     ("switch", "switch active process (switch or switch <pid>)"),
 
-    ("follow", 'follow a term (eg. "follow \'\\x12\\x14\\x27\\x13\'")'),
+    ("follow", r'''follow a term (eg. "follow '\x12\x14\x27\x13'")'''),
     ("showfollow", 'show all "followed" terms'),
     ("resetfollow", 'reset all "followed" terms'),
     ("xray", 'show addresses of (and possible pointers to) "followed" terms'),
