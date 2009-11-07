@@ -1,8 +1,8 @@
 Changelog
 =========
 
-python-ptrace 0.6.1
--------------------
+python-ptrace 0.6.1 (2009-11-07)
+--------------------------------
 
  * Create follow, showfollow, resetfollow, xray commands in gdb.py. Patch
    written by Dimitris Glynos

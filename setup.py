@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 
+# Produce to release a new version:
+#  - check version in ptrace/version.py
+#  - set release date in the ChangeLog
+#  - create a Mercurial tag
+#  - push the Mercurial
+#  - run ./setup.py register sdist upload
+#
+# After the release:
+#  - set version to n+1 (ptrace/version.py)
+#  - add a new empty section in the changelog for version n+1
+
 MODULES = ["ptrace", "ptrace.binding", "ptrace.syscall", "ptrace.debugger"]
 
 SCRIPTS = ("strace.py", "gdb.py")
