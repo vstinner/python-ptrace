@@ -1,7 +1,7 @@
 Changelog
 =========
 
-python-ptrace 0.6.2
+python-ptrace 0.6.2 (2009-11-09)
 --------------------------------
 
  * Fix 64 bits sub registers (set mask for eax, ebx, ecx, edx)
