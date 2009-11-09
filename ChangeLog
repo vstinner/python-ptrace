@@ -1,13 +1,20 @@
 Changelog
 =========
 
+python-ptrace 0.6.2
+--------------------------------
+
+ * Fix 64 bits sub registers (set mask for eax, ebx, ecx, edx)
+
 python-ptrace 0.6.1 (2009-11-07)
 --------------------------------
 
  * Create follow, showfollow, resetfollow, xray commands in gdb.py. Patch
    written by Dimitris Glynos
  * Project website moved to http://bitbucket.org/haypo/python-ptrace/
- * Fix 64 bits sub registers (set mask for eax, ebx, ecx, edx)
+ * Replace types (u)intXX_t by c_(u)intXX
+ * Create MemoryMapping.search() method and MemoryMapping now keeps a weak
+   reference to the process
 
 python-ptrace 0.6 (2009-02-13)
 ------------------------------
