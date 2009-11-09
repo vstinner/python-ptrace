@@ -5,7 +5,10 @@
 #  - set release date in the ChangeLog
 #  - create a Mercurial tag
 #  - push the Mercurial
-#  - run ./setup.py register sdist upload
+#  - clone the Mercurial; rm -rf .hg*; create a tarball
+#  - ./setup.py register
+#  - upload the tarball to Python Package Index
+#  - update the website home page (url, md5 and news)
 #
 # After the release:
 #  - set version to n+1 (ptrace/version.py)
