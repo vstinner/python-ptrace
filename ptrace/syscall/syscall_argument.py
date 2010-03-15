@@ -9,7 +9,7 @@ from ptrace.syscall.posix_arg import (
     formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags)
 from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
-    formatOptVal, formatSockaddr, formatSockaddrInStruct)
+    formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 import re
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
@@ -46,6 +46,7 @@ POINTER_CALLBACK = {
 STRUCT_CALLBACK = {
     # Prototype: callback(argument, attr_name, attr_value) -> str
     "sockaddr_in": formatSockaddrInStruct,
+    "sockaddr_in6": formatSockaddrIn6Struct,
 }
 
 INTEGER_TYPES = set((

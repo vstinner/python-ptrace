@@ -2,24 +2,14 @@ from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
 from ptrace.syscall import SYSCALL_PROTOTYPES
 from ptrace.syscall.socketcall_constants import SOCKETCALL, SOCKET_FAMILY
-from ptrace.syscall.socketcall_struct import sockaddr, sockaddr_in, sockaddr_un
+from ptrace.syscall.socketcall_struct import sockaddr, sockaddr_in, sockaddr_in6, sockaddr_un
 from ctypes import c_int
 from ptrace.os_tools import RUNNING_LINUX
-from socket import AF_INET, inet_ntoa
+from socket import AF_INET, AF_INET6, inet_ntoa
 from struct import pack
 if RUNNING_LINUX:
     from socket import AF_NETLINK
     from ptrace.syscall.socketcall_struct import sockaddr_nl
-
-def ip_int2str(ip):
-    """
-    Convert an IP address (as an interger) to a string.
-
-    >>> ip_int2str(0x7f000001)
-    '127.0.0.1'
-    """
-    ip_bytes = pack("!I", ip)
-    return inet_ntoa(ip_bytes)
 
 AF_FILE = 1
 
@@ -39,6 +29,8 @@ def formatSockaddr(argument, argtype):
     family = value.family
     if family == AF_INET:
         return argument.readStruct(address, sockaddr_in)
+    if family == AF_INET6:
+        return argument.readStruct(address, sockaddr_in6)
     if family == AF_FILE:
         return argument.readStruct(address, sockaddr_un)
     if RUNNING_LINUX:
@@ -66,8 +58,12 @@ def setupSocketCall(function, process, socketcall, address):
 def formatSockaddrInStruct(argument, name, value):
     if name == "sin_port":
         return ntoh_ushort(value)
-    if name == "sin_addr":
-        ip = ntoh_uint(value.s_addr)
-        return ip_int2str(ip)
+    return None
+
+def formatSockaddrIn6Struct(argument, name, value):
+    if name == "sin6_port":
+        return ntoh_ushort(value)
+    #if name == "sin6_addr":
+        # FIXME: ...
     return None
 

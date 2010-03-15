@@ -1,6 +1,11 @@
 Changelog
 =========
 
+python-ptrace 0.6.4
+-------------------
+
+ * Support sockaddr_in6 (IPv6 address)
+
 python-ptrace 0.6.3 (2011-02-16)
 --------------------------------
 
