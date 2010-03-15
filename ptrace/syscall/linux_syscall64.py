@@ -288,3 +288,11 @@ SYSCALL_NAMES = {
    285: "fallocate",
 }
 
+SOCKET_SYSCALL_NAMES = set((
+    "socket", "socketpair", "connect",
+    "sendto", "recvfrom", "sendmsg", "recvmsg",
+    "bind", "listen", "accept",
+    "getsockname", "getpeername", "getsockopt", "setsockopt",
+    "shutdown",
+))
+

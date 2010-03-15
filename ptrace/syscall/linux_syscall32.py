@@ -326,3 +326,5 @@ SYSCALL_NAMES = {
     319: "epoll_pwait",
 }
 
+SOCKET_SYSCALL_NAMES = set(("socketcall",))
+

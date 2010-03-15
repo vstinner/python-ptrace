@@ -400,3 +400,10 @@ SYSCALL_NAMES = {
     481: "thr_kill2",
 }
 
+SOCKET_SYSCALL_NAMES = set((
+    "socket", "socketpair", "connect",
+    "sendto", "recvfrom", "sendmsg", "recvmsg",
+    "bind", "listen", "accept",
+    "getpeername", "getsockname", "getsockopt", "setsockopt",
+    "shutdown",
+))

@@ -2,7 +2,8 @@
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
     ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
-from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, FILENAME_ARGUMENTS
+from ptrace.syscall import (SYSCALL_NAMES, SYSCALL_PROTOTYPES,
+    FILENAME_ARGUMENTS, SOCKET_SYSCALL_NAMES)
 from ptrace.func_call import FunctionCallOptions
 from sys import stderr, exit
 from optparse import OptionParser
@@ -55,7 +56,7 @@ class SyscallTracer(Application):
             action="store_true", default=False)
         parser.add_option("--syscalls", '-e', help="Comma separated list of shown system calls (other will be skipped)",
             type="str", default=None)
-        parser.add_option("--socketcall", help="Show only socketcall (network) functions",
+        parser.add_option("--socket", help="Show only socket functions",
             action="store_true", default=False)
         parser.add_option("--filename", help="Show only syscall using filename",
             action="store_true", default=False)
@@ -109,10 +110,8 @@ class SyscallTracer(Application):
                 restype, arguments = format
                 if any(argname in FILENAME_ARGUMENTS for argtype, argname in arguments):
                     only.add(syscall)
-        if self.options.socketcall:
-            self.options.raw_socketcall = False
-            for syscall, prototype in SOCKETCALL.itervalues():
-                only.add(syscall)
+        if self.options.socket:
+            only |= SOCKET_SYSCALL_NAMES
         self.only = only
         if self.options.ignore_regex:
             try:
