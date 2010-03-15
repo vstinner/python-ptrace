@@ -366,6 +366,11 @@ SYSCALL_PROTOTYPES = {
             ("struct sockaddr*", "name"),
             ("socklen_t*", "namelen"),
         )),
+    "getpeername" : ("long", (
+            ("int", "fd"),
+            ("struct sockaddr*", "name"),
+            ("socklen_t*", "namelen"),
+        )),
     "getsockopt" : ("long", (
             ("int", "fd"),
             ("int", "level"),
@@ -397,6 +402,63 @@ SYSCALL_PROTOTYPES = {
         )),
     "alarm" : ("long", (
             ("unsigned int", "seconds"),
+        )),
+    "recv": ("ssize_t", (
+            ("int", "sockfd"),
+            ("void*", "buf"),
+            ("size_t", "len"),
+            ("int", "flags"),
+        )),
+    "recvfrom": ("ssize_t", (
+            ("int", "sockfd"),
+            ("void*", "buf"),
+            ("size_t", "len"),
+            ("int", "flags"),
+            ("struct sockaddr*", "src_addr"),
+            ("socklen_t", "addrlen"),
+        )),
+    "recvmsg": ("ssize_t", (
+            ("int", "sockfd"),
+            ("struct msghdr*", "msg"),
+            ("int", "flags"),
+        )),
+    "send": ("ssize_t", (
+            ("int", "sockfd"),
+            ("const void*", "buf"),
+            ("size_t", "len"),
+            ("int", "flags"),
+        )),
+    "sendto": ("ssize_t", (
+            ("int", "sockfd"),
+            ("const void*", "buf"),
+            ("size_t", "len"),
+            ("int", "flags"),
+            ("const struct sockaddr*", "dest_addr"),
+            ("socklen_t", "addrlen"),
+        )),
+    "sendmsg": ("ssize_t", (
+            ("int", "sockfd"),
+            ("const struct msghdr*", "buf"),
+            ("int", "flags"),
+        )),
+    "listen": ("int", (
+            ("int", "fd"),
+            ("int", "backlog"),
+        )),
+    "accept": ("int", (
+            ("int", "fd"),
+            ("struct sockaddr*", "addr"),
+            ("socklen_t*", "addrlen"),
+        )),
+    "socketpair": ("int", (
+            ("int", "family"),
+            ("int", "type"),
+            ("int", "protocol"),
+            ("int*", "sockvec"),
+        )),
+    "shutdown": ("int", (
+            ("int", "fd"),
+            ("int", "how"),
         )),
 }
 

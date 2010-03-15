@@ -1,5 +1,6 @@
 from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
+from ptrace.syscall import SYSCALL_PROTOTYPES
 from ptrace.syscall.socketcall_constants import SOCKETCALL, SOCKET_FAMILY
 from ptrace.syscall.socketcall_struct import sockaddr, sockaddr_in, sockaddr_un
 from ctypes import c_int
@@ -56,7 +57,7 @@ def setupSocketCall(function, process, socketcall, address):
     function.name = socketcall.getText()
 
     # Create arguments
-    formats = SOCKETCALL[socketcall.value][1]
+    function.restype, formats = SYSCALL_PROTOTYPES[function.name]
     for argtype, argname in formats:
         value = process.readWord(address)
         function.addArgument(value, argname, argtype)
