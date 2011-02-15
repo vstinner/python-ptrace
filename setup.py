@@ -30,38 +30,37 @@ CLASSIFIERS = [
 
 LONG_DESCRIPTION = open('README').read() + open('ChangeLog').read()
 
-def main():
-    from imp import load_source
-    from os import path
-    from sys import argv
+from imp import load_source
+from os import path
+from sys import argv
+from distutils.core import setup
 
-    if "--setuptools" in argv:
-        argv.remove("--setuptools")
-        from setuptools import setup
-    else:
-        from distutils.core import setup
+ptrace = load_source("version", path.join("ptrace", "version.py"))
+PACKAGES = {}
+for name in MODULES:
+    PACKAGES[name] = name.replace(".", "/")
 
-    ptrace = load_source("version", path.join("ptrace", "version.py"))
-    PACKAGES = {}
-    for name in MODULES:
-        PACKAGES[name] = name.replace(".", "/")
+install_options = {
+    "name": ptrace.PACKAGE,
+    "version": ptrace.VERSION,
+    "url": ptrace.WEBSITE,
+    "download_url": ptrace.WEBSITE,
+    "author": "Victor Stinner",
+    "description": "python binding of ptrace",
+    "long_description": LONG_DESCRIPTION,
+    "classifiers": CLASSIFIERS,
+    "license": ptrace.LICENSE,
+    "packages": PACKAGES.keys(),
+    "package_dir": PACKAGES,
+    "scripts": SCRIPTS,
+}
 
-    install_options = {
-        "name": ptrace.PACKAGE,
-        "version": ptrace.VERSION,
-        "url": ptrace.WEBSITE,
-        "download_url": ptrace.WEBSITE,
-        "author": "Victor Stinner",
-        "description": "python binding of ptrace",
-        "long_description": LONG_DESCRIPTION,
-        "classifiers": CLASSIFIERS,
-        "license": ptrace.LICENSE,
-        "packages": PACKAGES.keys(),
-        "package_dir": PACKAGES,
-        "scripts": SCRIPTS,
-    }
-    setup(**install_options)
+# Python 3: run 2to3
+try:
+    from distutils.command.build_py import build_py_2to3
+except ImportError:
+    pass
+else:
+    install_options['cmdclass'] = {'build_py': build_py_2to3}
 
-if __name__ == "__main__":
-    main()
-
+setup(**install_options)
