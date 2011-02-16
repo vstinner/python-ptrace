@@ -1,3 +1,6 @@
 syntax: glob
 # generated files: .py => .pyc
 *.pyc
+build
+dist
+MANIFEST
