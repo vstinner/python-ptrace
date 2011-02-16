@@ -5,11 +5,11 @@ python-ptrace 0.6.3
 -------------------
 
  * Support distrom3
+ * Support Python 3
  * Rename strace.py option --socketcall to --socket, and fix this option for
    FreeBSD and Linux/64 bits
  * Add MANIFEST.in: include all files in source distribution (tests, cptrace
    module, ...)
- * Prepare Python 3 support
 
 python-ptrace 0.6.2 (2009-11-09)
 --------------------------------

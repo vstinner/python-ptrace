@@ -93,6 +93,12 @@ def formatAscii(data):
     else:
         return u''.join(asciiChar(ord(byte)) for byte in data)
 
+def formatHexa(data):
+    if RUNNING_PYTHON3:
+        return u' '.join(u"%02x" % byte for byte in data)
+    else:
+        return u' '.join(u"%02x" % ord(byte) for byte in data)
+
 # finds possible pointer values in process memory space,
 # pointing to address
 def getPointers(process, address):
@@ -415,13 +421,13 @@ class Gdb(Application):
             size = min(end_address - address, width)
             try:
                 # Read bytes
-                bytes = self.process.readBytes(address, size)
+                memory = self.process.readBytes(address, size)
 
                 # Format bytes
-                hexa = u' '.join( u"%02x" % ord(byte) for byte in bytes )
+                hexa = formatHexa(memory)
                 hexa = hexa.ljust(width*3-1, u' ')
 
-                ascii = formatAscii(bytes)
+                ascii = formatAscii(memory)
                 ascii = ascii.ljust(width, u' ')
 
                 # Display previous read error, if any
