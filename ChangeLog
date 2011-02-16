@@ -1,8 +1,8 @@
 Changelog
 =========
 
-python-ptrace 0.6.3
--------------------
+python-ptrace 0.6.3 (2011-02-16)
+--------------------------------
 
  * Support distrom3
  * Support Python 3

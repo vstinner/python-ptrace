@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 # Produce to release a new version:
-#  - check version in ptrace/version.py
-#  - set release date in the ChangeLog
 #  - ./test_doc.py
 #  - test gdb.py
 #  - test strace.py
+#  - check version in ptrace/version.py
+#  - set release date in the ChangeLog
+#  - hg ci
 #  - hg tag python-ptrace-x.y
 #  - hg push
 #  - ./setup.py sdist register upload
