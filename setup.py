@@ -3,11 +3,12 @@
 # Produce to release a new version:
 #  - check version in ptrace/version.py
 #  - set release date in the ChangeLog
-#  - create a Mercurial tag
-#  - push the Mercurial
-#  - clone the Mercurial; rm -rf .hg*; create a tarball
-#  - ./setup.py register
-#  - upload the tarball to Python Package Index
+#  - ./test_doc.py
+#  - test gdb.py
+#  - test strace.py
+#  - hg tag python-ptrace-x.y
+#  - hg push
+#  - ./setup.py sdist register upload
 #  - update the website home page (url, md5 and news)
 #
 # After the release:
