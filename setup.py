@@ -28,6 +28,7 @@ CLASSIFIERS = [
     'Operating System :: OS Independent',
     'Natural Language :: English',
     'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
 ]
 
 LONG_DESCRIPTION = open('README').read() + open('ChangeLog').read()
