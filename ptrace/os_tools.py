@@ -12,8 +12,9 @@ Constants about the operating system:
  - HAS_PTRACE (bool)
 """
 
-from sys import platform, version
+from sys import platform, version, version_info
 
+RUNNING_PYTHON3 = version_info[0] == 3
 RUNNING_PYPY = ("pypy" in version.lower())
 RUNNING_WINDOWS = (platform == 'win32')
 RUNNING_LINUX = (platform == 'linux2')

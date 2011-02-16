@@ -49,6 +49,7 @@ from ptrace.debugger.process_error import ProcessError
 from ptrace.debugger.memory_mapping import readProcessMappings
 from ptrace.binding.cpu import CPU_INSTR_POINTER, CPU_STACK_POINTER, CPU_FRAME_POINTER, CPU_SUB_REGISTERS
 from ptrace.debugger.syscall_state import SyscallState
+from ptrace.six import b
 if HAS_PROC:
     from ptrace.linux_proc import readProcessStat
 
@@ -505,7 +506,7 @@ class PtraceProcess:
             size -= subsize
             address += CPU_WORD_SIZE
         else:
-            data = ''
+            data = b('')
 
         while size:
             # Read word
@@ -633,9 +634,10 @@ class PtraceProcess:
         while True:
             done = False
             data = self.readBytes(address, chunk_length)
-            if '\0' in data:
+            pos = data.find(b('\0'))
+            if pos != -1:
                 done = True
-                data = data[:data.index('\0')]
+                data = data[:pos]
             if max_size <= size+chunk_length:
                 data = data[:(max_size-size)]
                 string.append(data)

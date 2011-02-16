@@ -23,6 +23,7 @@ from errno import ESRCH
 from ptrace.cpu_info import CPU_POWERPC
 from ptrace.debugger import ChildError
 from ptrace.debugger.memory_mapping import readProcessMappings
+from ptrace.os_tools import RUNNING_PYTHON3
 
 import re
 try:
@@ -80,6 +81,17 @@ COMMANDS = (
     ("quit", "quit debugger"),
     ("help", "display this help"),
 )
+
+def formatAscii(data):
+    def asciiChar(byte):
+        if 32 <= byte <= 127:
+            return unichr(byte)
+        else:
+            return '.'
+    if RUNNING_PYTHON3:
+        return u''.join(asciiChar(byte) for byte in data)
+    else:
+        return u''.join(asciiChar(ord(byte)) for byte in data)
 
 # finds possible pointer values in process memory space,
 # pointing to address
@@ -406,15 +418,11 @@ class Gdb(Application):
                 bytes = self.process.readBytes(address, size)
 
                 # Format bytes
-                hexa = ' '.join( "%02x" % ord(byte) for byte in bytes )
-                def toAscii(byte):
-                    if 32 <= ord(byte) <= 127:
-                        return byte
-                    else:
-                        return '.'
-                ascii = ''.join(toAscii(byte) for byte in bytes)
-                hexa = hexa.ljust(width*3-1, ' ')
-                ascii = ascii.ljust(width, ' ')
+                hexa = u' '.join( u"%02x" % ord(byte) for byte in bytes )
+                hexa = hexa.ljust(width*3-1, u' ')
+
+                ascii = formatAscii(bytes)
+                ascii = ascii.ljust(width, u' ')
 
                 # Display previous read error, if any
                 if read_error:
@@ -423,7 +431,7 @@ class Gdb(Application):
                     read_error = None
 
                 # Display line
-                error("%s| %s| %s" % (formatAddress(address), hexa, ascii))
+                error(u"%s| %s| %s" % (formatAddress(address), hexa, ascii))
             except PtraceError:
                 if not read_error:
                     read_error = [address, address + size]
