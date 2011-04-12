@@ -13,7 +13,7 @@ if HAS_PTRACE_EVENTS:
 class DebuggerError(PtraceError):
     pass
 
-class PtraceDebugger:
+class PtraceDebugger(object):
     """
     Debugger managing one or multiple processes at the same time.
 

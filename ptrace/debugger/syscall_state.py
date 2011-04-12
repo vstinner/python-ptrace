@@ -1,7 +1,7 @@
 from ptrace.syscall import PtraceSyscall
 from signal import SIGTRAP
 
-class SyscallState:
+class SyscallState(object):
     def __init__(self, process):
         self.process = process
         self.ignore_exec_trap = True

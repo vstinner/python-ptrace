@@ -49,7 +49,7 @@ def readProcessProc(pid, key):
     except IOError, err:
         raise ProcError("Process %s doesn't exist: %s" % (pid, err))
 
-class ProcessState:
+class ProcessState(object):
     """
     Processus state. Attributes:
     - state (str): process status ('R', 'S', 'T', ...)

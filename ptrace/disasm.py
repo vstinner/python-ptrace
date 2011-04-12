@@ -28,7 +28,7 @@ try:
             raise ImportError("CPU not supported")
     from ptrace import PtraceError
 
-    class Instruction:
+    class Instruction(object):
         """
         A CPU instruction.
 

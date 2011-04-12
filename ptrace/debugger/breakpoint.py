@@ -6,7 +6,7 @@ from ptrace.cpu_info import CPU_POWERPC, CPU_WORD_SIZE
 from ptrace.ctypes_tools import word2bytes
 from ptrace.six import b
 
-class Breakpoint:
+class Breakpoint(object):
     """
     Software breakpoint.
 

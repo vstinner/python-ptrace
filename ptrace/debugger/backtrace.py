@@ -2,7 +2,7 @@ from ptrace.ctypes_tools import formatAddress, formatWordHex
 from ptrace.cpu_info import CPU_WORD_SIZE, CPU_MAX_UINT
 from ptrace import PtraceError
 
-class BacktraceFrame:
+class BacktraceFrame(object):
     """
     Backtrace frame.
 
@@ -20,7 +20,7 @@ class BacktraceFrame:
         arguments = (formatWordHex(arg) for arg in self.arguments)
         return u"IP=%s: %s (%s)" % (formatAddress(self.ip), self.name, ", ".join(arguments))
 
-class Backtrace:
+class Backtrace(object):
     """
     Backtrace: all process frames since the start function.
     """

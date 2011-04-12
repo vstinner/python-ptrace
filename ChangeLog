@@ -4,6 +4,7 @@ Changelog
 python-ptrace 0.6.4
 -------------------
 
+ * Convert all classes to new-style classes, patch written by teythoon
  * Fix compilation on Apple, patch written by Anthony Gelibert
  * Support GNU/kFreeBSD, patch written by Jakub Wilk
  * Support sockaddr_in6 (IPv6 address)

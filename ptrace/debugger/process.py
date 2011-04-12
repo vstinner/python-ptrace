@@ -58,7 +58,7 @@ MAX_CODE_SIZE = 1024
 DEFAULT_NB_INSTR = 10
 DEFAULT_CODE_SIZE = 24
 
-class PtraceProcess:
+class PtraceProcess(object):
     """
     Process traced by a PtraceDebugger.
 

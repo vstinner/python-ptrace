@@ -1,6 +1,6 @@
 from ptrace.func_arg import FunctionArgument
 
-class FunctionCallOptions:
+class FunctionCallOptions(object):
     """
     Options to format a function call and its arguments.
     """
@@ -16,7 +16,7 @@ class FunctionCallOptions:
         self.max_array_count = max_array_count
         self.instr_pointer = False
 
-class FunctionCall:
+class FunctionCall(object):
     """
     A function call. Attributes:
      - name (str): function name

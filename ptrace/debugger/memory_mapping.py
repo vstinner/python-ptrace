@@ -20,7 +20,7 @@ PROC_MAP_REGEX = re.compile(
     # Filename: '  /usr/bin/synergyc'
     r'(?: +(.*))?')
 
-class MemoryMapping:
+class MemoryMapping(object):
     """
     Process memory mapping (metadata about the mapping).
 

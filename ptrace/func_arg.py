@@ -2,7 +2,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from logging import getLogger
 from ptrace.ctypes_tools import formatAddress
 
-class FunctionArgument:
+class FunctionArgument(object):
     """
     Description of a function argument. Attributes:
      - function: a Function objet
