@@ -1,5 +1,8 @@
 #include <Python.h>
 #include <stdbool.h>
+#if __APPLE__
+#include <sys/types.h>
+#endif
 #include <sys/ptrace.h>
 
 #define UNUSED(arg) arg __attribute__((unused))

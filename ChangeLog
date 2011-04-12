@@ -4,7 +4,8 @@ Changelog
 python-ptrace 0.6.4
 -------------------
 
- * Support GNU/kFreeBSD
+ * Fix compilation on Apple, patch written by Anthony Gelibert
+ * Support GNU/kFreeBSD, patch written by Jakub Wilk
  * Support sockaddr_in6 (IPv6 address)
 
 python-ptrace 0.6.3 (2011-02-16)

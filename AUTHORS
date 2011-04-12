@@ -1,6 +1,7 @@
 python-ptrace authors
 =====================
 
+Anthony Gelibert - fix cptrace on Apple
 Dimitris Glynos <dimitris AT census-labs.com> - follow gdb.py commands
 Jakub Wilk <jwilk AT debian.org> - fix for GNU/kFreeBSD
 Mark Seaborn <mrs AT mythic-beasts.com> - Create -i option for strace
