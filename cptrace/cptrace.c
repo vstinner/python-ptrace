@@ -54,7 +54,7 @@ static PyObject* cpython_ptrace(PyObject* UNUSED(self), PyObject *args, PyObject
     static char *kwlist[] = {"request", "pid", "arg1", "arg2", "check_errno", NULL};
 
     if (!PyArg_ParseTupleAndKeywords(args, keywds,
-        "Ii|IIO", kwlist,
+        "Ii|LLO", kwlist,
         &request, &pid, &arg1, &arg2, &check_errno_p
     ))
     {
