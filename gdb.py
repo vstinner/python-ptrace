@@ -84,7 +84,7 @@ COMMANDS = (
 
 def formatAscii(data):
     def asciiChar(byte):
-        if 32 <= byte <= 127:
+        if 32 <= byte <= 126:
             return unichr(byte)
         else:
             return '.'
