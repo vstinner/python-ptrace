@@ -16,6 +16,8 @@
 #  - set version to n+1 (ptrace/version.py)
 #  - add a new empty section in the changelog for version n+1
 
+from __future__ import with_statement
+
 MODULES = ["ptrace", "ptrace.binding", "ptrace.syscall", "ptrace.debugger"]
 
 SCRIPTS = ("strace.py", "gdb.py")
@@ -31,7 +33,10 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
 ]
 
-LONG_DESCRIPTION = open('README').read() + open('ChangeLog').read()
+with open('README') as fp:
+    LONG_DESCRIPTION = fp.read()
+with open('ChangeLog') as fp:
+    LONG_DESCRIPTION += fp.read()
 
 from imp import load_source
 from os import path
