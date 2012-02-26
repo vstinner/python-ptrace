@@ -1,8 +1,8 @@
 Changelog
 =========
 
-python-ptrace 0.6.4
--------------------
+python-ptrace 0.6.4 (2012-02-26)
+--------------------------------
 
  * Convert all classes to new-style classes, patch written by teythoon
  * Fix compilation on Apple, patch written by Anthony Gelibert

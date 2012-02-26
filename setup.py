@@ -8,6 +8,8 @@
 #  - set release date in the ChangeLog
 #  - hg ci
 #  - hg tag python-ptrace-x.y
+#  - update version in ptrace/version.py
+#  - hg ci
 #  - hg push
 #  - ./setup.py sdist register upload
 #  - update the website home page (url, md5 and news)
