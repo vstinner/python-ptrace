@@ -8,15 +8,14 @@
 #  - set release date in the ChangeLog
 #  - hg ci
 #  - hg tag python-ptrace-x.y
-#  - update version in ptrace/version.py
 #  - hg ci
 #  - hg push
 #  - ./setup.py sdist register upload
 #  - update the website home page (url, md5 and news)
-#
-# After the release:
+#    https://bitbucket.org/haypo/python-ptrace/wiki/Home
 #  - set version to n+1 (ptrace/version.py)
-#  - add a new empty section in the changelog for version n+1
+#  - hg ci
+#  - hg push
 
 from __future__ import with_statement
 
