@@ -87,7 +87,7 @@ class SyscallArgument(FunctionArgument):
         if syscall == "socketcall":
             if name == "call":
                 try:
-                    return SOCKETCALL[value][0]
+                    return SOCKETCALL[value]
                 except KeyError:
                     return str(value)
             if name == "args":
