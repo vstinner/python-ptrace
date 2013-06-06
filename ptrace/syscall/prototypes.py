@@ -451,7 +451,7 @@ SYSCALL_PROTOTYPES = {
             ("socklen_t*", "addrlen"),
         )),
     "socketpair": ("int", (
-            ("int", "family"),
+            ("int", "domain"),
             ("int", "type"),
             ("int", "protocol"),
             ("int*", "sockvec"),

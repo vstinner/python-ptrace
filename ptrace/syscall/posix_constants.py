@@ -50,7 +50,7 @@ SYSCALL_ARG_DICT = {
         },
     },
     "socket": {
-        "family": SOCKET_FAMILY,
+        "domain": SOCKET_FAMILY,
         "type": SOCKET_TYPE,
         "protocol": SOCKET_PROTOCOL,
     },
