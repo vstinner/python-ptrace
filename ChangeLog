@@ -1,6 +1,12 @@
 Changelog
 =========
 
+python-ptrace 0.6.5 (2013-06-06)
+--------------------------------
+
+ * syscall: fix parsing socketcall on Linux x86
+ * syscall: fix protoype of socket()
+
 python-ptrace 0.6.4 (2012-02-26)
 --------------------------------
 
