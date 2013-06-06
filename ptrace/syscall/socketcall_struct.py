@@ -48,7 +48,7 @@ class in6_addr(Union):
 
     def __repr__(self):
         text = ':'.join(("%04x" % ntoh_ushort(part)) for part in self.addr16)
-        return "<in6_addrr %s>" % text
+        return "<in6_addr %s>" % text
 
 # INET socket
 class sockaddr_in(Structure):
