@@ -38,7 +38,7 @@ if HAS_UNAME:
     CPU_PPC32 = (_machine == 'ppc')
     CPU_PPC64 = (_machine == 'ppc64')
     CPU_I386 = (_machine in ("i386", "i686"))    # compatible Intel 32 bits
-    CPU_X86_64 = (_machine == "x86_64")  # compatible Intel 64 bits
+    CPU_X86_64 = (_machine in ("x86_64", "amd64"))  # compatible Intel 64 bits
     del _machine
 else:
     # uname() fallback for Windows

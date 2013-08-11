@@ -55,20 +55,23 @@ class PtraceSyscall(FunctionCall):
             else:
                 self.syscall = regs.orig_eax
         else:
-            self.syscall = regs.eax
+            if CPU_X86_64:
+                self.syscall = regs.rax
+            else:
+                self.syscall = regs.eax
 
         # Get syscall variables
         self.name = SYSCALL_NAMES.get(self.syscall, "syscall<%s>" % self.syscall)
 
     def readArgumentValues(self, regs):
+        if CPU_X86_64:
+            return (regs.rdi, regs.rsi, regs.rdx, regs.r10, regs.r8, regs.r9)
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
             return [ self.process.readWord(sp + index*CPU_WORD_SIZE)
                 for index in xrange(1, 6+1) ]
         if CPU_I386:
             return (regs.ebx, regs.ecx, regs.edx, regs.esi, regs.edi, regs.ebp)
-        if CPU_X86_64:
-            return (regs.rdi, regs.rsi, regs.rdx, regs.r10, regs.r8, regs.r9)
         if CPU_POWERPC:
             return (regs.gpr3, regs.gpr4, regs.gpr5, regs.gpr6, regs.gpr7, regs.gpr8)
         raise NotImplementedError()
