@@ -15,43 +15,26 @@ Unsigned types:
  - uint64_t
 """
 
-from ctypes import sizeof, \
-    c_byte, c_ubyte, \
-    c_short, c_ushort, \
-    c_int, c_uint, \
-    c_long, c_ulong, \
-    c_longlong, c_ulonglong
+import ctypes
 
 # 8-bit integers
-uint8_t = c_ubyte
-int8_t = c_byte
+int8_t = ctypes.c_int8
+uint8_t = ctypes.c_uint8
 
 # 16-bit integers
-assert sizeof(c_short) == 2
-assert sizeof(c_ushort) == 2
-int16_t = c_short
-uint16_t = c_ushort
+int16_t = ctypes.c_int16
+uint16_t = ctypes.c_uint16
 
 # 32-bit integers
-assert sizeof(c_int) == 4
-assert sizeof(c_uint) == 4
-int32_t = c_int
-uint32_t = c_uint
+int32_t = ctypes.c_int32
+uint32_t = ctypes.c_uint32
 
 # 64-bit integers
-if sizeof(c_long) == 8:
-    int64_t = c_long
-else:
-    assert sizeof(c_longlong) == 8
-    int64_t = c_longlong
-if sizeof(c_ulong) == 8:
-    uint64_t = c_ulong
-else:
-    assert sizeof(c_ulonglong) == 8
-    uint64_t = c_ulonglong
+int64_t = ctypes.c_int64
+uint64_t = ctypes.c_uint64
 
 # size_t
-size_t = c_long
+size_t = ctypes.c_size_t
 
 __all__ = (
     "uint8_t", "int8_t", "int16_t", "uint16_t",
