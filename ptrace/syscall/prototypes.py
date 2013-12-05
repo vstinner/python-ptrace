@@ -339,6 +339,11 @@ SYSCALL_PROTOTYPES = {
     "unlink": ("long", (
             ("const char*", "pathname"),
         )),
+    "unlinkat":("long", (
+            ("int", "dirfd"),
+            ("const char*", "pathname"),
+            ("int", "flags"),
+        )),
     "kill" : ("long", (
             ("int", "pid"),
             ("int", "signum"),
