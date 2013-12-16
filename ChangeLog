@@ -1,11 +1,13 @@
 Changelog
 =========
 
-python-ptrace 0.6.6
--------------------
+python-ptrace 0.6.6 (2013-12-16)
+--------------------------------
 
  * Fix os_tools.RUNNING_LINUX for Python 2.x compiled on Linux kernel 3.x
  * Support FreeBSD on x86_64
+ * Add missing prototype of the unlinkat() system call. Patch written by
+   Matthew Fernandez.
 
 python-ptrace 0.6.5 (2013-06-06)
 --------------------------------
