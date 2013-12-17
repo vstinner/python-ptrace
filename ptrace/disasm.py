@@ -15,7 +15,7 @@ try:
         else:
             raise ImportError("CPU not supported")
         DISTORM3 = True
-    except ImportError, err:
+    except ImportError as err:
         DISTORM3 = False
         from ptrace.pydistorm import Decode
         if CPU_X86_64:
@@ -46,8 +46,8 @@ try:
             else:
                 self.address = instr.offset
                 self.size = instr.size
-                self.hexa = unicode(instr.instructionHex)
-                self.text = u"%s %s" % (instr.mnemonic, instr.operands)
+                self.hexa = str(instr.instructionHex)
+                self.text = "%s %s" % (instr.mnemonic, instr.operands)
 
         def __str__(self):
             return self.text
@@ -70,7 +70,7 @@ try:
         raise PtraceError("Unable to disassemble %r" % code)
 
     HAS_DISASSEMBLER = True
-except (ImportError, OSError), err:
+except (ImportError, OSError) as err:
     # OSError if libdistorm64.so doesn't exist
     HAS_DISASSEMBLER = False
 

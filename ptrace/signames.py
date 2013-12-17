@@ -25,7 +25,7 @@ def getSignalNames():
         except KeyError:
             allnames[signum] = [name]
     signames = {}
-    for signum, names in allnames.iteritems():
+    for signum, names in allnames.items():
         if not signum:
             # Skip signal 0
             continue

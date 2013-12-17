@@ -1,5 +1,5 @@
 from os import strerror
-from itertools import izip
+
 from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
 from ptrace.func_call import FunctionCall
@@ -69,7 +69,7 @@ class PtraceSyscall(FunctionCall):
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
             return [ self.process.readWord(sp + index*CPU_WORD_SIZE)
-                for index in xrange(1, 6+1) ]
+                for index in range(1, 6+1) ]
         if CPU_I386:
             return (regs.ebx, regs.ecx, regs.edx, regs.esi, regs.edi, regs.ebp)
         if CPU_POWERPC:
@@ -79,7 +79,7 @@ class PtraceSyscall(FunctionCall):
     def readArguments(self, argument_values):
         if self.name in SYSCALL_PROTOTYPES:
             self.restype, formats = SYSCALL_PROTOTYPES[self.name]
-            for value, format in izip(argument_values, formats):
+            for value, format in zip(argument_values, formats):
                 argtype, argname = format
                 self.addArgument(value=value, name=argname, type=argtype)
         else:

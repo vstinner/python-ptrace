@@ -59,7 +59,7 @@ install_options = {
     "long_description": LONG_DESCRIPTION,
     "classifiers": CLASSIFIERS,
     "license": ptrace.LICENSE,
-    "packages": PACKAGES.keys(),
+    "packages": list(PACKAGES.keys()),
     "package_dir": PACKAGES,
     "scripts": SCRIPTS,
 }

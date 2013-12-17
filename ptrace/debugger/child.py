@@ -38,7 +38,7 @@ def _waitpid_no_intr(pid, options):
     while True:
         try:
             return waitpid(pid, options)
-        except OSError, e:
+        except OSError as e:
             if e.errno == EINTR:
                 continue
             else:
@@ -49,7 +49,7 @@ def _read_no_intr(fd, buffersize):
     while True:
         try:
             return read(fd, buffersize)
-        except OSError, e:
+        except OSError as e:
             if e.errno == EINTR:
                 continue
             else:
@@ -60,7 +60,7 @@ def _write_no_intr(fd, s):
     while True:
         try:
             return write(fd, s)
-        except OSError, e:
+        except OSError as e:
             if e.errno == EINTR:
                 continue
             else:
@@ -79,11 +79,11 @@ def _createChild(arguments, no_stdout, env, errpipe_write):
     # Child code
     try:
         ptrace_traceme()
-    except PtraceError, err:
+    except PtraceError as err:
         raise ChildError(str(err))
 
     # Close all files except 0, 1, 2 and errpipe_write
-    for fd in xrange(3, MAXFD):
+    for fd in range(3, MAXFD):
         if fd == errpipe_write:
             continue
         try:
@@ -107,7 +107,7 @@ def _execChild(arguments, no_stdout, env):
             dup2(null.fileno(), 1)
             dup2(1, 2)
             null.close()
-        except IOError, err:
+        except IOError as err:
             close(2)
             close(1)
     try:
@@ -115,7 +115,7 @@ def _execChild(arguments, no_stdout, env):
             execve(arguments[0], arguments, env)
         else:
             execv(arguments[0], arguments)
-    except Exception, err:
+    except Exception as err:
         raise ChildError(str(err))
 
 def createChild(arguments, no_stdout, env=None):

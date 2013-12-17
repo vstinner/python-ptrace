@@ -25,21 +25,21 @@ def formatAccessMode(argument):
 
 # From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
 OPEN_MODE_BITMASK = (
-    (01, "O_WRONLY"),
-    (02, "O_RDWR"),
-    (0100, "O_CREAT"),
-    (0200, "O_EXCL"),
-    (0400, "O_NOCTTY"),
-    (01000, "O_TRUNC"),
-    (02000, "O_APPEND"),
-    (04000, "O_NONBLOCK"),
-    (010000, "O_SYNC"),
-    (020000, "O_ASYNC"),
-    (040000, "O_DIRECT"),
-    (0100000, "O_LARGEFILE"),
-    (0200000, "O_DIRECTORY"),
-    (0400000, "O_NOFOLLOW"),
-    (01000000, "O_NOATIME"),
+    (0o1, "O_WRONLY"),
+    (0o2, "O_RDWR"),
+    (0o100, "O_CREAT"),
+    (0o200, "O_EXCL"),
+    (0o400, "O_NOCTTY"),
+    (0o1000, "O_TRUNC"),
+    (0o2000, "O_APPEND"),
+    (0o4000, "O_NONBLOCK"),
+    (0o10000, "O_SYNC"),
+    (0o20000, "O_ASYNC"),
+    (0o40000, "O_DIRECT"),
+    (0o100000, "O_LARGEFILE"),
+    (0o200000, "O_DIRECTORY"),
+    (0o400000, "O_NOFOLLOW"),
+    (0o1000000, "O_NOATIME"),
 )
 
 def formatOpenMode(argument):

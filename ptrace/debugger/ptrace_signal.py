@@ -47,8 +47,8 @@ def evalFaultAddress(process, match):
         return None
     try:
         return parseExpression(process, expr)
-    except ValueError, err:
-        print "err: %s" % err
+    except ValueError as err:
+        print("err: %s" % err)
         return None
 
 class ProcessSignal(ProcessEvent):

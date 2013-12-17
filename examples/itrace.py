@@ -29,23 +29,23 @@ class Tracer(strace.SyscallTracer):
         syscall_limit = self.options.syscall_limit
         i = 0
         while i < syscall_limit or syscall_limit is None:
-            print i
+            print(i)
             i += 1
             process.syscall()
             self.debugger.waitSyscall()
         i = 0
         while self.debugger:
             eip = process.getInstrPointer()
-            print i, process.pid, "[%08x]" % eip
+            print(i, process.pid, "[%08x]" % eip)
             i += 1
             process.singleStep()
             event = self.debugger.waitProcessEvent()
             if isinstance(event, ProcessExit):
-                print "process exit"
+                print("process exit")
                 return
             if (isinstance(event, ProcessSignal) and
                 event.signum & ~128 != signal.SIGTRAP):
-                print "died with signal %i" % event.signum
+                print("died with signal %i" % event.signum)
                 return
 
 if __name__ == "__main__":

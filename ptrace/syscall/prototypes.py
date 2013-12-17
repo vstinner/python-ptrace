@@ -467,7 +467,7 @@ SYSCALL_PROTOTYPES = {
         )),
 }
 
-for orig, copies in ALIASES.iteritems():
+for orig, copies in ALIASES.items():
     orig = SYSCALL_PROTOTYPES[orig]
     for copy in copies:
         SYSCALL_PROTOTYPES[copy] = orig

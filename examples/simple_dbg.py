@@ -6,13 +6,13 @@ from sys import stderr, argv, exit
 
 def playWithProcess(process):
     # Do anything you want with the process here...
-    print "Dump process registers"
+    print("Dump process registers")
     process.dumpRegs()
-    print "Continue process execution"
+    print("Continue process execution")
     process.cont()
-    print "Wait next process event..."
+    print("Wait next process event...")
     event = process.waitEvent()
-    print "New process event: %s" % event
+    print("New process event: %s" % event)
 
 def traceProgram(arguments):
     # Copy the environment variables
@@ -27,8 +27,8 @@ def traceProgram(arguments):
 def main():
     # Check the command line
     if len(argv) < 2:
-        print >>stderr, "usage: %s program [arg1 arg2 ...]" % argv[0]
-        print >>stderr, "   or: %s pid" % argv[0]
+        print("usage: %s program [arg1 arg2 ...]" % argv[0], file=stderr)
+        print("   or: %s pid" % argv[0], file=stderr)
         exit(1)
 
     # Get the process identifier

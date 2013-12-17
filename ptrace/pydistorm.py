@@ -108,7 +108,7 @@ def Decode(codeOffset, code, dt=Decode32Bits):
         # Yield instruction and compute decoded size
         size = 0
         instr_array = cast(result, POINTER(_DecodedInst))
-        for index in xrange(count):
+        for index in range(count):
             instr = instr_array[index]
             size += instr.size
             yield instr

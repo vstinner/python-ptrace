@@ -82,7 +82,7 @@ class PtraceDebugger(object):
                 "User interrupt! Force the process %s attach "
                 "(don't wait for signals)."
                 % pid)
-        except ProcessSignal, event:
+        except ProcessSignal as event:
             event.display()
         except:
             process.is_attached = False
@@ -137,7 +137,7 @@ class PtraceDebugger(object):
         while not process:
             try:
                 pid, status = self._waitpid(wanted_pid, blocking)
-            except OSError, err:
+            except OSError as err:
                 if err.errno == ECHILD:
                     process = self.dict[wanted_pid]
                     return process.processTerminated()

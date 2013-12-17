@@ -35,7 +35,7 @@ class FunctionArgument(object):
                     self.text = formatAddress(self.value)
                 else:
                     self.text = repr(self.value)
-            except PTRACE_ERRORS, err:
+            except PTRACE_ERRORS as err:
                 writeError(getLogger(), err,
                     "Format argument %s of function %s() value error"
                     % (self.name, self.function.name))
@@ -78,7 +78,7 @@ class FunctionArgument(object):
                     text = str(text)
                 else:
                     text = repr(value)
-            except PTRACE_ERRORS, err:
+            except PTRACE_ERRORS as err:
                 writeError(getLogger(), err, "Format struct value error")
                 text = repr(value)
             arguments.append("%s=%s" % (name, text))
@@ -92,7 +92,7 @@ class FunctionArgument(object):
     def readArray(self, address, basetype, count):
         array = self.function.process.readArray(address, basetype, count)
         arguments = []
-        for index in xrange(count):
+        for index in range(count):
             value = array[index]
             value = str(value)
             arguments.append(value)

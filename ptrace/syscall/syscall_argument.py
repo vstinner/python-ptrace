@@ -57,7 +57,7 @@ INTEGER_TYPES = set((
 def iterBits(data):
     for char in data:
         byte = ord(char)
-        for index in xrange(8):
+        for index in range(8):
             yield ((byte >> index) & 1) == 1
 
 class SyscallArgument(FunctionArgument):
@@ -115,7 +115,7 @@ class SyscallArgument(FunctionArgument):
                 text = self.formatValuePointer(argtype[:-1])
                 if text:
                     return text
-            except PTRACE_ERRORS, err:
+            except PTRACE_ERRORS as err:
                 writeError(getLogger(), err, "Warning: Format %r value error" % self, log_level=INFO)
             return formatAddress(self.value)
 

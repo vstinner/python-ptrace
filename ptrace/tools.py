@@ -137,7 +137,7 @@ def inverseDict(data):
     {32: '0x20', 16: '0x10'}
     """
     result = {}
-    for key, value in data.iteritems():
+    for key, value in data.items():
         result[value] = key
     return result
 

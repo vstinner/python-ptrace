@@ -129,7 +129,7 @@ def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
     if HAS_CPTRACE:
         try:
             result = _ptrace(command, pid, arg1, arg2)
-        except ValueError, errobj:
+        except ValueError as errobj:
             message = str(errobj)
             errno = get_errno()
             raise PtraceError(message, errno=errno, pid=pid)

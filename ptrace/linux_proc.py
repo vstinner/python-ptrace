@@ -26,7 +26,7 @@ def openProc(path):
     filename = "/proc/%s" % path
     try:
         return open(filename)
-    except IOError, err:
+    except IOError as err:
         raise ProcError("Unable to open %r: %s" % (filename, err))
 
 def readProc(path):
@@ -46,7 +46,7 @@ def readProcessProc(pid, key):
         filename = "/proc/%s/%s" % (pid, key)
         with open(filename) as proc:
             return proc.read()
-    except IOError, err:
+    except IOError as err:
         raise ProcError("Process %s doesn't exist: %s" % (pid, err))
 
 class ProcessState(object):
@@ -129,7 +129,7 @@ def readProcessLink(pid, key):
     try:
         filename = "/proc/%s/%s" % (pid, key)
         return readlink(filename)
-    except OSError, err:
+    except OSError as err:
         raise ProcError("Unable to read proc link %r: %s" % (filename, err))
 
 def readProcesses():

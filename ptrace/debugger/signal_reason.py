@@ -30,7 +30,7 @@ def extractRegisters(process, instr):
         try:
             value = process.getreg(name)
             registers[name] = value
-        except PtraceError, err:
+        except PtraceError as err:
             pass
     return registers
 
@@ -79,7 +79,7 @@ class SignalInfo(Exception):
             log("- instruction: %s" % self.instr)
         for mapping in self.mappings:
             log("- mapping: %s" % mapping)
-        for name, value in self.registers.iteritems():
+        for name, value in self.registers.items():
             log("- register %s=%s" % (name, formatWordHex(value)))
 
     def displayExtra(self, log):

@@ -1,10 +1,7 @@
 from hotshot import Profile
 from hotshot.stats import load as loadStats
 from os import unlink
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+from io import StringIO
 
 def runProfiler(logger, func, args=tuple(), kw={},
 verbose=True, nb_func=25,

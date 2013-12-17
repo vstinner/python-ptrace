@@ -110,7 +110,7 @@ def readProcessMappings(process):
         return maps
     try:
         mapsfile = openProc("%s/maps" % process.pid)
-    except ProcError, err:
+    except ProcError as err:
         raise ProcessError(process, "Unable to read process maps: %s" % err)
     try:
         for line in mapsfile:

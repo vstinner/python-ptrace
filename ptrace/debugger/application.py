@@ -1,3 +1,4 @@
+from __future__ import print_function
 from optparse import OptionGroup
 from logging import (getLogger, StreamHandler,
     DEBUG, INFO, WARNING, ERROR)
@@ -50,7 +51,7 @@ class Application(object):
             try:
                 self.debugger.traceFork()
             except DebuggerError:
-                print >>stderr, "ERROR: --fork option is not supported by your OS, sorry!"
+                print("ERROR: --fork option is not supported by your OS, sorry!", file=stderr)
                 exit(1)
         if self.options.trace_exec:
             self.debugger.traceExec()
@@ -65,7 +66,7 @@ class Application(object):
             is_attached = True
         try:
             return self.debugger.addProcess(pid, is_attached=is_attached)
-        except (ProcessExit, PtraceError), err:
+        except (ProcessExit, PtraceError) as err:
             if isinstance(err, PtraceError) \
             and err.errno == EPERM:
                 error("ERROR: You are not allowed to trace process %s (permission denied or process already traced)" % pid)

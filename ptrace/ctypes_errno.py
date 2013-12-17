@@ -60,7 +60,7 @@ if not get_errno:
         """
         try:
             pythonapi.PyErr_SetFromErrno(py_object(OSError))
-        except OSError, err:
+        except OSError as err:
             return err.errno
         else:
             raise RuntimeError("get_errno() is unable to get error code")

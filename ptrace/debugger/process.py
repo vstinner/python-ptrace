@@ -25,7 +25,7 @@ if HAS_PTRACE_GETREGS:
     from ptrace.binding import ptrace_getregs
 else:
     from ptrace.binding import ptrace_peekuser, ptrace_registers_t
-from ptrace.os_tools import HAS_PROC, RUNNING_BSD
+from ptrace.os_tools import HAS_PROC, RUNNING_BSD, RUNNING_PYTHON3
 from ptrace.tools import dumpRegs
 from ptrace.cpu_info import CPU_WORD_SIZE, CPU_64BITS
 from ptrace.ctypes_tools import bytes2word, word2bytes, bytes2type, bytes2array
@@ -189,7 +189,7 @@ class PtraceProcess(object):
             log = error
         try:
             ip = self.getInstrPointer()
-        except PtraceError, err:
+        except PtraceError as err:
             if start is None:
                 log("Unable to read instruction pointer: %s" % err)
                 return
@@ -199,7 +199,7 @@ class PtraceProcess(object):
 
         try:
             self._dumpCode(start, stop, ip, manage_bp, log)
-        except PtraceError, err:
+        except PtraceError as err:
             log("Unable to dump code at %s: %s" % (
                 formatAddress(start), err))
 
@@ -214,13 +214,16 @@ class PtraceProcess(object):
             else:
                 size = MIN_CODE_SIZE
             code = self.readBytes(start, size)
-            text = " ".join( "%02x" % ord(byte) for byte in code )
+            if RUNNING_PYTHON3:
+                text = " ".join( "%02x" % byte for byte in code )
+            else:
+                text = " ".join( "%02x" % ord(byte) for byte in code )
             log("CODE: %s" % text)
             return
 
         if manage_bp:
             address = start
-            for line in xrange(10):
+            for line in range(10):
                 bp = False
                 if address in self.breakpoints:
                     bytes = self.breakpoints[address].old_bytes
@@ -312,7 +315,7 @@ class PtraceProcess(object):
                 self.cont(SIGKILL)
             else:
                 self.kill(SIGKILL)
-        except PtraceError, event:
+        except PtraceError as event:
             if event.errno == ESRCH:
                 done = True
             else:
@@ -410,7 +413,7 @@ class PtraceProcess(object):
             # FIXME: Optimize getreg() when used with this function
             words = []
             nb_words = sizeof(ptrace_registers_t) // CPU_WORD_SIZE
-            for offset in xrange(nb_words):
+            for offset in range(nb_words):
                 word = ptrace_peekuser(self.pid, offset*CPU_WORD_SIZE)
                 bytes = word2bytes(word)
                 words.append(bytes)
@@ -545,7 +548,7 @@ class PtraceProcess(object):
                 filename = '/proc/%u/mem' % self.pid
                 try:
                     self.read_mem_file = open(filename, 'rb', 0)
-                except IOError, err:
+                except IOError as err:
                     message = "Unable to open %s: fallback to ptrace implementation" % filename
                     if err.errno != EACCES:
                         error(message)
@@ -558,7 +561,7 @@ class PtraceProcess(object):
                 mem = self.read_mem_file
                 mem.seek(address)
                 return mem.read(size)
-            except (IOError, ValueError), err:
+            except (IOError, ValueError) as err:
                 raise ProcessError(self, "readBytes(%s, %s) error: %s" % (
                     formatAddress(address), size, err))
     else:
@@ -648,7 +651,7 @@ class PtraceProcess(object):
                 break
             size += chunk_length
             address += chunk_length
-        return ''.join(string), truncated
+        return b''.join(string), truncated
 
     def dumpStack(self, log=None):
         if not log:
@@ -661,7 +664,7 @@ class PtraceProcess(object):
     def _dumpStack(self, log):
         sp = self.getStackPointer()
         displayed = 0
-        for index in xrange(-5, 5+1):
+        for index in range(-5, 5+1):
             delta = index * CPU_WORD_SIZE
             try:
                 value = self.readWord(sp + delta)
@@ -693,7 +696,7 @@ class PtraceProcess(object):
         try:
             regs = self.getregs()
             dumpRegs(log, regs)
-        except PtraceError, err:
+        except PtraceError as err:
             log("Unable to read registers: %s" % err)
 
     def cont(self, signum=0):
@@ -717,7 +720,7 @@ class PtraceProcess(object):
         self.debugger.waitSyscall(self)
 
     def findBreakpoint(self, address):
-        for bp in self.breakpoints.itervalues():
+        for bp in self.breakpoints.values():
             if bp.address <= address < bp.address + bp.size:
                 return bp
         return None

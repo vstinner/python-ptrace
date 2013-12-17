@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
     ProcessExit, NewProcessEvent, ProcessSignal,
@@ -24,6 +25,13 @@ from ptrace.cpu_info import CPU_POWERPC
 from ptrace.debugger import ChildError
 from ptrace.debugger.memory_mapping import readProcessMappings
 from ptrace.os_tools import RUNNING_PYTHON3
+try:
+    unichr
+    raw_input
+except NameError:
+    # Python 3
+    unichr = chr
+    raw_input = input
 
 import re
 try:
@@ -258,7 +266,7 @@ class Gdb(Application):
         self.followterms.append(term)
 
     def showFollowTerms(self):
-        print self.followterms
+        print(self.followterms)
 
     def _xray(self):
         for term in self.followterms:
@@ -273,10 +281,10 @@ class Gdb(Application):
         for process, procmap, address, term in self._xray():
             pointers = " ".join(formatAddress(ptr_addr)
                 for ptr_addr in getPointers(process, address))
-            print "term[%s] pid[%i] %s %s pointers: %s" % (
+            print("term[%s] pid[%i] %s %s pointers: %s" % (
                 repr(term), process.pid, procmap,
                 formatAddress(address),
-                pointers)
+                pointers))
 
     def execute(self, command):
         errmsg = None
@@ -341,7 +349,7 @@ class Gdb(Application):
         else:
             errmsg = "Unknown command: %r" % command
         if errmsg:
-            print >>stderr, errmsg
+            print(errmsg, file=stderr)
             return False
         return True
 
@@ -356,13 +364,13 @@ class Gdb(Application):
             pass
         try:
             return self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
             raise ValueError("Invalid signal number: %r" % command)
 
     def signal(self, command):
         try:
             signum = self.parseSignum(command)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
         last_process = self.process
         try:
@@ -377,7 +385,7 @@ class Gdb(Application):
     def print_(self, command):
         try:
             value = self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
         error("Decimal: %s" % value)
         error("Hexadecimal: %s" % formatWordHex(value))
@@ -401,7 +409,7 @@ class Gdb(Application):
                 if end_address <= start_address:
                     raise ValueError('End address (%s) is smaller than start address(%s)!'
                         % (formatAddress(end_address), formatAddress(start_address)))
-            except ValueError, err:
+            except ValueError as err:
                 return str(err)
             size = end_address - start_address
             max_size = width*max_line
@@ -411,7 +419,7 @@ class Gdb(Application):
         else:
             try:
                 start_address = self.parseInteger(command)
-            except ValueError, err:
+            except ValueError as err:
                 return str(err)
             end_address = start_address + 5*width
 
@@ -425,10 +433,10 @@ class Gdb(Application):
 
                 # Format bytes
                 hexa = formatHexa(memory)
-                hexa = hexa.ljust(width*3-1, u' ')
+                hexa = hexa.ljust(width*3-1, ' ')
 
                 ascii = formatAscii(memory)
-                ascii = ascii.ljust(width, u' ')
+                ascii = ascii.ljust(width, ' ')
 
                 # Display previous read error, if any
                 if read_error:
@@ -437,7 +445,7 @@ class Gdb(Application):
                     read_error = None
 
                 # Display line
-                error(u"%s| %s| %s" % (formatAddress(address), hexa, ascii))
+                error("%s| %s| %s" % (formatAddress(address), hexa, ascii))
             except PtraceError:
                 if not read_error:
                     read_error = [address, address + size]
@@ -466,7 +474,7 @@ class Gdb(Application):
         stop = None
         try:
             values = self.parseIntegers(command)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
         if 1 <= len(values):
             start = values[0]
@@ -492,15 +500,15 @@ class Gdb(Application):
             if not key.startswith("$"):
                 return 'Register name (%s) have to start with "$"' % key
             key = key[1:]
-        except ValueError, err:
+        except ValueError as err:
              return "Invalid command: %r" % command
         try:
             value = self.parseInteger(value)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
         try:
             self.process.setreg(key, value)
-        except ProcessError, err:
+        except ProcessError as err:
             return "Unable to set $%s=%s: %s" % (key, value, err)
         error("Set $%s to %s" % (key, value))
         return None
@@ -513,13 +521,13 @@ class Gdb(Application):
                     prefix, formatAddress(instr.address), instr.text))
             else:
                 self.process.dumpCode()
-        except PtraceError, err:
+        except PtraceError as err:
             error("Unable to read current instruction: %s" % err)
 
     def attachProcess(self, text):
         try:
             pid = self.parseInteger(text)
-        except ValueError, err:
+        except ValueError as err:
              return str(err)
         process = self.debugger.addProcess(pid, False)
         self.switchProcess(process)
@@ -589,7 +597,7 @@ class Gdb(Application):
     def until(self, command):
         try:
             address = self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
              return str(err)
         errmsg = self.step(False, address)
         if errmsg:
@@ -609,7 +617,7 @@ class Gdb(Application):
             return
         try:
             pid = self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
              return str(err)
         try:
             process = self.debugger[pid]
@@ -626,7 +634,7 @@ class Gdb(Application):
 
     def nextProcess(self):
         try:
-            process = iter(self.debugger).next()
+            process = next(iter(self.debugger))
             self.switchProcess(process)
         except StopIteration:
             pass
@@ -634,15 +642,15 @@ class Gdb(Application):
     def displayBreakpoints(self):
         found = False
         for process in self.debugger:
-            for bp in process.breakpoints.itervalues():
+            for bp in process.breakpoints.values():
                 found = True
                 error("%s:%s" % (process, bp))
         if not found:
             error("(no breakpoint)")
 
     def displaySignals(self):
-        signals = SIGNAMES.items()
-        signals.sort(key=lambda (key, value): key)
+        signals = list(SIGNAMES.items())
+        signals.sort(key=lambda key_value: key_value[0])
         for signum, name in signals:
             error("% 2s: %s" % (signum, name))
 
@@ -653,7 +661,7 @@ class Gdb(Application):
             # Get address and size of instruction at specified address
             instr = self.process.disassembleOne(address)
             return instr.size
-        except PtraceError, err:
+        except PtraceError as err:
             warning("Warning: Unable to read instruction size at %s: %s" % (
                 formatAddress(address), err))
             return default_size
@@ -661,14 +669,14 @@ class Gdb(Application):
     def breakpoint(self, command):
         try:
             address = self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
 
         # Create breakpoint
         size = self.readInstrSize(address)
         try:
             bp = self.process.createBreakpoint(address, size)
-        except PtraceError, err:
+        except PtraceError as err:
             return "Unable to set breakpoint at %s: %s" % (
                 formatAddress(address), err)
         error("New breakpoint: %s" % bp)
@@ -677,7 +685,7 @@ class Gdb(Application):
     def delete(self, command):
         try:
             address = self.parseInteger(command)
-        except ValueError, err:
+        except ValueError as err:
             return str(err)
 
         breakpoint = self.process.findBreakpoint(address)
@@ -728,7 +736,7 @@ class Gdb(Application):
             info("Wait %s interruption" % process)
             try:
                 process.waitSignals(SIGINT)
-            except ProcessSignal, event:
+            except ProcessSignal as event:
                 event.display()
             except KeyboardInterrupt:
                 pass
@@ -753,7 +761,7 @@ class Gdb(Application):
             self.restoreTerminal()
             command = raw_input(self.invite).strip()
         except EOFError:
-            print
+            print()
             return True
         except KeyboardInterrupt:
             error("User interrupt!")
@@ -781,8 +789,8 @@ class Gdb(Application):
                 command = command.strip()
                 try:
                     ok &= self.execute(command)
-                except Exception, err:
-                    print "Command error: %s" % err
+                except Exception as err:
+                    print("Command error: %s" % err)
                     ok = False
                 if not ok:
                     break
@@ -790,16 +798,16 @@ class Gdb(Application):
                 self.previous_command = command_str
         except KeyboardInterrupt:
             self.interrupt()
-        except NewProcessEvent, event:
+        except NewProcessEvent as event:
             self.newProcess(event)
-        except ProcessSignal, event:
+        except ProcessSignal as event:
             self.processSignal(event)
-        except ProcessExit, event:
+        except ProcessExit as event:
             error(event)
             self.nextProcess()
-        except ProcessExecution, event:
+        except ProcessExecution as event:
             self.processExecution(event)
-        except PtraceError, err:
+        except PtraceError as err:
             error("ERROR: %s" % err)
             if err.errno == ESRCH:
                 self.deleteProcess(err.pid)
@@ -811,7 +819,7 @@ class Gdb(Application):
         # Create new process
         try:
             self.process = self.createProcess()
-        except ChildError, err:
+        except ChildError as err:
             writeError(getLogger(), err, "Unable to create child process")
             return
         if not self.process:
@@ -834,7 +842,7 @@ class Gdb(Application):
             self.runDebugger()
         except KeyboardInterrupt:
             error("Interrupt debugger: quit!")
-        except PTRACE_ERRORS, err:
+        except PTRACE_ERRORS as err:
             writeError(getLogger(), err, "Debugger error")
         self.process = None
         self.debugger.quit()

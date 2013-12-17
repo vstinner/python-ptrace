@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
     ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
@@ -75,10 +76,10 @@ class SyscallTracer(Application):
         self.options, self.program = parser.parse_args()
 
         if self.options.list_syscalls:
-            syscalls = SYSCALL_NAMES.items()
+            syscalls = list(SYSCALL_NAMES.items())
             syscalls.sort(key=lambda data: data[0])
             for num, name in syscalls:
-                print "% 3s: %s" % (num, name)
+                print("% 3s: %s" % (num, name))
             exit(0)
 
         if self.options.pid is None and not self.program:
@@ -94,19 +95,19 @@ class SyscallTracer(Application):
                 if not item or item in only:
                     continue
                 ok = True
-                valid_names = SYSCALL_NAMES.values()
+                valid_names = list(SYSCALL_NAMES.values())
                 for name in only:
                     if name not in valid_names:
-                        print >>stderr, "ERROR: unknow syscall %r" % name
+                        print("ERROR: unknow syscall %r" % name, file=stderr)
                         ok = False
                 if not ok:
-                    print >>stderr
-                    print >>stderr, "Use --list-syscalls options to get system calls list"
+                    print(file=stderr)
+                    print("Use --list-syscalls options to get system calls list", file=stderr)
                     exit(1)
                 # remove duplicates
                 only.add(item)
         if self.options.filename:
-            for syscall, format in SYSCALL_PROTOTYPES.iteritems():
+            for syscall, format in SYSCALL_PROTOTYPES.items():
                 restype, arguments = format
                 if any(argname in FILENAME_ARGUMENTS for argtype, argname in arguments):
                     only.add(syscall)
@@ -116,9 +117,9 @@ class SyscallTracer(Application):
         if self.options.ignore_regex:
             try:
                 self.ignore_regex = re.compile(self.options.ignore_regex)
-            except Exception, err:
-                print "Invalid regular expression! %s" % err
-                print "(regex: %r)" % self.options.ignore_regex
+            except Exception as err:
+                print("Invalid regular expression! %s" % err)
+                print("(regex: %r)" % self.options.ignore_regex)
                 exit(1)
         else:
             self.ignore_regex = None
@@ -163,17 +164,17 @@ class SyscallTracer(Application):
             try:
                 event = self.debugger.waitSyscall()
                 process = event.process
-            except ProcessExit, event:
+            except ProcessExit as event:
                 self.processExited(event)
                 continue
-            except ProcessSignal, event:
+            except ProcessSignal as event:
                 event.display()
                 process.syscall(event.signum)
                 continue
-            except NewProcessEvent, event:
+            except NewProcessEvent as event:
                 self.newProcess(event)
                 continue
-            except ProcessExecution, event:
+            except ProcessExecution as event:
                 self.processExecution(event)
                 continue
 
@@ -245,13 +246,13 @@ class SyscallTracer(Application):
         self.debugger = PtraceDebugger()
         try:
             self.runDebugger()
-        except ProcessExit, event:
+        except ProcessExit as event:
             self.processExited(event)
-        except PtraceError, err:
+        except PtraceError as err:
             error("ptrace() error: %s" % err)
         except KeyboardInterrupt:
             error("Interrupted.")
-        except PTRACE_ERRORS, err:
+        except PTRACE_ERRORS as err:
             writeError(getLogger(), err, "Debugger error")
         self.debugger.quit()
 
