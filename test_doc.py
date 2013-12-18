@@ -34,7 +34,6 @@ def main():
     #testDoc('doc/c_tools.rst')
 
     # Test documentation of some functions/classes
-    testModule("ptrace.compatibility")
     testModule("ptrace.tools")
     testModule("ptrace.signames")
     testModule("ptrace.logging_tools")
