@@ -18,6 +18,7 @@ from ptrace.process_tools import dumpProcessInfo
 from ptrace.tools import inverseDict
 from ptrace.func_call import FunctionCallOptions
 from ptrace.signames import signalName, SIGNAMES
+from ptrace.six import PY3, binary_type
 from signal import SIGTRAP, SIGINT
 from ptrace.terminal import enableEchoMode, terminalWidth
 from errno import ESRCH
@@ -255,8 +256,10 @@ class Gdb(Application):
         # FIXME: Validate input
 #        if not BYTES_REGEX.match(text):
 #            raise ValueError('Follow text must be enclosed in quotes!')
+        if PY3:
+            text = 'b' + text.lstrip()
         value = eval(text)
-        if not isinstance(value, str):
+        if not isinstance(value, binary_type):
             raise TypeError("Input is not a bytes string!")
         return value
 
@@ -791,6 +794,7 @@ class Gdb(Application):
                     ok &= self.execute(command)
                 except Exception as err:
                     print("Command error: %s" % err)
+                    raise
                     ok = False
                 if not ok:
                     break
