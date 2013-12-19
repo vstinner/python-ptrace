@@ -64,16 +64,4 @@ install_options = {
     "scripts": SCRIPTS,
 }
 
-# Python 3: run 2to3
-try:
-    from distutils.command.build_py import build_py_2to3
-    from distutils.command.build_scripts import build_scripts_2to3
-except ImportError:
-    pass
-else:
-    install_options['cmdclass'] = {
-        'build_py': build_py_2to3,
-        'build_scripts': build_scripts_2to3,
-    }
-
 setup(**install_options)
