@@ -71,13 +71,36 @@ static PyObject* cpython_ptrace(PyObject* UNUSED(self), PyObject *args, PyObject
         return NULL;
 }
 
-static PyMethodDef moduleMethods[] = {
+static PyMethodDef module_methods[] = {
     {"ptrace", (PyCFunction)cpython_ptrace, METH_VARARGS | METH_KEYWORDS, python_ptrace_DOCSTR},
     {NULL, NULL, 0, NULL}
 };
 
-PyMODINIT_FUNC initcptrace(void)
+PyDoc_STRVAR(module_doc,
+"ptrace module written in C");
+
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef module_def = {
+    PyModuleDef_HEAD_INIT,
+    "cptrace",
+    module_doc,
+    0,
+    module_methods,
+    NULL
+};
+#endif
+
+PyMODINIT_FUNC
+#if PY_MAJOR_VERSION >= 3
+PyInit_cptrace(void)
+#else
+initcptrace(void)
+#endif
 {
-    (void)Py_InitModule3("cptrace", moduleMethods, "ptrace module written in C");
+#if PY_MAJOR_VERSION >= 3
+    return PyModule_Create(&module_def);
+#else
+    (void)Py_InitModule3("cptrace", module_methods, module_doc);
+#endif
 }
 
