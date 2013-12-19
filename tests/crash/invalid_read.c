@@ -10,5 +10,5 @@ int main()
     point_t *point = 0;
     int z;
     z = point->z;
-    return 0;
+    return z;
 }
