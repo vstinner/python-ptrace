@@ -4,7 +4,7 @@ Changelog
 python-ptrace 0.7
 -----------------
 
- * Experimental support of Python 3 in the same code base
+ * Experimental support of Python 3.3 in the same code base
  * Drop support of Python 2.5
  * Remove the ptrace.compatibility module
 
