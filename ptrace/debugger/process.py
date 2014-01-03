@@ -27,7 +27,7 @@ else:
     from ptrace.binding import ptrace_peekuser, ptrace_registers_t
 from ptrace.os_tools import HAS_PROC, RUNNING_BSD, RUNNING_PYTHON3
 from ptrace.tools import dumpRegs
-from ptrace.cpu_info import CPU_WORD_SIZE, CPU_64BITS
+from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.ctypes_tools import bytes2word, word2bytes, bytes2type, bytes2array
 from signal import SIGTRAP, SIGSTOP, SIGKILL
 from ptrace.ctypes_tools import formatAddress, formatWordHex
@@ -414,7 +414,7 @@ class PtraceProcess(object):
             words = []
             nb_words = sizeof(ptrace_registers_t) // CPU_WORD_SIZE
             for offset in range(nb_words):
-                word = ptrace_peekuser(self.pid, offset*CPU_WORD_SIZE)
+                word = ptrace_peekuser(self.pid, offset * CPU_WORD_SIZE)
                 bytes = word2bytes(word)
                 words.append(bytes)
             bytes = ''.join(words)
@@ -620,14 +620,12 @@ class PtraceProcess(object):
 
     def readStruct(self, address, struct):
         bytes = self.readBytes(address, sizeof(struct))
-        if not CPU_64BITS:
-            bytes = c_char_p(bytes)
+        bytes = c_char_p(bytes)
         return bytes2type(bytes, struct)
 
     def readArray(self, address, basetype, count):
         bytes = self.readBytes(address, sizeof(basetype)*count)
-        if not CPU_64BITS:
-            bytes = c_char_p(bytes)
+        bytes = c_char_p(bytes)
         return bytes2array(bytes, basetype, count)
 
     def readCString(self, address, max_size, chunk_length=256):

@@ -7,6 +7,7 @@ python-ptrace 0.7
  * Experimental support of Python 3.3 in the same code base
  * Drop support of Python 2.5
  * Remove the ptrace.compatibility module
+ * Fix Process.readStruct() and Process.readArray() on x86_64
 
 python-ptrace 0.6.6 (2013-12-16)
 --------------------------------
