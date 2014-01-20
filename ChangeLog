@@ -8,6 +8,8 @@ python-ptrace 0.7
  * Drop support of Python 2.5
  * Remove the ptrace.compatibility module
  * Fix Process.readStruct() and Process.readArray() on x86_64
+ * Experimental support of ARM architecture (Linux EAPI),
+   strace.py has been tested on Raspberry Pi (armv6l)
 
 python-ptrace 0.6.6 (2013-12-16)
 --------------------------------
