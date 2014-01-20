@@ -473,25 +473,25 @@ class PtraceProcess(object):
         if CPU_INSTR_POINTER:
             self.setreg(CPU_INSTR_POINTER, ip)
         else:
-            raise ProcessError(self, "Instruction pointer is not defined")
+            raise ProcessError(self, "Instruction pointer register is not defined")
 
     def getInstrPointer(self):
         if CPU_INSTR_POINTER:
             return self.getreg(CPU_INSTR_POINTER)
         else:
-            raise ProcessError(self, "Instruction pointer is not defined")
+            raise ProcessError(self, "Instruction pointer register is not defined")
 
     def getStackPointer(self):
         if CPU_STACK_POINTER:
             return self.getreg(CPU_STACK_POINTER)
         else:
-            raise ProcessError(self, "Instruction pointer is not defined")
+            raise ProcessError(self, "Stack pointer register is not defined")
 
     def getFramePointer(self):
         if CPU_FRAME_POINTER:
             return self.getreg(CPU_FRAME_POINTER)
         else:
-            raise ProcessError(self, "Instruction pointer is not defined")
+            raise ProcessError(self, "Stack pointer register is not defined")
 
     def _readBytes(self, address, size):
         offset = address % CPU_WORD_SIZE

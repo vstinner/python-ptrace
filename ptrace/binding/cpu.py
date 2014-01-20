@@ -13,6 +13,7 @@ if CPU_POWERPC:
 elif CPU_ARM:
     CPU_INSTR_POINTER = 'r15'
     CPU_STACK_POINTER = 'r14'
+    CPU_FRAME_POINTER = 'r11'
 elif CPU_X86_64:
     CPU_INSTR_POINTER = "rip"
     CPU_STACK_POINTER = "rsp"
