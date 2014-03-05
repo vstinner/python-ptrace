@@ -22,8 +22,8 @@ Or using sudo program: ::
 cptrace
 =======
 
-For faster debug, you can also install cptrace: Python binding of the ptrace()
-function written in C: ::
+For faster debug and to avoid ctypes, you can also install cptrace: Python
+binding of the ptrace() function written in C: ::
 
-    ./setup_cptrace.py install
+    python setup_cptrace.py install
 

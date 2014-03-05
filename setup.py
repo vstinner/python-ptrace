@@ -2,15 +2,14 @@
 
 # Produce to release a new version:
 #  - ./test_doc.py
-#  - test gdb.py
-#  - test strace.py
+#  - run tests (test_gdb.py and test_strace.py) with Python 2 and Python 3
 #  - check version in ptrace/version.py
 #  - set release date in the ChangeLog
 #  - hg ci
 #  - hg tag python-ptrace-x.y
 #  - hg ci
 #  - hg push
-#  - ./setup.py sdist register upload
+#  - ./setup.py sdist register bdist_wheel upload
 #  - update the website home page (url, md5 and news)
 #    https://bitbucket.org/haypo/python-ptrace/wiki/Home
 #  - set version to n+1 (ptrace/version.py)
@@ -42,7 +41,11 @@ with open('ChangeLog') as fp:
 from imp import load_source
 from os import path
 from sys import argv
-from distutils.core import setup
+try:
+    # setuptools supports bdist_wheel
+    from setuptools import setup, Extension
+except ImportError:
+    from distutils.core import setup
 
 ptrace = load_source("version", path.join("ptrace", "version.py"))
 PACKAGES = {}
