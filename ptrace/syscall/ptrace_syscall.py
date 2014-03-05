@@ -1,6 +1,6 @@
 from os import strerror
 
-from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386
+from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
 from ptrace.func_call import FunctionCall
 from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, SyscallArgument
@@ -49,6 +49,8 @@ class PtraceSyscall(FunctionCall):
         # Read syscall number
         if CPU_POWERPC:
             self.syscall = regs.gpr0
+        elif CPU_ARM:
+            self.syscall = regs.r7
         elif RUNNING_LINUX:
             if CPU_X86_64:
                 self.syscall = regs.orig_rax
@@ -66,6 +68,8 @@ class PtraceSyscall(FunctionCall):
     def readArgumentValues(self, regs):
         if CPU_X86_64:
             return (regs.rdi, regs.rsi, regs.rdx, regs.r10, regs.r8, regs.r9)
+        if CPU_ARM:
+            return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6)
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
             return [ self.process.readWord(sp + index*CPU_WORD_SIZE)
@@ -102,7 +106,9 @@ class PtraceSyscall(FunctionCall):
                 continue
             argument.text = None
 
-        if CPU_I386:
+        if CPU_ARM:
+            regname = "r0"
+        elif CPU_I386:
             regname = "eax"
         elif CPU_X86_64:
             regname = "rax"

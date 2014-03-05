@@ -9,6 +9,7 @@ ALIASES = {
     "break": ("brk",),
     "exit": ("exit_group",),
     "fcntl": ("fcntl64",),
+    "getcwd": ("__getcwd",),
 }
 
 # Name of arguments containing a filename or a path
@@ -280,7 +281,7 @@ SYSCALL_PROTOTYPES = {
             ("struct user_desc*", "newtls"),
             ("void*", "child_tidptr"),
         )),
-    "__getcwd": ("long", (
+    "getcwd": ("long", (
             ("char*", "pathname"),
             ("size_t", "size"),
         )),

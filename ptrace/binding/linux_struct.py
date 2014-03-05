@@ -1,7 +1,7 @@
 from ctypes import (Structure, Union, sizeof,
     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
     c_uint16, c_uint32, c_uint64)
-from ptrace.cpu_info import CPU_64BITS, CPU_PPC32
+from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_ARM
 
 pid_t = c_int
 uid_t = c_ushort
@@ -56,6 +56,8 @@ class user_regs_struct(Structure):
             ("dsisr", c_ulong),
             ("result", c_ulong),
         )
+    elif CPU_ARM:
+        _fields_ = tuple(("r%i" % reg, c_ulong) for reg in range(18))
     elif CPU_64BITS:
         _fields_ = (
             ("r15", c_ulong),
