@@ -1,8 +1,8 @@
 Changelog
 =========
 
-python-ptrace 0.7
------------------
+python-ptrace 0.7 (2013-03-05)
+------------------------------
 
 * Experimental support of Python 3.3 in the same code base
 * Drop support of Python 2.5

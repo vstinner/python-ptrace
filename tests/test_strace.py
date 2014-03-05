@@ -16,7 +16,7 @@ class TestStrace(unittest.TestCase):
         stdout, _ = proc.communicate()
         exitcode = proc.wait()
         self.assertFalse(b'Traceback' in stdout, stdout)
-        for syscall in ('exit', 'mmap', 'open'):
+        for syscall in (b'exit', b'mmap', b'open'):
             pattern = re.compile(b'^' + syscall, re.MULTILINE)
             self.assertTrue(pattern.search(stdout), stdout)
         self.assertEqual(exitcode, 0)
