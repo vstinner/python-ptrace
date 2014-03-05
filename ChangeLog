@@ -8,6 +8,10 @@ python-ptrace 0.8
   PtraceProcess to not call waitpid() with pid=-1. There is a race condition
   with waitpid(-1) and fork, the status of the child process may be returned
   before the debugger is noticed of the creation of the new child process.
+* Issue #10: Fix PtraceProcess.readBytes() for processes not created by the
+  debugger (ex: fork) if the kernel blocks access to private mappings of
+  /proc/pid/mem. Fallback to PTRACE_PEEKTEXT which is slower but a debugger
+  tracing the process is always allowed to use it.
 
 python-ptrace 0.7 (2013-03-05)
 ------------------------------

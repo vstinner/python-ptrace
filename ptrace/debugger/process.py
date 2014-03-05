@@ -560,10 +560,21 @@ class PtraceProcess(object):
             try:
                 mem = self.read_mem_file
                 mem.seek(address)
-                return mem.read(size)
+                data = mem.read(size)
             except (IOError, ValueError) as err:
                 raise ProcessError(self, "readBytes(%s, %s) error: %s" % (
                     formatAddress(address), size, err))
+            if len(data) == 0 and size:
+                # Issue #10: If the process was not created by the debugger
+                # (ex: fork), the kernel may deny reading private mappings of
+                # /proc/pid/mem to the debugger, depending on the kernel
+                # version and kernel config (ex: SELinux enabled or not).
+                #
+                # Fallback to PTRACE_PEEKTEXT. It is slower but a debugger
+                # tracing the process is always allowed to use it.
+                self.readBytes = self._readBytes
+                return self.readBytes(address, size)
+            return data
     else:
         readBytes = _readBytes
 
