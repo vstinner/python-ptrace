@@ -6,6 +6,7 @@ from termios import tcgetattr, tcsetattr, ECHO, TCSADRAIN, TIOCGWINSZ
 from sys import stdin, stdout
 from fcntl import ioctl
 from struct import unpack
+import os
 
 TERMIO_LFLAGS = 3
 
@@ -27,6 +28,8 @@ def enableEchoMode():
     correctly, or False if the mode was already set.
     """
     fd = stdin.fileno()
+    if not os.isatty(fd):
+        return False
     state = tcgetattr(fd)
     if state[TERMIO_LFLAGS] & ECHO:
         return False
