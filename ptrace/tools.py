@@ -133,8 +133,8 @@ def inverseDict(data):
     """
     Inverse a dictionary.
 
-    >>> inverseDict({"0x10": 16, "0x20": 32})
-    {32: '0x20', 16: '0x10'}
+    >>> inverseDict({"0x10": 16, "0x20": 32}) == {32: '0x20', 16: '0x10'}
+    True
     """
     result = {}
     for key, value in data.items():
