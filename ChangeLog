@@ -1,6 +1,14 @@
 Changelog
 =========
 
+python-ptrace 0.8
+-----------------
+
+* Issue #9: Rewrite waitProcessEvent() and waitSignals() methods of
+  PtraceProcess to not call waitpid() with pid=-1. There is a race condition
+  with waitpid(-1) and fork, the status of the child process may be returned
+  before the debugger is noticed of the creation of the new child process.
+
 python-ptrace 0.7 (2013-03-05)
 ------------------------------
 

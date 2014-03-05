@@ -5,6 +5,7 @@ from signal import SIGTRAP, SIGSTOP
 from errno import ECHILD
 from ptrace.debugger import PtraceProcess, ProcessSignal
 from ptrace.binding import HAS_PTRACE_EVENTS
+from time import sleep
 if HAS_PTRACE_EVENTS:
     from ptrace.binding.func import (
         PTRACE_O_TRACEFORK, PTRACE_O_TRACEVFORK,
@@ -127,7 +128,7 @@ class PtraceDebugger(object):
                 % (pid, wanted_pid), pid=pid)
         return pid, status
 
-    def _wait(self, wanted_pid, blocking=True):
+    def _wait_event_pid(self, wanted_pid, blocking=True):
         """
         Wait for a process event from the specified process identifier. If
         blocking=False, return None if there is no new event, otherwise return
@@ -151,13 +152,32 @@ class PtraceDebugger(object):
                 warning("waitpid() warning: Unknown PID %r" % pid)
         return process.processStatus(status)
 
+    def _wait_event(self, wanted_pid, blocking=True):
+        if wanted_pid is not None:
+            return self._wait_event_pid(wanted_pid, blocking)
+
+        pause = 0.001
+        while True:
+            pids = tuple(self.dict)
+            if len(pids) > 1:
+                for pid in pids:
+                    process = self._wait_event_pid(pid, False)
+                    if process is not None:
+                        return process
+                if not blocking:
+                    return None
+                pause = min(pause * 2, 0.5)
+                sleep(pause)
+            else:
+                return self._wait_event_pid(pids[0], blocking)
+
     def waitProcessEvent(self, pid=None, blocking=True):
         """
         Wait for a process event from a specific process (if pid option is
         set) or any process (default). If blocking=False, return None if there
         is no new event, otherwise return an objet based on ProcessEvent.
         """
-        return self._wait(pid, blocking)
+        return self._wait_event(pid, blocking)
 
     def waitSignals(self, *signals, **kw):
         """
@@ -167,7 +187,7 @@ class PtraceDebugger(object):
         """
         pid = kw.get('pid', None)
         while True:
-            event = self._wait(pid)
+            event = self._wait_event(pid)
             if event.__class__ != ProcessSignal:
                 raise event
             signum = event.signum
