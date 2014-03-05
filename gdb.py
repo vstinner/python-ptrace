@@ -35,11 +35,12 @@ except NameError:
     raw_input = input
 
 import re
-try:
-    # Use readline for better raw_input()
-    import readline
-except ImportError:
-    pass
+if stdout.isatty():
+    try:
+        # Use readline for better raw_input()
+        import readline
+    except ImportError:
+        pass
 
 # Match a register name: $eax, $gp0, $orig_eax
 REGISTER_REGEX = re.compile(r"\$[a-z]+[a-z0-9_]+")
