@@ -1,4 +1,4 @@
 PACKAGE = "python-ptrace"
 VERSION = "0.8"
-WEBSITE = "http://bitbucket.org/haypo/python-ptrace/wiki/Home"
+WEBSITE = "http://python-ptrace.readthedocs.org/"
 LICENSE = "GNU GPL v2"

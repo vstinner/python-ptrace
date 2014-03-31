@@ -4,15 +4,14 @@
 #  - hg in  # check that there is no incoming changesets
 #  - ./test_doc.py
 #  - run tests (test_gdb.py and test_strace.py) with Python 2 and Python 3
-#  - check version in ptrace/version.py
+#  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in the ChangeLog
 #  - hg ci
 #  - hg tag python-ptrace-x.y
 #  - hg push
 #  - ./setup.py sdist register bdist_wheel upload
-#  - update the website home page (url, md5 and news)
-#    https://bitbucket.org/haypo/python-ptrace/wiki/Home
-#  - set version to n+1 (ptrace/version.py)
+#  - update the doc
+#  - set version to n+1 (ptrace/version.py and doc/conf.py)
 #  - hg ci
 #  - hg push
 
