@@ -6,7 +6,7 @@ python-ptrace is a debugger using ptrace (Linux, BSD and Darwin system call to
 trace processes) written in Python.
 
 * `python-ptrace documentation
-  <http://python-pytrace.readthedocs.org/>`_
+  <http://python-ptrace.readthedocs.org/>`_
 * `python-ptrace at Bitbucket
   <http://bitbucket.org/haypo/python-ptrace/>`_
 * `python-ptrace at the Python Cheeseshop (PyPI)
