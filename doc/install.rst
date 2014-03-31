@@ -1,10 +1,14 @@
-ptrace dependencies
-===================
++++++++++++++++++++++
+Install python-ptrace
++++++++++++++++++++++
 
- * Python 2.5+:
-   http://python.org/
- * distorm disassembler (optional)
-   http://www.ragestorm.net/distorm/
+python-ptrace dependencies
+==========================
+
+* Python 2.5+:
+  http://python.org/
+* distorm disassembler (optional)
+  http://www.ragestorm.net/distorm/
 
 
 Installation
@@ -12,7 +16,7 @@ Installation
 
 Type as root: ::
 
-   ./setup.py install
+   python setup.py install
 
 Or using sudo program: ::
 

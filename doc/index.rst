@@ -1,18 +1,46 @@
-.. python-ptrace documentation master file, created by
-   sphinx-quickstart on Mon Mar 31 10:08:56 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+=============
+python-ptrace
+=============
 
-Welcome to python-ptrace's documentation!
-=========================================
+python-ptrace is a Python binding of ptrace library.
 
-Contents:
+The binding works on:
+
+* Linux version 2.6.20 on i386, x86_64, PPC (may works on Linux 2.4.x
+  and 2.6.x)
+* Linux version 2.4 on PPC
+* FreeBSD version 7.0RC1 on i386 (may works on FreeBSD 5.x/6.x)
+* OpenBSD version 4.2 on i386
+* Experimental support of ARM architecture (Linux EAPI),
+  strace.py has been tested on Raspberry Pi (armv6l)
+
+Features:
+
+* High level Python object API : !PtraceDebugger and !PtraceProcess
+* Able to control multiple processes: catch fork events on Linux
+* Read/write bytes to arbitrary address: take care of memory alignment and
+  split bytes to cpu word
+* Execution step by step using ptrace_singlestep() or hardware interruption 3
+* Can use distorm (http://www.ragestorm.net/distorm/) disassembler
+* Dump registers, memory mappings, stack, etc.
+* Syscall tracer and parser (strace command)
+
+Website: http://bitbucket.org/haypo/python-ptrace/wiki/Home
+
+
+Table of Contents
+=================
 
 .. toctree::
    :maxdepth: 2
 
+   install
+   cptrace
    process_events
    ptrace_signal
+   todo
+   changelog
+   authors
 
 
 Indices and tables
