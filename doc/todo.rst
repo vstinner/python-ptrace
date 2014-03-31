@@ -36,11 +36,11 @@ Minor tasks
 -----------
 
  * setup.py: convert docstrings with 2to3 (run "2to3 -w -d ." ?)
- * Fix gdb.py "step" command on a jump. Example where step will never stop: ::
+ * Fix gdb.py "step" command on a jump. Example where step will never stop::
 
-(gdb) where
-ASM 0xb7e3b917: JMP 0xb7e3b8c4 (eb ab)
-ASM 0xb7e3b919: LEA ESI, [ESI+0x0] (8db426 00000000)
+    (gdb) where
+    ASM 0xb7e3b917: JMP 0xb7e3b8c4 (eb ab)
+    ASM 0xb7e3b919: LEA ESI, [ESI+0x0] (8db426 00000000)
 
  * Remove gdb.py "except PtraceError, err: if err.errno == ESRCH" hack,
    process death detection should be done by PtraceProcess or PtraceDebugger
