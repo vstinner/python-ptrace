@@ -7,16 +7,16 @@ Process events
 
 All process events are based on ProcessEvent class.
 
- * ProcessExit: process exited with an exitcode, killed by a signal
-   or exited abnormally
- * ProcessSignal: process received a signal
- * NewProcessEvent: new process created, eg. after a fork() syscall
+* ProcessExit: process exited with an exitcode, killed by a signal
+  or exited abnormally
+* ProcessSignal: process received a signal
+* NewProcessEvent: new process created, eg. after a fork() syscall
 
 Attributes:
 
- * All events have a "process" attribute
- * ProcessExit has "exitcode" and "signum" attributes (both can be None)
- * ProcessSignal has "signum" and "name" attributes
+* All events have a "process" attribute
+* ProcessExit has "exitcode" and "signum" attributes (both can be None)
+* ProcessSignal has "signum" and "name" attributes
 
 For NewProcessEvent, use process.parent attribute to get the parent process.
 

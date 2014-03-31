@@ -1,6 +1,6 @@
-+++++++++++++++++++++
-python-ptrace authors
-+++++++++++++++++++++
++++++++
+Authors
++++++++
 
 Contributors
 ============
