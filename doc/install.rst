@@ -19,13 +19,10 @@ Install from source
 Download tarball
 ----------------
 
- `Download python-ptrace-0.6.6.tar.gz
- <http://pypi.python.org/packages/source/p/python-ptrace/python-ptrace-0.6.6.tar.gz>`_:
+`Download python-ptrace-0.7.tar.gz
+<http://pypi.python.org/packages/source/p/python-ptrace/python-ptrace-0.7.tar.gz>`_:
 
-* MD5: c2187d1e3277da8602839ed2ef30f106
-* SHA1: ba696e380aef0b29fe7a7db669bba5278bdf9a7e
-
-Download development version using Mercurial::
+Download the development version using Mercurial::
 
     hg clone https://bitbucket.org/haypo/python-ptrace
 

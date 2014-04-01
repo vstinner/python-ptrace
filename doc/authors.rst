@@ -17,5 +17,5 @@ Contributors
 Thanks
 ======
 
- * procps authors (top and uptime programs)
+* procps authors (top and uptime programs)
 
