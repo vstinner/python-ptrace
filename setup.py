@@ -34,8 +34,6 @@ CLASSIFIERS = [
 
 with open('README') as fp:
     LONG_DESCRIPTION = fp.read()
-with open('ChangeLog') as fp:
-    LONG_DESCRIPTION += fp.read()
 
 from imp import load_source
 from os import path
