@@ -11,9 +11,6 @@
 #  - hg push
 #  - ./setup.py sdist register bdist_wheel upload
 #  - update the doc
-#  - set version to n+1 (ptrace/version.py and doc/conf.py)
-#  - hg ci
-#  - hg push
 #  - increment version in  ptrace/version.py and doc/conf.py
 #  - hg ci
 #  - hg push
