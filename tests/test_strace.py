@@ -5,6 +5,7 @@ import subprocess
 import sys
 import unittest
 
+PY3 = (sys.version_info >= (3,))
 STRACE = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
 
 class TestStrace(unittest.TestCase):
@@ -27,13 +28,16 @@ class TestStrace(unittest.TestCase):
 
     def test_getcwd(self):
         cwd = os.getcwd()
-        if sys.version_info >= (3,):
+        if PY3:
             cwd = os.fsencode(cwd)
         stdout = self.strace(sys.executable, '-c', 'import os; os.getcwd()')
         pattern = re.compile(b'^getcwd\\((.*),', re.MULTILINE)
         match = pattern.search(stdout)
         self.assertTrue(match, stdout)
-        self.assertEqual(match.group(1), os.fsencode(repr(cwd)))
+        expected = repr(cwd)
+        if PY3:
+            expected = os.fsencode(expected)
+        self.assertEqual(match.group(1), expected)
 
     def test_socket(self):
         code = 'import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).close()'
