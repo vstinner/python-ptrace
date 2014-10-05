@@ -3,8 +3,8 @@
 Changelog
 =========
 
-python-ptrace 0.8
------------------
+python-ptrace 0.8 (2014-10-05)
+------------------------------
 
 * Issue #9: Rewrite waitProcessEvent() and waitSignals() methods of
   PtraceProcess to not call waitpid() with pid=-1. There is a race condition

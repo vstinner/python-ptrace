@@ -14,6 +14,9 @@
 #  - set version to n+1 (ptrace/version.py and doc/conf.py)
 #  - hg ci
 #  - hg push
+#  - increment version in  ptrace/version.py and doc/conf.py
+#  - hg ci
+#  - hg push
 
 from __future__ import with_statement
 
