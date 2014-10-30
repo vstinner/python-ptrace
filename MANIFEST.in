@@ -9,7 +9,10 @@ include conv_python3.0.sh
 include cptrace/Makefile
 include cptrace/cptrace.c
 include cptrace/version.py
+
 include doc/*.rst
+include doc/conf.py
+
 include examples/itrace.py
 include examples/simple_dbg.py
 include pyflakes.sh
@@ -21,3 +24,5 @@ include runtests.py
 include test_doc.py
 include tests/test_*.py
 include tests/crash/*.c
+include tests/crash/BSDmakefile
+include tests/crash/Makefile
