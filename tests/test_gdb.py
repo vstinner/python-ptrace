@@ -44,17 +44,6 @@ class TestGdb(unittest.TestCase):
             b'^User identifier: [0-9]+',
             b'^Group identifier: [0-9]+',
         ):
-            check_stdout(pattern, stdout)
-
-    def test_proc(self):
-        stdout = self.run_command('proc')
-        for pattern in (
-            b'^Process ID: [0-9]+',
-            b'^Process state: ',
-            b'^Process environment: ',
-            b'^User identifier: [0-9]+',
-            b'^Group identifier: [0-9]+',
-        ):
             self.assertTrue(re.search(pattern, stdout, re.MULTILINE),
                             (pattern, stdout))
 
