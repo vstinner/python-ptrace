@@ -4,17 +4,21 @@ Error pipe and serialization code comes from Python 2.5 subprocess module.
 from os import (
     fork, execv, execve, waitpid,
     close, dup2, pipe,
-    read, write, devnull)
+    read, write, devnull, sysconf)
 from sys import exc_info
 from traceback import format_exception
 from ptrace.os_tools import RUNNING_WINDOWS
-from subprocess import MAXFD
 from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
 from errno import EINTR
 import fcntl
 import pickle
+
+try:
+    MAXFD = sysconf("SC_OPEN_MAX")
+except:
+    MAXFD = 256
 
 class ChildError(RuntimeError):
     pass
