@@ -3,6 +3,12 @@
 Changelog
 =========
 
+python-ptrace 0.8.1 (2014-10-30)
+--------------------------------
+
+* Update MANIFEST.in to include all files
+* Fix to support Python 3.5
+
 python-ptrace 0.8 (2014-10-05)
 ------------------------------
 

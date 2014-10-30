@@ -3,7 +3,8 @@
 # Produce to release a new version:
 #  - hg in  # check that there is no incoming changesets
 #  - ./test_doc.py
-#  - run ./runtests.py with Python 2 Python 3
+#  - python runtests.py
+#  - python3 runtests.py
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in the ChangeLog
 #  - hg ci
