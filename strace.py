@@ -27,8 +27,10 @@ class SyscallTracer(Application):
     def setupLog(self):
         if self.options.output:
             fd = open(self.options.output, 'w')
+            self._output = fd
         else:
             fd = stderr
+            self._output = None
         self._setupLog(fd)
 
     def parseOptions(self):
@@ -240,6 +242,8 @@ class SyscallTracer(Application):
             runProfiler(getLogger(), self._main)
         else:
             self._main()
+        if self._output is not None:
+            self._output.close()
 
     def _main(self):
         self.debugger = PtraceDebugger()
