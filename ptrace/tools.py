@@ -33,6 +33,8 @@ def readBits(value, bitmasks):
     ...
     >>> readBits(5, bitmask)
     ['exec', 'read']
+    >>> readBits(12, bitmask)
+    ['read', 8]
     """
     bitset = []
     for mask, item in bitmasks:
@@ -40,6 +42,8 @@ def readBits(value, bitmasks):
             continue
         bitset.append(item)
         value = value & ~mask
+    if value:
+        bitset.append(str(value))
     return bitset
 
 def formatBits(value, bitmasks, empty_text=None, format_value=str):
