@@ -3,6 +3,12 @@
 Changelog
 =========
 
+python-ptrace 0.8.2
+-------------------
+
+* Issue #17: syscall parser now supports O_CLOEXEC and SOCK_CLOEXEC, fix unit
+  tests on Python 3.4 and newer
+
 python-ptrace 0.8.1 (2014-10-30)
 --------------------------------
 

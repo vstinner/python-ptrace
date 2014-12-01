@@ -39,10 +39,19 @@ class TestStrace(unittest.TestCase):
             expected = os.fsencode(expected)
         self.assertEqual(match.group(1), expected)
 
+    def test_open(self):
+        if PY3:
+            code = 'open(%a).close()' % __file__
+        else:
+            code = 'open(%r).close()' % __file__
+        stdout = self.strace(sys.executable, '-c', code)
+        pattern = re.compile(br"^open\(.*test_strace\.py', O_RDONLY(\|O_CLOEXEC)?\)", re.MULTILINE)
+        self.assertTrue(pattern.search(stdout), stdout)
+
     def test_socket(self):
         code = 'import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).close()'
         stdout = self.strace(sys.executable, '-c', code)
-        pattern = re.compile(b'^socket\\(AF_INET, SOCK_STREAM, ', re.MULTILINE)
+        pattern = re.compile(br'^socket\(AF_INET, SOCK_STREAM(\|SOCK_CLOEXEC)?, ', re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
 if __name__ == "__main__":

@@ -24,7 +24,7 @@ def formatAccessMode(argument):
     return formatBits(argument.value, ACCESS_MODE_BITMASK, "F_OK")
 
 # From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
-OPEN_MODE_BITMASK = (
+OPEN_MODE_BITMASK = [
     (0o1, "O_WRONLY"),
     (0o2, "O_RDWR"),
     (0o100, "O_CREAT"),
@@ -40,10 +40,17 @@ OPEN_MODE_BITMASK = (
     (0o200000, "O_DIRECTORY"),
     (0o400000, "O_NOFOLLOW"),
     (0o1000000, "O_NOATIME"),
-)
+]
+O_CLOEXEC = 0o02000000
 
 def formatOpenMode(argument):
-    return formatBits(int(argument.value), OPEN_MODE_BITMASK, "O_RDONLY", oct)
+    value = argument.value
+    cloexec = bool(value & O_CLOEXEC)
+    value = value & ~O_CLOEXEC
+    text = formatBits(int(value), OPEN_MODE_BITMASK, "O_RDONLY", oct)
+    if cloexec:
+        text += '|O_CLOEXEC'
+    return text
 
 CLONE_FLAGS_BITMASK = (
     (0x00000100, "CLONE_VM"),

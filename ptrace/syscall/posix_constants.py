@@ -1,5 +1,5 @@
 from ptrace.syscall.socketcall_constants import (
-    SOCKET_FAMILY, SOCKET_TYPE, SOCKET_PROTOCOL,
+    SOCKET_FAMILY, SOCKET_PROTOCOL,
     SETSOCKOPT_LEVEL, SETSOCKOPT_OPTNAME)
 
 SYSCALL_ARG_DICT = {
@@ -51,7 +51,6 @@ SYSCALL_ARG_DICT = {
     },
     "socket": {
         "domain": SOCKET_FAMILY,
-        "type": SOCKET_TYPE,
         "protocol": SOCKET_PROTOCOL,
     },
     "getsockopt": {

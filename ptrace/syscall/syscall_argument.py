@@ -22,6 +22,7 @@ elif RUNNING_FREEBSD:
     from ptrace.syscall.freebsd_constants import SYSCALL_ARG_DICT
 else:
     SYSCALL_ARG_DICT = {}
+from ptrace.syscall.socketcall_constants import formatSocketType
 
 KNOWN_STRUCTS = []
 if RUNNING_LINUX:
@@ -35,6 +36,7 @@ ARGUMENT_CALLBACK = {
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},
+    "socket": {"type": formatSocketType},
     "setsockopt": {"optval": formatOptVal},
 }
 

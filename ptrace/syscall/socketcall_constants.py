@@ -1,3 +1,5 @@
+import socket
+
 SOCKETCALL = {
     1: "socket",
     2: "bind",
@@ -55,6 +57,19 @@ SOCKET_TYPE = {
      5: "SOCK_SEQPACKET",
     10: "SOCK_PACKET",
 }
+
+def formatSocketType(argument):
+    value = argument.value
+    text = []
+    if hasattr(socket, 'SOCK_CLOEXEC'):
+        cloexec = value & socket.SOCK_CLOEXEC
+        value &= ~socket.SOCK_CLOEXEC
+    else:
+        cloexec = False
+    text = SOCKET_TYPE.get(value, value)
+    if cloexec:
+        text += '|SOCK_CLOEXEC'
+    return text
 
 SOCKET_PROTOCOL = {
      1: "IPPROTO_ICMP",
