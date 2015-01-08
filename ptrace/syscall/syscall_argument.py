@@ -11,7 +11,9 @@ from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
     formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
 from ptrace.syscall.socketcall_constants import SOCKETCALL
+import os
 import re
+import six
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS
 if RUNNING_LINUX:
@@ -182,26 +184,34 @@ class SyscallArgument(FunctionArgument):
     def readCString(self, address):
         if address:
             max_size = self.options.string_max_length
-            char, truncated = self.function.process.readCString(address, max_size)
-            char = repr(char)
+            data, truncated = self.function.process.readCString(address, max_size)
+            if six.PY3:
+                text = os.fsdecode(data)
+            else:
+                text = data
+            text = repr(text)
             if truncated:
-                char += "..."
+                text += "..."
         else:
-            char = "NULL"
-        return self.formatPointer(char, address)
+            text = "NULL"
+        return self.formatPointer(text, address)
 
     def readString(self, address, size):
         if address:
             max_len = self.options.string_max_length
             truncated = (max_len < size)
             size = min(size, max_len)
-            bytes = self.function.process.readBytes(address, size)
-            bytes = repr(bytes)
+            data = self.function.process.readBytes(address, size)
+            if six.PY3:
+                text = os.fsdecode(data)
+            else:
+                text = data
+            text = repr(text)
             if truncated:
-                bytes += "..."
+                text += "..."
         else:
-            bytes = "NULL"
-        return self.formatPointer(bytes, address)
+            text = "NULL"
+        return self.formatPointer(text, address)
 
     def readCStringArray(self, address):
         if not address:
