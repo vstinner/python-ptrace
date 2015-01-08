@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import unittest
 
 PY3 = (sys.version_info >= (3,))
@@ -10,15 +11,19 @@ STRACE = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'strace.
 
 class TestStrace(unittest.TestCase):
     def strace(self, *args):
-        args = (sys.executable, STRACE, '--') + args
-        proc = subprocess.Popen(args,
-                                stdout=subprocess.PIPE,
-                                stderr=subprocess.STDOUT)
-        stdout, _ = proc.communicate()
-        exitcode = proc.wait()
+        with tempfile.NamedTemporaryFile(mode='wb+') as temp:
+            args = (sys.executable, STRACE, '-o', temp.name, '--') + args
+            proc = subprocess.Popen(args,
+                                    stdout=subprocess.DEVNULL,
+                                    stderr=subprocess.STDOUT)
+            exitcode = proc.wait()
+
+            temp.seek(0)
+            strace = temp.readlines()
+            strace = b''.join(strace)
         self.assertEqual(exitcode, 0)
-        self.assertFalse(b'Traceback' in stdout, stdout)
-        return stdout
+        self.assertIsNone(re.match(b'^Traceback', strace), strace)
+        return strace
 
     def test_basic(self):
         stdout = self.strace(sys.executable, '-c', 'pass')
@@ -28,8 +33,6 @@ class TestStrace(unittest.TestCase):
 
     def test_getcwd(self):
         cwd = os.getcwd()
-        if PY3:
-            cwd = os.fsencode(cwd)
         stdout = self.strace(sys.executable, '-c', 'import os; os.getcwd()')
         pattern = re.compile(b'^getcwd\\((.*),', re.MULTILINE)
         match = pattern.search(stdout)
@@ -46,6 +49,12 @@ class TestStrace(unittest.TestCase):
             code = 'open(%r).close()' % __file__
         stdout = self.strace(sys.executable, '-c', code)
         pattern = re.compile(br"^open\(.*test_strace\.py', O_RDONLY(\|O_CLOEXEC)?\)", re.MULTILINE)
+        self.assertTrue(pattern.search(stdout), stdout)
+
+    def test_chdir(self):
+        code = 'import os; os.chdir("directory")'
+        stdout = self.strace(sys.executable, '-c', code)
+        pattern = re.compile(br"^chdir\('directory'\)", re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
     def test_socket(self):
