@@ -13,7 +13,7 @@ from ptrace.syscall.socketcall import (setupSocketCall,
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 import os
 import re
-import six
+from ptrace import six
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS
 if RUNNING_LINUX:
