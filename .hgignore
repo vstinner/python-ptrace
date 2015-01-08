@@ -1,6 +1,8 @@
 syntax: glob
 # generated files: .py => .pyc
 *.pyc
+python_ptrace.egg-info
 build
 dist
 MANIFEST
+.tox
