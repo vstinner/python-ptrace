@@ -59,3 +59,39 @@ binding of the ptrace() function written in C::
 
     python setup_cptrace.py install
 
+
+Run tests
+=========
+
+Run tests with tox
+------------------
+
+The `tox project <https://testrun.org/tox/latest/>`_ can be used to build a
+virtual environment run tests against different Python versions (Python 2 and
+Python 3).
+
+To run all tests on Python 2 and Python 3, just type::
+
+    tox
+
+To only run tests on Python 2.7, type::
+
+    tox -e py2
+
+Available environments:
+
+* ``py2``: Python 2
+* ``py3``: Python 3
+
+
+Run tests manually
+------------------
+
+Type::
+
+    python runtests.py
+    python test_doc.py
+
+It's also possible to run a specific test::
+
+    PYTHONPATH=$PWD python tests/test_strace.py

@@ -2,11 +2,11 @@
 
 # Produce to release a new version:
 #  - hg in  # check that there is no incoming changesets
-#  - ./test_doc.py
-#  - python runtests.py
-#  - python3 runtests.py
+#  - run tests, type: tox
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in the ChangeLog
+#  - check that "python setup.py sdist" contains all files tracked by
+#    the SCM (Mercurial): update MANIFEST.in if needed
 #  - hg ci
 #  - hg tag python-ptrace-x.y
 #  - hg push
