@@ -3,6 +3,10 @@
 Changelog
 =========
 
+* Python 3: fix formatting of string syscall arguments (ex: filenames), decode
+  bytes from the locale encoding.
+* Add chdir() prototype. Patch written by Raymond Barkhouse.
+
 python-ptrace 0.8.2
 -------------------
 
