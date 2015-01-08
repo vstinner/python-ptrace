@@ -328,6 +328,9 @@ SYSCALL_PROTOTYPES = {
             ("int", "oldfd"),
             ("int", "newfd"),
         )),
+    "chdir": ("long", (
+            ("const char*", "pathname"),
+        )),
     "fchdir": ("long", (
             ("int", "fd"),
         )),
