@@ -49,7 +49,7 @@ class TestStrace(unittest.TestCase):
         else:
             code = 'open(%r).close()' % __file__
         stdout = self.strace(sys.executable, '-c', code)
-        pattern = re.compile(br"^open\(.*test_strace\.py', O_RDONLY(\|O_CLOEXEC)?\)", re.MULTILINE)
+        pattern = re.compile(br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?\)", re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
     def test_chdir(self):
