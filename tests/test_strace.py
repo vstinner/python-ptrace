@@ -13,10 +13,11 @@ class TestStrace(unittest.TestCase):
     def strace(self, *args):
         with tempfile.NamedTemporaryFile(mode='wb+') as temp:
             args = (sys.executable, STRACE, '-o', temp.name, '--') + args
-            proc = subprocess.Popen(args,
-                                    stdout=subprocess.DEVNULL,
-                                    stderr=subprocess.STDOUT)
-            exitcode = proc.wait()
+            with open(os.devnull, "wb") as devnull:
+                proc = subprocess.Popen(args,
+                                        stdout=devnull,
+                                        stderr=subprocess.STDOUT)
+                exitcode = proc.wait()
 
             temp.seek(0)
             strace = temp.readlines()
