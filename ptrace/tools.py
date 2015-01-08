@@ -34,7 +34,7 @@ def readBits(value, bitmasks):
     >>> readBits(5, bitmask)
     ['exec', 'read']
     >>> readBits(12, bitmask)
-    ['read', 8]
+    ['read', '8']
     """
     bitset = []
     for mask, item in bitmasks:
