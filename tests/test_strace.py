@@ -63,16 +63,6 @@ class TestStrace(unittest.TestCase):
         pattern = re.compile(regex, re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
     
-    def assert_syscall_file(self, name, regex):
-        """
-        Strace the given syscall script name and match the strace output against
-        the given regular expression.
-        """
-        filename = os.path.join(SYSCALL_SCRIPTS, '%s.py' % name)
-        stdout = self.strace(sys.executable, filename)
-        pattern = re.compile(regex, re.MULTILINE)
-        self.assertTrue(pattern.search(stdout), stdout)
-
     def test_basic(self):
         stdout = self.strace(sys.executable, '-c', 'pass')
         for syscall in (b'exit', b'mmap', b'open'):
@@ -104,10 +94,20 @@ class TestStrace(unittest.TestCase):
             br"^chdir\('directory'\)")
     
     def test_rename(self):
-        self.assert_syscall_file('rename', br"^rename\('oldpath', 'newpath'\)")
+        with open('oldpath', 'w') as f:
+            pass
+
+        self.assert_syscall(
+                'import os; os.rename("oldpath", "newpath")',
+                br"^rename\('oldpath', 'newpath'\)")
 
     def test_link(self):
-        self.assert_syscall_file('link', br"^link\('oldpath', 'newpath'\)")
+        with open('oldpath', 'w') as f:
+            pass
+
+        self.assert_syscall(
+                'import os; os.link("oldpath", "newpath")',
+                br"^link\('oldpath', 'newpath'\)")
 
     def test_symlink(self):
         self.assert_syscall(
