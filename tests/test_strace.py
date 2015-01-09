@@ -93,17 +93,11 @@ class TestStrace(unittest.TestCase):
             br"^chdir\('directory'\)")
     
     def test_rename(self):
-        with open('oldpath', 'w') as f:
-            pass
-
         self.assert_syscall(
                 "import os; os.rename('oldpath', 'newpath')",
                 br"^rename\('oldpath', 'newpath'\)")
 
     def test_link(self):
-        with open('oldpath', 'w') as f:
-            pass
-
         self.assert_syscall(
                 "import os; os.link('oldpath', 'newpath')",
                 br"^link\('oldpath', 'newpath'\)")
