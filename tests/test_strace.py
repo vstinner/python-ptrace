@@ -11,7 +11,6 @@ PY3 = (sys.version_info >= (3,))
 
 TESTDIR = os.path.abspath(os.path.dirname(__file__))
 STRACE = os.path.normpath(os.path.join(TESTDIR, '..', 'strace.py'))
-SYSCALL_SCRIPTS = os.path.join(TESTDIR, 'syscalls')
 
 class TestStrace(unittest.TestCase):
 
@@ -90,7 +89,7 @@ class TestStrace(unittest.TestCase):
 
     def test_chdir(self):
         self.assert_syscall(
-            'import os; os.chdir("directory")',
+            "import os; os.chdir('directory')",
             br"^chdir\('directory'\)")
     
     def test_rename(self):
@@ -98,7 +97,7 @@ class TestStrace(unittest.TestCase):
             pass
 
         self.assert_syscall(
-                'import os; os.rename("oldpath", "newpath")',
+                "import os; os.rename('oldpath', 'newpath')",
                 br"^rename\('oldpath', 'newpath'\)")
 
     def test_link(self):
@@ -106,17 +105,17 @@ class TestStrace(unittest.TestCase):
             pass
 
         self.assert_syscall(
-                'import os; os.link("oldpath", "newpath")',
+                "import os; os.link('oldpath', 'newpath')",
                 br"^link\('oldpath', 'newpath'\)")
 
     def test_symlink(self):
         self.assert_syscall(
-            'import os; os.symlink("target", "linkpath")',
+            "import os; os.symlink('target', 'linkpath')",
             br"^symlink\('target', 'linkpath'\)")
 
     def test_socket(self):
         self.assert_syscall(
-            'import socket; socket.socket(socket.AF_INET,socket.SOCK_STREAM).close()',
+            "import socket; socket.socket(socket.AF_INET,socket.SOCK_STREAM).close()",
             br'^socket\(AF_INET, SOCK_STREAM(\|SOCK_CLOEXEC)?')
 
 if __name__ == "__main__":
