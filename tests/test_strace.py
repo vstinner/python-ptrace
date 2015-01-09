@@ -49,7 +49,6 @@ class TestStrace(unittest.TestCase):
             temp.seek(0)
             strace = temp.readlines()
             strace = b''.join(strace)
-        self.assertEqual(exitcode, 0)
         self.assertIsNone(re.match(b'^Traceback', strace), strace)
         return strace
 
