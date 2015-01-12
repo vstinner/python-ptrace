@@ -5,8 +5,8 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from ptrace import six
 
-PY3 = (sys.version_info >= (3,))
 STRACE = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
 
 class TestStrace(unittest.TestCase):
@@ -39,12 +39,12 @@ class TestStrace(unittest.TestCase):
         match = pattern.search(stdout)
         self.assertTrue(match, stdout)
         expected = repr(cwd)
-        if PY3:
+        if six.PY3:
             expected = os.fsencode(expected)
         self.assertEqual(match.group(1), expected)
 
     def test_open(self):
-        if PY3:
+        if six.PY3:
             code = 'open(%a).close()' % __file__
         else:
             code = 'open(%r).close()' % __file__
@@ -62,6 +62,12 @@ class TestStrace(unittest.TestCase):
         code = 'import socket; socket.socket(socket.AF_INET, socket.SOCK_STREAM).close()'
         stdout = self.strace(sys.executable, '-c', code)
         pattern = re.compile(br'^socket\(AF_INET, SOCK_STREAM(\|SOCK_CLOEXEC)?, ', re.MULTILINE)
+        self.assertTrue(pattern.search(stdout), stdout)
+
+    def test_socket(self):
+        code = 'import os; os.listdir(os.curdir)'
+        stdout = self.strace(sys.executable, '-c', code)
+        pattern = re.compile(br"^openat\(-100, '.', ", re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
 if __name__ == "__main__":

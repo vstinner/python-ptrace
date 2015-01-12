@@ -5,16 +5,32 @@ from ctypes import cast, POINTER
 def int2uint64(value):
     """
     Convert a signed 64 bits integer into an unsigned 64 bits integer.
+
+    >>> print(int2uint64(1))
+    1
+    >>> print(int2uint64(2**64 + 1))  # ignore bits larger than 64 bits
+    1
+    >>> print(int2uint64(-1))
+    18446744073709551615
+    >>> print(int2uint64(-2))
+    18446744073709551614
     """
-    if value < 0:
-        return 0x10000000000000000 + value
-    else:
-        return value
+    return (value & 0xffffffffffffffff)
 
 def uint2int64(value):
     """
     Convert an unsigned 64 bits integer into a signed 64 bits integer.
+
+    >>> print(uint2int64(1))
+    1
+    >>> print(uint2int64(2**64 + 1))  # ignore bits larger than 64 bits
+    1
+    >>> print(uint2int64(18446744073709551615))
+    -1
+    >>> print(uint2int64(18446744073709551614))
+    -2
     """
+    value = value & 0xffffffffffffffff
     if value & 0x8000000000000000:
         return value - 0x10000000000000000
     else:
@@ -53,20 +69,37 @@ def formatUintHex64(value):
 def int2uint32(value):
     """
     Convert a signed 32 bits integer into an unsigned 32 bits integer.
+
+    >>> print(int2uint32(1))
+    1
+    >>> print(int2uint32(2**32 + 1))  # ignore bits larger than 32 bits
+    1
+    >>> print(int2uint32(-1))
+    4294967295
     """
-    if value < 0:
-        return 0x100000000 + value
-    else:
-        return value
+    return value & 0xffffffff
 
 def uint2int32(value):
     """
     Convert an unsigned 32 bits integer into a signed 32 bits integer.
+
+    >>> print(uint2int32(1))
+    1
+    >>> print(uint2int32(2**32 + 1))  # ignore bits larger than 32 bits
+    1
+    >>> print(uint2int32(4294967295))
+    -1
+    >>> print(uint2int32(4294967294))
+    -2
+    >>> print(uint2int32(18446744073709551615))
+    -1
     """
+    value = value & 0xffffffff
     if value & 0x80000000:
-        return value - 0x100000000
+        v = value - 0x100000000
     else:
-        return value
+        v = value
+    return v
 
 uint2int = uint2int32
 int2uint = int2uint32
