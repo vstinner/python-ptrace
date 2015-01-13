@@ -13,7 +13,8 @@ ALIASES = {
 }
 
 # Name of arguments containing a filename or a path
-FILENAME_ARGUMENTS = set(("filename", "pathname"))
+FILENAME_ARGUMENTS = set(
+    ("filename", "pathname", "oldpath", "newpath", "target", "linkpath"))
 
 SYSCALL_PROTOTYPES = {
     "read": ("ssize_t", (
@@ -340,8 +341,20 @@ SYSCALL_PROTOTYPES = {
             ("int", "nbytes"),
             ("long*", "basep"),
         )),
+    "rename": ("long", (
+            ("const char*", "oldpath"),
+            ("const char*", "newpath"),
+        )),
+    "link": ("long", (
+            ("const char*", "oldpath"),
+            ("const char*", "newpath"),
+        )),
     "unlink": ("long", (
             ("const char*", "pathname"),
+        )),
+    "symlink": ("long", (
+            ("const char*", "target"),
+            ("const char*", "linkpath"),
         )),
     "unlinkat":("long", (
             ("int", "dirfd"),
