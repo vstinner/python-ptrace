@@ -1,6 +1,5 @@
 from ptrace.tools import readBits, formatBits
 from ptrace.signames import signalName
-from ptrace.ctypes_tools import uint2int
 
 # From /usr/include/bits/mman.h (Ubuntu Feisty, i386)
 MMAP_PROT_BITMASK = (
@@ -95,12 +94,6 @@ def formatCloneFlags(argument):
 
 AT_FDCWD = -100
 
-def formatDirFd(argument):
-    value = argument.value
-
-    if argument.type != "int":
-        return str(value)
-
-    value = uint2int(value)
+def formatDirFd(value):
     return "AT_FDCWD" if value == AT_FDCWD else str(value)
 

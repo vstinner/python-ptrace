@@ -15,7 +15,7 @@ import os
 import re
 from ptrace import six
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
-from ptrace.syscall import FILENAME_ARGUMENTS
+from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
 if RUNNING_LINUX:
     from ptrace.syscall.linux_struct import (
         timeval, timespec, pollfd, rlimit, new_utsname, user_desc)
@@ -35,7 +35,7 @@ ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
     "open": {"mode": formatOpenMode},
-    "openat": {"flags": formatOpenMode, "mode": formatOpenMode, "dirfd": formatDirFd},
+    "openat": {"flags": formatOpenMode, "mode": formatOpenMode},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},
@@ -109,6 +109,8 @@ class SyscallArgument(FunctionArgument):
             return signalName(value)
         if name in FILENAME_ARGUMENTS:
             return self.readCString(value)
+        if name in DIRFD_ARGUMENTS and argtype == 'int':
+            return formatDirFd(uint2int(value))
 
         # Remove "const " prefix
         if argtype.startswith("const "):

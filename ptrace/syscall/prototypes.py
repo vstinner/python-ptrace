@@ -16,6 +16,8 @@ ALIASES = {
 FILENAME_ARGUMENTS = set(
     ("filename", "pathname", "oldpath", "newpath", "target", "linkpath"))
 
+DIRFD_ARGUMENTS = set(("dirfd", "olddirfd", "newdirfd"))
+
 SYSCALL_PROTOTYPES = {
     "read": ("ssize_t", (
             ("unsigned int", "fd"),
@@ -32,6 +34,12 @@ SYSCALL_PROTOTYPES = {
             ("int", "mode"),
         )),
     "readlink": ("long", (
+            ("const char*", "pathname"),
+            ("char*", "buf"),
+            ("int", "bufsize"),
+        )),
+    "readlinkat": ("long", (
+            ("int", "dirfd"),
             ("const char*", "pathname"),
             ("char*", "buf"),
             ("int", "bufsize"),
@@ -70,6 +78,12 @@ SYSCALL_PROTOTYPES = {
     "fstat": ("long", (
             ("unsigned int", "fd"),
             ("struct oldstat*", "statbuf"),
+        )),
+    "newfstatat": ("long", (
+            ("int", "dirfd"),
+            ("const char*", "filename"),
+            ("struct oldstat*", "statbuf"),
+            ("int", "flags"),
         )),
     "fstat64": ("long", (
             ("unsigned long", "fd"),
@@ -345,6 +359,12 @@ SYSCALL_PROTOTYPES = {
             ("const char*", "oldpath"),
             ("const char*", "newpath"),
         )),
+    "renameat": ("long", (
+            ("int", "olddirfd"),
+            ("const char*", "oldpath"),
+            ("int", "newdirfd"),
+            ("const char*", "newpath"),
+        )),
     "link": ("long", (
             ("const char*", "oldpath"),
             ("const char*", "newpath"),
@@ -355,6 +375,18 @@ SYSCALL_PROTOTYPES = {
     "symlink": ("long", (
             ("const char*", "target"),
             ("const char*", "linkpath"),
+        )),
+    "symlinkat": ("long", (
+            ("const char*", "target"),
+            ("int", "newdirfd"),
+            ("const char*", "linkpath"),
+        )),
+    "linkat":("int", (
+            ("int", "olddirfd"),
+            ("const char*", "oldpath"),
+            ("int", "newdirfd"),
+            ("const char*", "newpath"),
+            ("int", "flags"),
         )),
     "unlinkat":("long", (
             ("int", "dirfd"),
