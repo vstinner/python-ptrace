@@ -51,13 +51,12 @@ def formatOpenMode(argument):
     flags = readBits(int(value), OPEN_MODE_BITMASK)
 
     # Add default access mode if neither of the others are present.
-    if not flags or not (
-            flags[0] == "O_WRONLY" or flags[0] == "O_RDWR"):
+    if not flags or flags[0] not in ("O_WRONLY", "O_RDWR"):
         flags.insert(0, "O_RDONLY")
 
     text = "|".join(flags)
     if value:
-        text = "<%s> (%s)" % (text, argument.value)
+        text = "%s (%s)" % (text, oct(argument.value))
     return text
 
 CLONE_FLAGS_BITMASK = (

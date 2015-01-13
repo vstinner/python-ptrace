@@ -49,7 +49,7 @@ class TestStrace(unittest.TestCase):
         else:
             code = 'open(%r).close()' % __file__
         stdout = self.strace(sys.executable, '-c', code)
-        pattern = re.compile(br"^open\(.*test_strace\.pyc?', <?O_RDONLY(\|O_CLOEXEC)?", re.MULTILINE)
+        pattern = re.compile(br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?", re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
     def test_chdir(self):
@@ -67,7 +67,7 @@ class TestStrace(unittest.TestCase):
     def test_openat(self):
         code = 'import os; os.listdir(os.curdir)'
         stdout = self.strace(sys.executable, '-c', code)
-        pattern = re.compile(br"^openat\(AT_FDCWD, '\.', <O_RDONLY\|O_NONBLOCK\|O_DIRECTORY(\|O_CLOEXEC)?>[^,]+, O_RDONLY\)", re.MULTILINE)
+        pattern = re.compile(br"^openat\(AT_FDCWD, '\.', O_RDONLY\|O_NONBLOCK\|O_DIRECTORY(\|O_CLOEXEC)?[^,]+, O_RDONLY\)", re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
 if __name__ == "__main__":
