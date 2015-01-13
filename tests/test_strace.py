@@ -63,7 +63,7 @@ class TestStrace(unittest.TestCase):
     def test_chdir(self):
         self.assert_syscall(
             "import os; os.chdir('directory')",
-            br"^chdir\('directory'\)")
+            br"^chdir\('directory'\)\s+= -2 ENOENT")
     
     def test_rename(self):
         self.assert_syscall(

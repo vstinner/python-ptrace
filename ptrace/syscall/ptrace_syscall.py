@@ -1,4 +1,5 @@
 from os import strerror
+from errno import errorcode
 
 from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
@@ -124,8 +125,8 @@ class PtraceSyscall(FunctionCall):
             uresult = self.result
             self.result = ulong2long(self.result)
             if self.result < 0:
-                text = "%s (%s)" % (
-                    self.result, strerror(-self.result))
+                text = "%s %s (%s)" % (
+                    self.result, errorcode[-self.result], strerror(-self.result))
             elif not(0 <= self.result <= 9):
                 text = "%s (%s)" % (self.result, formatWordHex(uresult))
             else:
