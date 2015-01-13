@@ -6,7 +6,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from logging import getLogger, INFO
 from ptrace.func_arg import FunctionArgument
 from ptrace.syscall.posix_arg import (
-    formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags)
+    formatMmapProt, formatAccessMode, formatOpenMode, formatDirFd, formatCloneFlags)
 from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
     formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
@@ -35,6 +35,7 @@ ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
     "open": {"mode": formatOpenMode},
+    "openat": {"flags": formatOpenMode, "mode": formatOpenMode, "dirfd": formatDirFd},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},

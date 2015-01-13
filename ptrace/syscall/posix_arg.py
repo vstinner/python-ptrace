@@ -1,5 +1,6 @@
 from ptrace.tools import readBits, formatBits
 from ptrace.signames import signalName
+from ptrace.ctypes_tools import uint2int
 
 # From /usr/include/bits/mman.h (Ubuntu Feisty, i386)
 MMAP_PROT_BITMASK = (
@@ -23,7 +24,7 @@ ACCESS_MODE_BITMASK = (
 def formatAccessMode(argument):
     return formatBits(argument.value, ACCESS_MODE_BITMASK, "F_OK")
 
-# From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
+# From /usr/include/bits/fcntl.h (Ubuntu Trusty, x86_64)
 OPEN_MODE_BITMASK = [
     (0o1, "O_WRONLY"),
     (0o2, "O_RDWR"),
@@ -40,16 +41,23 @@ OPEN_MODE_BITMASK = [
     (0o200000, "O_DIRECTORY"),
     (0o400000, "O_NOFOLLOW"),
     (0o1000000, "O_NOATIME"),
+    (0o2000000, "O_CLOEXEC"),
+    (0o10000000, "O_PATH"), # Linux 2.6.39
+    (0o20200000, "O_TMPFILE"), # Linux 3.11
 ]
-O_CLOEXEC = 0o02000000
 
 def formatOpenMode(argument):
     value = argument.value
-    cloexec = bool(value & O_CLOEXEC)
-    value = value & ~O_CLOEXEC
-    text = formatBits(int(value), OPEN_MODE_BITMASK, "O_RDONLY", oct)
-    if cloexec:
-        text += '|O_CLOEXEC'
+    flags = readBits(int(value), OPEN_MODE_BITMASK)
+
+    # Add default access mode if neither of the others are present.
+    if not flags or not (
+            flags[0] == "O_WRONLY" or flags[0] == "O_RDWR"):
+        flags.insert(0, "O_RDONLY")
+
+    text = "|".join(flags)
+    if value:
+        text = "<%s> (%s)" % (text, argument.value)
     return text
 
 CLONE_FLAGS_BITMASK = (
@@ -85,4 +93,15 @@ def formatCloneFlags(argument):
         return "<%s> (%s)" % (bits, str(flags))
     else:
         return str(flags)
+
+AT_FDCWD = -100
+
+def formatDirFd(argument):
+    value = argument.value
+
+    if argument.type != "int":
+        return str(value)
+
+    value = uint2int(value)
+    return "AT_FDCWD" if value == AT_FDCWD else str(value)
 
