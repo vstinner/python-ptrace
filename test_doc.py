@@ -34,11 +34,12 @@ def main():
     #testDoc('doc/c_tools.rst')
 
     # Test documentation of some functions/classes
-    testModule("ptrace.tools")
-    testModule("ptrace.signames")
-    testModule("ptrace.logging_tools")
+    testModule("ptrace.ctypes_tools")
     testModule("ptrace.debugger.parse_expr")
+    testModule("ptrace.logging_tools")
+    testModule("ptrace.signames")
     testModule("ptrace.syscall.socketcall")
+    testModule("ptrace.tools")
 
 if __name__ == "__main__":
     main()
