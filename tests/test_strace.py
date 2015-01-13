@@ -58,7 +58,7 @@ class TestStrace(unittest.TestCase):
         else:
             code = 'open(%r).close()' % __file__
         self.assert_syscall(code,
-            br"^open\(.*test_strace\.pyc?', <?O_RDONLY(\|O_CLOEXEC)?")
+            br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
 
     def test_chdir(self):
         self.assert_syscall(
@@ -94,7 +94,7 @@ class TestStrace(unittest.TestCase):
     def test_openat(self):
         self.assert_syscall(
             'import os; os.listdir(os.curdir)',
-             br"^openat\(-100, '.', ")
+            br"^openat\(AT_FDCWD, '\.', O_RDONLY\|O_NONBLOCK\|O_DIRECTORY(\|O_CLOEXEC)?[^,]+, O_RDONLY\)")
 
 if __name__ == "__main__":
     unittest.main()
