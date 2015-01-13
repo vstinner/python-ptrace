@@ -83,9 +83,8 @@ class TestStrace(unittest.TestCase):
         finally:
             try:
                 os.unlink('linkpath')
-            except OSError as e:
-                if e.errno != 2: # ENOENT
-                    raise
+            except OSError:
+                pass
 
     def test_socket(self):
         self.assert_syscall(
