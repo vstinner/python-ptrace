@@ -13,7 +13,8 @@ CLASSIFIERS = [
     'Programming Language :: Python',
 ]
 
-LONG_DESCRIPTION = open('README.cptrace').read()
+LONG_DESCRIPTION = open('doc/cptrace.rst').read()
+
 
 def main():
     from imp import load_source
