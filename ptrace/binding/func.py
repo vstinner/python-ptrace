@@ -128,7 +128,7 @@ except ImportError:
 def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
     if HAS_CPTRACE:
         try:
-            result = _ptrace(command, pid, arg1, arg2)
+            result = _ptrace(command, pid, arg1, arg2, check_errno)
         except ValueError as errobj:
             message = str(errobj)
             errno = get_errno()
