@@ -36,7 +36,6 @@ Main tasks
 Minor tasks
 -----------
 
-* setup.py: convert docstrings with 2to3 (run "2to3 -w -d ." ?)
 * Fix gdb.py "step" command on a jump. Example where step will never stop::
 
    (gdb) where
