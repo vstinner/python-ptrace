@@ -47,11 +47,11 @@ Table of Contents
    :maxdepth: 2
 
    install
+   usage
    syscall
    gdb
    process_events
    ptrace_signal
-   process
    cptrace
    authors
    changelog
