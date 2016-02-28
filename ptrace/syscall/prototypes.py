@@ -5,8 +5,8 @@
 #    arch/um/sys-i386/sys_call_table.S
 
 ALIASES = {
-    "mmap": ("mmap2",),
-    "break": ("brk",),
+    "mmap_pgoff": ("mmap", "mmap2",),
+    "brk": ("break",),
     "exit": ("exit_group",),
     "fcntl": ("fcntl64",),
     "getcwd": ("__getcwd",),
@@ -1761,4 +1761,3 @@ for orig, copies in ALIASES.items():
     orig = SYSCALL_PROTOTYPES[orig]
     for copy in copies:
         SYSCALL_PROTOTYPES[copy] = orig
-
