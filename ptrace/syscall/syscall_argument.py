@@ -34,7 +34,7 @@ KNOWN_STRUCTS = dict( (struct.__name__, struct) for struct in KNOWN_STRUCTS )
 ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
-    "open": {"mode": formatOpenMode},
+    "open": {"flags": formatOpenMode, "mode": formatOpenMode},
     "openat": {"flags": formatOpenMode, "mode": formatOpenMode},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},

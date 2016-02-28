@@ -20,15 +20,15 @@ DIRFD_ARGUMENTS = set(("dirfd", "olddirfd", "newdirfd"))
 
 SYSCALL_PROTOTYPES = {
     "accept": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int *", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int *", "addrlen"),
     )),
     "accept4": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int *", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int *", "addrlen"),
+        ("int", "flags"),
     )),
     "access": ("long", (
         ("const char *", "filename"),
@@ -55,9 +55,9 @@ SYSCALL_PROTOTYPES = {
         ("long", "data"),
     )),
     "bind": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int", "addrlen"),
     )),
     "bpf": ("long", (
         ("int", "cmd"),
@@ -118,19 +118,19 @@ SYSCALL_PROTOTYPES = {
         ("const struct timespec *", "tp"),
     )),
     "clone": ("long", (
-        ("unsigned long", ""),
-        ("unsigned long", ""),
-        ("int *", ""),
-        ("int *", ""),
-        ("unsigned long", ""),
+        ("unsigned long", "flags"),
+        ("unsigned long", "child_stack"),
+        ("int *", "ptid"),
+        ("int *", "ctid"),
+        ("unsigned long", "regs"),
     )),
     "close": ("long", (
         ("unsigned int", "fd"),
     )),
     "connect": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int", "addrlen"),
     )),
     "copy_file_range": ("long", (
         ("int", "fd_in"),
@@ -427,9 +427,9 @@ SYSCALL_PROTOTYPES = {
         ("struct itimerval *", "value"),
     )),
     "getpeername": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int *", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int *", "addrlen"),
     )),
     "getpgid": ("long", (
         ("pid_t", "pid"),
@@ -481,9 +481,9 @@ SYSCALL_PROTOTYPES = {
         ("pid_t", "pid"),
     )),
     "getsockname": ("long", (
-        ("int", ""),
-        ("struct sockaddr *", ""),
-        ("int *", ""),
+        ("int", "sockfd"),
+        ("struct sockaddr *", "addr"),
+        ("int *", "addrlen"),
     )),
     "getsockopt": ("long", (
         ("int", "fd"),
@@ -547,9 +547,9 @@ SYSCALL_PROTOTYPES = {
         ("aio_context_t *", "ctx"),
     )),
     "io_submit": ("long", (
-        ("", "aio_context_t"),
-        ("long", ""),
-        ("struct iocb * *", ""),
+        ("aio_context_t", "ctx_id"),
+        ("long", "nr"),
+        ("struct iocb * *", "iocbpp"),
     )),
     "ioctl": ("long", (
         ("unsigned int", "fd"),
@@ -637,8 +637,8 @@ SYSCALL_PROTOTYPES = {
         ("int", "flags"),
     )),
     "listen": ("long", (
-        ("int", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("int", "backlog"),
     )),
     "listxattr": ("long", (
         ("const char *", "path"),
@@ -899,9 +899,9 @@ SYSCALL_PROTOTYPES = {
         ("struct mmap_arg_struct *", "arg"),
     )),
     "old_readdir": ("long", (
-        ("unsigned int", ""),
-        ("struct old_linux_dirent *", ""),
-        ("unsigned int", ""),
+        ("unsigned int", "fd"),
+        ("struct old_linux_dirent *", "dirp"),
+        ("unsigned int", "count"),
     )),
     "old_select": ("long", (
         ("struct sel_arg_struct *", "arg"),
@@ -910,7 +910,7 @@ SYSCALL_PROTOTYPES = {
         ("char *", "name"),
     )),
     "olduname": ("long", (
-        ("struct oldold_utsname *", ""),
+        ("struct oldold_utsname *", "buf"),
     )),
     "open": ("long", (
         ("const char *", "filename"),
@@ -976,10 +976,10 @@ SYSCALL_PROTOTYPES = {
         ("int", "timeout"),
     )),
     "ppoll": ("long", (
-        ("struct pollfd *", ""),
-        ("unsigned int", ""),
-        ("struct timespec *", ""),
-        ("const sigset_t *", ""),
+        ("struct pollfd *", "fds"),
+        ("unsigned int", "nfds"),
+        ("struct timespec *", "tmo_p"),
+        ("const sigset_t *", "sigmask"),
         ("size_t", ""),
     )),
     "prctl": ("long", (
@@ -1025,12 +1025,12 @@ SYSCALL_PROTOTYPES = {
         ("unsigned long", "flags"),
     )),
     "pselect6": ("long", (
-        ("int", ""),
-        ("fd_set *", ""),
-        ("fd_set *", ""),
-        ("fd_set *", ""),
-        ("struct timespec *", ""),
-        ("void *", ""),
+        ("int", "nfds"),
+        ("fd_set *", "readfds"),
+        ("fd_set *", "writefds"),
+        ("fd_set *", "exceptfds"),
+        ("struct timespec *", "timeout"),
+        ("void *", "sigmask"),
     )),
     "ptrace": ("long", (
         ("long", "request"),
@@ -1090,18 +1090,18 @@ SYSCALL_PROTOTYPES = {
         ("void *", "arg"),
     )),
     "recv": ("long", (
-        ("int", ""),
-        ("void *", ""),
-        ("size_t", ""),
-        ("", "unsigned"),
+        ("int", "sockfd"),
+        ("void *", "buf"),
+        ("size_t", "len"),
+        ("unsigned", "flags"),
     )),
     "recvfrom": ("long", (
-        ("int", ""),
-        ("void *", ""),
-        ("size_t", ""),
-        ("", "unsigned"),
-        ("struct sockaddr *", ""),
-        ("int *", ""),
+        ("int", "sockfd"),
+        ("void *", "buf"),
+        ("size_t", "len"),
+        ("unsigned", "flags"),
+        ("struct sockaddr *", "src_addr"),
+        ("int *", "addrlen"),
     )),
     "recvmmsg": ("long", (
         ("int", "fd"),
@@ -1155,9 +1155,9 @@ SYSCALL_PROTOTYPES = {
         ("const char *", "pathname"),
     )),
     "rt_sigaction": ("long", (
-        ("int", ""),
-        ("const struct sigaction *", ""),
-        ("struct sigaction *", ""),
+        ("int", "signum"),
+        ("const struct sigaction *", "act"),
+        ("struct sigaction *", "oldact"),
         ("size_t", ""),
     )),
     "rt_sigpending": ("long", (
@@ -1275,10 +1275,10 @@ SYSCALL_PROTOTYPES = {
         ("const struct timespec *", "timeout"),
     )),
     "send": ("long", (
-        ("int", ""),
-        ("void *", ""),
-        ("size_t", ""),
-        ("", "unsigned"),
+        ("int", "sockfd"),
+        ("void *", "buf"),
+        ("size_t", "len"),
+        ("unsigned", "flags"),
     )),
     "sendfile": ("long", (
         ("int", "out_fd"),
@@ -1304,12 +1304,12 @@ SYSCALL_PROTOTYPES = {
         ("unsigned", "flags"),
     )),
     "sendto": ("long", (
-        ("int", ""),
-        ("void *", ""),
-        ("size_t", ""),
-        ("", "unsigned"),
-        ("struct sockaddr *", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("void *", "buf"),
+        ("size_t", "len"),
+        ("unsigned", "flags"),
+        ("struct sockaddr *", "dest_addr"),
+        ("int", "addrlen"),
     )),
     "set_mempolicy": ("long", (
         ("int", "mode"),
@@ -1462,13 +1462,13 @@ SYSCALL_PROTOTYPES = {
         ("int", "flag"),
     )),
     "shutdown": ("long", (
-        ("int", ""),
-        ("int", ""),
+        ("int", "sockfd"),
+        ("int", "how"),
     )),
     "sigaction": ("long", (
-        ("int", ""),
-        ("const struct old_sigaction *", ""),
-        ("struct old_sigaction *", ""),
+        ("int", "signum"),
+        ("const struct old_sigaction *", "act"),
+        ("struct old_sigaction *", "oldact"),
     )),
     "sigaltstack": ("long", (
         ("const struct sigaltstack *", "uss"),
@@ -1503,19 +1503,19 @@ SYSCALL_PROTOTYPES = {
         ("old_sigset_t", "mask"),
     )),
     "socket": ("long", (
-        ("int", ""),
-        ("int", ""),
-        ("int", ""),
+        ("int", "domain"),
+        ("int", "type"),
+        ("int", "protocol"),
     )),
     "socketcall": ("long", (
         ("int", "call"),
         ("unsigned long *", "args"),
     )),
     "socketpair": ("long", (
-        ("int", ""),
-        ("int", ""),
-        ("int", ""),
-        ("int *", ""),
+        ("int", "domain"),
+        ("int", "type"),
+        ("int", "protocol"),
+        ("int *", "sv"),
     )),
     "splice": ("long", (
         ("int", "fd_in"),
@@ -1680,7 +1680,7 @@ SYSCALL_PROTOTYPES = {
         ("int", "flags"),
     )),
     "uname": ("long", (
-        ("struct old_utsname *", ""),
+        ("struct old_utsname *", "buf"),
     )),
     "unlink": ("long", (
         ("const char *", "pathname"),
