@@ -107,14 +107,15 @@ class SyscallArgument(FunctionArgument):
                 return self.readString(value, length)
         if name == "signum":
             return signalName(value)
-        if name in FILENAME_ARGUMENTS:
-            return self.readCString(value)
-        if name in DIRFD_ARGUMENTS and argtype == 'int':
+        if name in DIRFD_ARGUMENTS and argtype == "int":
             return formatDirFd(uint2int(value))
 
         # Remove "const " prefix
         if argtype.startswith("const "):
             argtype = argtype[6:]
+
+        if name in FILENAME_ARGUMENTS and argtype == "char *":
+            return self.readCString(value)
 
         # Format depending on the type
         if argtype.endswith("*"):
@@ -239,4 +240,3 @@ class SyscallArgument(FunctionArgument):
             callback = STRUCT_CALLBACK[struct]
             return callback(self, name, value)
         return None
-

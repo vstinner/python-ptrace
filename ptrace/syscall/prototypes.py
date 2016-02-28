@@ -14,7 +14,7 @@ ALIASES = {
 
 # Name of arguments containing a filename or a path
 FILENAME_ARGUMENTS = set(
-    ("filename", "pathname", "oldpath", "newpath", "target", "linkpath"))
+    ("filename", "pathname", "path", "oldname", "newname", "old", "new"))
 
 DIRFD_ARGUMENTS = set(("dirfd", "olddirfd", "newdirfd"))
 
@@ -385,7 +385,7 @@ SYSCALL_PROTOTYPES = {
         ("struct getcpu_cache *", "cache"),
     )),
     "getcwd": ("long", (
-        ("char *", "buf"),
+        ("char *", "pathname"),
         ("unsigned long", "size"),
     )),
     "getdents": ("long", (
