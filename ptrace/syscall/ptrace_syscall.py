@@ -10,6 +10,32 @@ from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD
 from ptrace.cpu_info import CPU_WORD_SIZE
 from ptrace.binding.cpu import CPU_INSTR_POINTER
 
+if CPU_POWERPC:
+    SYSCALL_REGISTER = "gpr0"
+elif CPU_ARM:
+    SYSCALL_REGISTER = "r7"
+elif RUNNING_LINUX:
+    if CPU_X86_64:
+        SYSCALL_REGISTER = "orig_rax"
+    else:
+        SYSCALL_REGISTER = "orig_eax"
+else:
+    if CPU_X86_64:
+        SYSCALL_REGISTER = "rax"
+    else:
+        SYSCALL_REGISTER = "eax"
+
+if CPU_ARM:
+    RETURN_VALUE_REGISTER = "r0"
+elif CPU_I386:
+    RETURN_VALUE_REGISTER = "eax"
+elif CPU_X86_64:
+    RETURN_VALUE_REGISTER = "rax"
+elif CPU_POWERPC:
+    RETURN_VALUE_REGISTER = "result"
+else:
+    raise NotImplementedError("Unsupported CPU architecture")
+
 PREFORMAT_ARGUMENTS = {
     "select": (2, 3, 4),
     "execve": (0, 1, 2),
@@ -48,21 +74,7 @@ class PtraceSyscall(FunctionCall):
 
     def readSyscall(self, regs):
         # Read syscall number
-        if CPU_POWERPC:
-            self.syscall = regs.gpr0
-        elif CPU_ARM:
-            self.syscall = regs.r7
-        elif RUNNING_LINUX:
-            if CPU_X86_64:
-                self.syscall = regs.orig_rax
-            else:
-                self.syscall = regs.orig_eax
-        else:
-            if CPU_X86_64:
-                self.syscall = regs.rax
-            else:
-                self.syscall = regs.eax
-
+        self.syscall = getattr(regs, SYSCALL_REGISTER)
         # Get syscall variables
         self.name = SYSCALL_NAMES.get(self.syscall, "syscall<%s>" % self.syscall)
 
@@ -107,17 +119,7 @@ class PtraceSyscall(FunctionCall):
                 continue
             argument.text = None
 
-        if CPU_ARM:
-            regname = "r0"
-        elif CPU_I386:
-            regname = "eax"
-        elif CPU_X86_64:
-            regname = "rax"
-        elif CPU_POWERPC:
-            regname = "result"
-        else:
-            raise NotImplementedError()
-        self.result = self.process.getreg(regname)
+        self.result = self.process.getreg(RETURN_VALUE_REGISTER)
 
         if self.restype.endswith("*"):
             text = formatAddress(self.result)
@@ -136,4 +138,3 @@ class PtraceSyscall(FunctionCall):
 
     def __str__(self):
         return "<Syscall name=%r>" % self.name
-
