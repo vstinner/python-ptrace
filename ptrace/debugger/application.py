@@ -1,8 +1,7 @@
-from __future__ import print_function
 from optparse import OptionGroup
 from logging import (getLogger, StreamHandler,
     DEBUG, INFO, WARNING, ERROR)
-from sys import stderr, exit
+from sys import exit
 from ptrace import PtraceError
 from logging import error
 from ptrace.tools import locateProgram
@@ -51,7 +50,7 @@ class Application(object):
             try:
                 self.debugger.traceFork()
             except DebuggerError:
-                print("ERROR: --fork option is not supported by your OS, sorry!", file=stderr)
+                error("--fork option is not supported by your OS, sorry!")
                 exit(1)
         if self.options.trace_exec:
             self.debugger.traceExec()
@@ -83,4 +82,3 @@ class Application(object):
             action="store_true", default=False)
         parser.add_option("--no-stdout", help="Use /dev/null as stdout/stderr, or close stdout and stderr if /dev/null doesn't exist",
             action="store_true", default=False)
-

@@ -48,7 +48,7 @@ def evalFaultAddress(process, match):
     try:
         return parseExpression(process, expr)
     except ValueError as err:
-        print("err: %s" % err)
+        error("err: %s" % err)
         return None
 
 class ProcessSignal(ProcessEvent):
@@ -222,4 +222,3 @@ class ProcessSignal(ProcessEvent):
         if self.reason:
             self.reason.display(log)
         log("-" * 60)
-
