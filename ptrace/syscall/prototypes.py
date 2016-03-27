@@ -5,11 +5,15 @@
 #    arch/um/sys-i386/sys_call_table.S
 
 ALIASES = {
-    "mmap_pgoff": ("mmap", "mmap2",),
     "brk": ("break",),
-    "exit": ("exit_group",),
-    "fcntl": ("fcntl64",),
+    "fadvise64": ("posix_fadvise",),
+    "fstatat64": ("fstatat",),
     "getcwd": ("__getcwd",),
+    "mmap_pgoff": ("mmap", "mmap2",),
+    "pread64": ("pread",),
+    "prlimit64": ("prlimit",),
+    "pselect6": ("pselect",),
+    "pwrite64": ("pwrite",),
 }
 
 # Name of arguments containing a filename or a path
