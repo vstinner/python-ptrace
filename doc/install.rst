@@ -36,7 +36,7 @@ Download the development version using Mercurial::
 python-ptrace dependencies
 --------------------------
 
-* Python 2.5+:
+* Python 2.6+/3.3+:
   http://python.org/
 * distorm disassembler (optional)
   http://www.ragestorm.net/distorm/
