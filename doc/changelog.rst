@@ -3,13 +3,14 @@
 Changelog
 =========
 
-* Python 3: fix formatting of string syscall arguments (ex: filenames), decode
-  bytes from the locale encoding.
-* Add chdir() prototype. Patch written by Raymond Barkhouse.
-
-python-ptrace 0.8.2
+python-ptrace 0.9 (2016-04-23)
 -------------------
 
+* Add all Linux syscall prototypes
+* Add error symbols (eg. ENOENT), in addition to error text, for strace
+* Fix open mode so O_RDONLY shows if it's the only file access mode
+* Python 3: fix formatting of string syscall arguments (ex: filenames), decode
+  bytes from the locale encoding
 * Issue #17: syscall parser now supports O_CLOEXEC and SOCK_CLOEXEC, fix unit
   tests on Python 3.4 and newer
 
@@ -183,4 +184,3 @@ Developer changes:
   of PtraceProcess
 * Always define all PtraceProcess methods but raise an error if the function
   is not implemented
-
