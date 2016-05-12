@@ -2,7 +2,7 @@
 Error pipe and serialization code comes from Python 2.5 subprocess module.
 """
 from os import (
-    fork, execv, execve, waitpid,
+    fork, execvp, execvpe, waitpid,
     close, dup2, pipe,
     read, write, devnull, sysconf)
 from sys import exc_info
@@ -125,9 +125,9 @@ def _execChild(arguments, no_stdout, env):
             close(1)
     try:
         if env is not None:
-            execve(arguments[0], arguments, env)
+            execvpe(arguments[0], arguments, env)
         else:
-            execv(arguments[0], arguments)
+            execvp(arguments[0], arguments)
     except Exception as err:
         raise ChildError(str(err))
 
