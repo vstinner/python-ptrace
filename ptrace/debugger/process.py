@@ -153,7 +153,7 @@ class PtraceProcess(object):
     Sometimes, is_stopped value is wrong. You might use isTraced() to
     make sure that the process is stopped.
     """
-    def __init__(self, debugger, pid, is_attached, parent=None):
+    def __init__(self, debugger, pid, is_attached, parent=None, is_thread=False):
         self.debugger = debugger
         self.breakpoints = {}
         self.pid = pid
@@ -163,6 +163,7 @@ class PtraceProcess(object):
         self.was_attached = is_attached
         self.is_attached = False
         self.is_stopped = True
+        self.is_thread = is_thread
         if not is_attached:
             self.attach()
         else:
@@ -399,7 +400,8 @@ class PtraceProcess(object):
             self.notImplementedError()
         if event in NEW_PROCESS_EVENT:
             new_pid = ptrace_geteventmsg(self.pid)
-            new_process = self.debugger.addProcess(new_pid, is_attached=True, parent=self)
+            is_thread = (event == PTRACE_EVENT_CLONE)
+            new_process = self.debugger.addProcess(new_pid, is_attached=True, parent=self, is_thread=is_thread)
             return NewProcessEvent(new_process)
         elif event == PTRACE_EVENT_EXEC:
             return ProcessExecution(self)

@@ -31,6 +31,10 @@ HAS_PTRACE_IO = False
 HAS_PTRACE_SIGINFO = False
 HAS_PTRACE_GETREGS = False
 
+# Special flags that are required to wait for cloned processes (threads)
+# See wait(2)
+THREAD_TRACE_FLAGS = 0x00000000
+
 pid_t = c_int
 
 # PTRACE_xxx constants from /usr/include/sys/ptrace.h
@@ -95,6 +99,9 @@ if RUNNING_LINUX:
     HAS_PTRACE_EVENTS = True
     PTRACE_SETOPTIONS = 0x4200
     PTRACE_GETEVENTMSG = 0x4201
+
+    # Linux introduces the __WALL flag for wait
+    THREAD_TRACE_FLAGS = 0x40000000
 
 PTRACE_O_TRACESYSGOOD   = 0x00000001
 PTRACE_O_TRACEFORK      = 0x00000002

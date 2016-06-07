@@ -9,7 +9,8 @@ from time import sleep
 if HAS_PTRACE_EVENTS:
     from ptrace.binding.func import (
         PTRACE_O_TRACEFORK, PTRACE_O_TRACEVFORK,
-        PTRACE_O_TRACEEXEC, PTRACE_O_TRACESYSGOOD)
+        PTRACE_O_TRACEEXEC, PTRACE_O_TRACESYSGOOD,
+        PTRACE_O_TRACECLONE, THREAD_TRACE_FLAGS)
 
 class DebuggerError(PtraceError):
     pass
@@ -61,10 +62,11 @@ class PtraceDebugger(object):
         self.options = 0
         self.trace_fork = False
         self.trace_exec = False
+        self.trace_clone = False
         self.use_sysgood = False
         self.enableSysgood()
 
-    def addProcess(self, pid, is_attached, parent=None):
+    def addProcess(self, pid, is_attached, parent=None, is_thread=False):
         """
         Add a new process using its identifier. Use is_attached=False to
         attach an existing (running) process, and is_attached=True to trace
@@ -72,7 +74,7 @@ class PtraceDebugger(object):
         """
         if pid in self.dict:
             raise KeyError("The process %s is already registered!" % pid)
-        process = PtraceProcess(self, pid, is_attached, parent=parent)
+        process = PtraceProcess(self, pid, is_attached, parent=parent, is_thread=is_thread)
         info("Attach %s to debugger" % process)
         self.dict[pid] = process
         self.list.append(process)
@@ -119,6 +121,10 @@ class PtraceDebugger(object):
         if wanted_pid:
             if wanted_pid not in self.dict:
                 raise DebuggerError("Unknown PID: %r" % wanted_pid, pid=wanted_pid)
+
+            process = self.dict[wanted_pid]
+            if process.is_thread:
+                flags |= THREAD_TRACE_FLAGS
 
             pid, status = waitpid(wanted_pid, flags)
         else:
@@ -246,6 +252,16 @@ class PtraceDebugger(object):
             return
         self.trace_exec = True
         self.options |= PTRACE_O_TRACEEXEC
+
+    def traceClone(self):
+        """
+        Enable clone() tracing. Do nothing if it's not supported.
+        """
+        if not HAS_PTRACE_EVENTS:
+            # no effect on OS without ptrace events
+            return
+        self.trace_clone = True
+        self.options |= PTRACE_O_TRACECLONE
 
     def enableSysgood(self):
         """
