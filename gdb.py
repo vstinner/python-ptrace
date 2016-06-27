@@ -65,6 +65,7 @@ COMMANDS = (
     ("where", "display true code content (show breakpoints effects on code). eg. 'where $eip', 'where $eip $eip+20'"),
     ("print", "display a value (print <value>)"),
     ("hexdump", "dump memory as specified address or address range (hexdump <address> or hexdump <start> <stop>)"),
+    ("gcore", "generate core file of the process"),
     ("where2", "display original code content (don't show effects of breakpoint on code)"),
     ("stack", "display stack content"),
     ("backtrace", "dump the backtrace"),
@@ -304,6 +305,8 @@ class Gdb(Application):
             self.process.dumpRegs()
         elif command == "stack":
             self.process.dumpStack()
+        elif command == "gcore":
+            self.gcore(self.process)
         elif command == "backtrace":
             errmsg = self.backtrace()
         elif command == "where" or command.startswith("where "):
@@ -398,7 +401,27 @@ class Gdb(Application):
                 continue
             error("Address is part of mapping: %s" % map)
         return None
-
+    
+    def gcore(self, process):
+        import re
+        childPid = str(process).split('#')[-1][:-1]
+        maps_file = open("/proc/" + childPid + "/maps", 'r')
+        mem_file = open("/proc/" + childPid + "/mem", 'r', 0)
+        from sys import argv
+        dump = open("/vmdump/" + argv[1] + ".dump", "wb")
+        for line in maps_file.readlines():  # for each mapped region
+            m = re.match(r'([0-9A-Fa-f]+)-([0-9A-Fa-f]+) ([-r])', line)
+            if m.group(3) == 'r':  # if this is a readable region
+                if "/lib" not in line and "/usr" not in line: # for eliminating of shared libs
+                    start = int(m.group(1), 16)
+                    end = int(m.group(2), 16)
+                    mem_file.seek(start)  # seek to region start
+                    chunk = mem_file.read(end - start)  # read region contents
+                    dump.write(chunk,) # dump contents to standard output
+        maps_file.close()
+        mem_file.close()
+        dump.close()
+    
     def hexdump(self, command):
         max_line = 20
         width = (terminalWidth() - len(formatAddress(1)) - 3) // 4
