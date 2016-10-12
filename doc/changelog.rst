@@ -11,6 +11,7 @@ python-ptrace 0.9.1
   the ``ctypes.get_errno()`` function
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   ``ctypes.c_int8``, ``ctypes.c_uint32``, ... types
+* Allow command names without absolute path.
 
 
 python-ptrace 0.9 (2016-04-23)
