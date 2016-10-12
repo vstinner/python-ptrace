@@ -126,7 +126,7 @@ class PtraceSyscall(FunctionCall):
         else:
             uresult = self.result
             self.result = ulong2long(self.result)
-            if self.result & 0xFFFF < 0:
+            if self.result < 0:
                 text = "%s %s (%s)" % (
                     self.result, errorcode[-self.result], strerror(-self.result))
             elif not(0 <= self.result <= 9):
