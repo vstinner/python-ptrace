@@ -1,5 +1,0 @@
-python-ptrace is a Python binding of ptrace library.
-
-* Website and documentation: http://python-ptrace.readthedocs.org/
-* Documentation: see doc/ and examples/ directories.
-

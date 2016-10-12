@@ -27,10 +27,10 @@ Download development version
 
 Download the development version using Mercurial::
 
-    hg clone https://bitbucket.org/haypo/python-ptrace
+    git clone https://github.com/haypo/python-ptrace.git
 
 `Browse python-ptrace source code
-<https://bitbucket.org/haypo/python-ptrace/src/>`_.
+<https://github.com/haypo/python-ptrace>`_.
 
 
 python-ptrace dependencies

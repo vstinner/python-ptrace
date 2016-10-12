@@ -3,8 +3,13 @@
 Changelog
 =========
 
-python-ptrace 0.9 (2016-04-23)
+python-ptrace 0.9.1
 -------------------
+
+* Project moved to GitHub: https://github.com/haypo/python-ptrace
+
+python-ptrace 0.9 (2016-04-23)
+------------------------------
 
 * Add all Linux syscall prototypes
 * Add error symbols (eg. ENOENT), in addition to error text, for strace

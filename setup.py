@@ -33,7 +33,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
 ]
 
-with open('README') as fp:
+with open('README.rst') as fp:
     LONG_DESCRIPTION = fp.read()
 
 from imp import load_source
