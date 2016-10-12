@@ -1,20 +1,23 @@
 #!/usr/bin/env python
 
 # Produce to release a new version:
-#  - hg in  # check that there is no incoming changesets
+#  - git pull --rebase  # check that there is no incoming changesets
 #  - run tests, type: tox
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in the ChangeLog
 #  - check that "python setup.py sdist" contains all files tracked by
 #    the SCM (Mercurial): update MANIFEST.in if needed
-#  - hg ci
-#  - hg tag python-ptrace-x.y
-#  - hg push
+#  - git commit -a
+#  - git push
+#
+#  - git tag python-ptrace-x.y
+#  - git push --tags
+#
 #  - ./setup.py sdist register bdist_wheel upload
 #  - update the doc
 #  - increment version in  ptrace/version.py and doc/conf.py
-#  - hg ci
-#  - hg push
+#  - git commit
+#  - git push
 
 from __future__ import with_statement
 
