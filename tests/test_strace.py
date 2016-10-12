@@ -34,7 +34,7 @@ class TestStrace(unittest.TestCase):
         stdout = self.strace(sys.executable, '-c', code)
         pattern = re.compile(regex, re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
-    
+
     def test_basic(self):
         stdout = self.strace(sys.executable, '-c', 'pass')
         for syscall in (b'exit', b'mmap', b'open'):
@@ -64,7 +64,7 @@ class TestStrace(unittest.TestCase):
         self.assert_syscall(
             "import os; os.chdir('directory')",
             br"^chdir\('directory'\)\s+= -2 ENOENT")
-    
+
     def test_rename(self):
         self.assert_syscall(
                 "import os; os.rename('oldpath', 'newpath')",
@@ -91,10 +91,6 @@ class TestStrace(unittest.TestCase):
             "import socket; socket.socket(socket.AF_INET,socket.SOCK_STREAM).close()",
             br'^socket\(AF_INET, SOCK_STREAM(\|SOCK_CLOEXEC)?')
 
-    def test_openat(self):
-        self.assert_syscall(
-            'import os; os.listdir(os.curdir)',
-            br"^openat\(AT_FDCWD, '\.', O_RDONLY\|O_NONBLOCK\|O_DIRECTORY(\|O_CLOEXEC)?[^,]+, O_RDONLY\)")
 
 if __name__ == "__main__":
     unittest.main()
