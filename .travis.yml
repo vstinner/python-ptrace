@@ -1,0 +1,6 @@
+language: python
+env:
+  - TOXENV=py2
+  - TOXENV=py3
+install: pip install -U tox
+script: tox
