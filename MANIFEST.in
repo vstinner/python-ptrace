@@ -5,13 +5,12 @@ include INSTALL
 include MANIFEST.in
 include README.cptrace
 include TODO
-include conv_python3.0.sh
+include tox.ini
 include cptrace/Makefile
 include cptrace/cptrace.c
 include cptrace/version.py
 
-include doc/*.rst
-include doc/conf.py
+include doc/*.rst doc/conf.py doc/make.bat doc/Makefile
 
 include examples/itrace.py
 include examples/simple_dbg.py
