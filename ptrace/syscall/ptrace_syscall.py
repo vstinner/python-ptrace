@@ -42,7 +42,9 @@ PREFORMAT_ARGUMENTS = {
     "clone": (0, 1),
 }
 
+
 class PtraceSyscall(FunctionCall):
+
     def __init__(self, process, options, regs=None):
         FunctionCall.__init__(self, "syscall", options, SyscallArgument)
         self.process = process
@@ -76,7 +78,8 @@ class PtraceSyscall(FunctionCall):
         # Read syscall number
         self.syscall = getattr(regs, SYSCALL_REGISTER)
         # Get syscall variables
-        self.name = SYSCALL_NAMES.get(self.syscall, "syscall<%s>" % self.syscall)
+        self.name = SYSCALL_NAMES.get(
+            self.syscall, "syscall<%s>" % self.syscall)
 
     def readArgumentValues(self, regs):
         if CPU_X86_64:
@@ -85,8 +88,8 @@ class PtraceSyscall(FunctionCall):
             return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6)
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
-            return [ self.process.readWord(sp + index*CPU_WORD_SIZE)
-                for index in range(1, 6+1) ]
+            return [self.process.readWord(sp + index * CPU_WORD_SIZE)
+                    for index in range(1, 6 + 1)]
         if CPU_I386:
             return (regs.ebx, regs.ecx, regs.edx, regs.esi, regs.edi, regs.ebp)
         if CPU_POWERPC:

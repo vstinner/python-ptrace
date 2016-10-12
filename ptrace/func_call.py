@@ -1,13 +1,15 @@
 from ptrace.func_arg import FunctionArgument
 
+
 class FunctionCallOptions(object):
     """
     Options to format a function call and its arguments.
     """
+
     def __init__(self,
-    write_types=False, write_argname=False,
-    replace_socketcall=True, string_max_length=300,
-    write_address=False, max_array_count=20):
+                 write_types=False, write_argname=False,
+                 replace_socketcall=True, string_max_length=300,
+                 write_address=False, max_array_count=20):
         self.write_address = write_address
         self.write_types = write_types
         self.write_argname = write_argname
@@ -15,6 +17,7 @@ class FunctionCallOptions(object):
         self.string_max_length = string_max_length
         self.max_array_count = max_array_count
         self.instr_pointer = False
+
 
 class FunctionCall(object):
     """
@@ -30,6 +33,7 @@ class FunctionCall(object):
      - addArgument(): add a new argument
      - clearArguments(): remove all arguments
     """
+
     def __init__(self, name, options, argument_class=FunctionArgument):
         self.name = name
         self.options = options
@@ -39,7 +43,8 @@ class FunctionCall(object):
         self.argument_class = argument_class
 
     def addArgument(self, value=None, name=None, type=None):
-        arg = self.argument_class(self, len(self.arguments), self.options, value, type, name)
+        arg = self.argument_class(
+            self, len(self.arguments), self.options, value, type, name)
         self.arguments.append(arg)
 
     def clearArguments(self):
@@ -56,7 +61,7 @@ class FunctionCall(object):
             return self.arguments[key]
 
     def format(self):
-        arguments = [ arg.format() for arg in self.arguments ]
+        arguments = [arg.format() for arg in self.arguments]
         arguments = ", ".join(arguments)
         if self.restype and self.options.write_types:
             return "%s %s(%s)" % (self.restype, self.name, arguments)
@@ -65,4 +70,3 @@ class FunctionCall(object):
 
     def __repr__(self):
         return "<FunctionCall name=%r>" % self.name
-

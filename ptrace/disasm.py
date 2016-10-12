@@ -40,6 +40,7 @@ try:
          - hexa (str): bytes of the instruction as an hexadecimal string
          - text (str): string representing the whole instruction
         """
+
         def __init__(self, instr):
             if DISTORM3:
                 self.address, self.size, self.text, self.hexa = instr
@@ -73,4 +74,3 @@ try:
 except (ImportError, OSError) as err:
     # OSError if libdistorm64.so doesn't exist
     HAS_DISASSEMBLER = False
-

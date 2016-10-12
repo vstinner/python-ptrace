@@ -1,6 +1,6 @@
 from optparse import OptionGroup
 from logging import (getLogger, StreamHandler,
-    DEBUG, INFO, WARNING, ERROR)
+                     DEBUG, INFO, WARNING, ERROR)
 from sys import exit
 from ptrace import PtraceError
 from logging import error
@@ -9,7 +9,9 @@ from ptrace.debugger import ProcessExit, DebuggerError
 from errno import EPERM
 from ptrace.debugger.child import createChild
 
+
 class Application(object):
+
     def __init__(self):
         pass
 
@@ -34,11 +36,11 @@ class Application(object):
     def createLogOptions(self, parser):
         log = OptionGroup(parser, "Logging")
         log.add_option("--quiet", "-q", help="Be quiet (set log level to ERROR)",
-            action="store_true", default=False)
+                       action="store_true", default=False)
         log.add_option("--verbose", "-v", help="Debug mode (set log level to INFO)",
-            action="store_true", default=False)
+                       action="store_true", default=False)
         log.add_option("--debug", help="Debug mode (set log level to DEBUG)",
-            action="store_true", default=False)
+                       action="store_true", default=False)
         parser.add_option_group(log)
 
     def createChild(self, arguments, env=None):
@@ -67,18 +69,19 @@ class Application(object):
             return self.debugger.addProcess(pid, is_attached=is_attached)
         except (ProcessExit, PtraceError) as err:
             if isinstance(err, PtraceError) \
-            and err.errno == EPERM:
-                error("ERROR: You are not allowed to trace process %s (permission denied or process already traced)" % pid)
+                    and err.errno == EPERM:
+                error(
+                    "ERROR: You are not allowed to trace process %s (permission denied or process already traced)" % pid)
             else:
                 error("ERROR: Process can no be attached! %s" % err)
         return None
 
     def createCommonOptions(self, parser):
         parser.add_option("--pid", "-p", help="Attach running process specified by its identifier",
-            type="int", default=None)
+                          type="int", default=None)
         parser.add_option("--fork", "-f", help="Trace fork and child process",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--trace-exec", help="Trace execve() event",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--no-stdout", help="Use /dev/null as stdout/stderr, or close stdout and stderr if /dev/null doesn't exist",
-            action="store_true", default=False)
+                          action="store_true", default=False)

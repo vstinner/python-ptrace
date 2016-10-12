@@ -16,6 +16,7 @@ if regex:
 else:
     REGISTER_REGEX = None
 
+
 def extractRegisters(process, instr):
     registers = {}
     if not process or not instr or not REGISTER_REGEX:
@@ -33,6 +34,7 @@ def extractRegisters(process, instr):
         except PtraceError as err:
             pass
     return registers
+
 
 def findMappings(addresses, process, size):
     mappings = []
@@ -52,17 +54,19 @@ def findMappings(addresses, process, size):
         found = False
         for map in process_mappings:
             if (map.start <= address < map.end) \
-            or (map.start <= (address + size - 1) < map.end):
+                    or (map.start <= (address + size - 1) < map.end):
                 found = True
                 mappings.append("%s is part of %s" % (address_str, map))
         if not found:
             mappings.append("%s is not mapped in memory" % address_str)
     return mappings
 
+
 class SignalInfo(Exception):
+
     def __init__(self, name, text,
-    address=None, size=None, instr=None,
-    process=None, registers=None):
+                 address=None, size=None, instr=None,
+                 process=None, registers=None):
         Exception.__init__(self, text)
         self.name = name
         self.text = text
@@ -85,24 +89,32 @@ class SignalInfo(Exception):
     def displayExtra(self, log):
         pass
 
+
 class DivisionByZero(SignalInfo):
+
     def __init__(self, instr=None, process=None):
         SignalInfo.__init__(self, "div_by_zero",
-            "Division by zero", instr=instr, process=process)
+                            "Division by zero", instr=instr, process=process)
+
 
 class Abort(SignalInfo):
+
     def __init__(self):
         SignalInfo.__init__(self, "abort",
-            "Program received signal SIGABRT, Aborted.")
+                            "Program received signal SIGABRT, Aborted.")
+
 
 class StackOverflow(SignalInfo):
+
     def __init__(self, stack_ptr, stack_map, instr=None, process=None):
         text = "STACK OVERFLOW! Stack pointer is in %s" % stack_map
         SignalInfo.__init__(self, "stack_overflow", text,
-            address=stack_ptr, registers={'<stack ptr>': stack_ptr},
-            instr=instr, process=process)
+                            address=stack_ptr, registers={
+                                '<stack ptr>': stack_ptr},
+                            instr=instr, process=process)
         self.stack_ptr = stack_ptr
         self.stack_map = stack_map
+
 
 class InvalidMemoryAcces(SignalInfo):
     NAME = "invalid_mem_access"
@@ -115,7 +127,8 @@ class InvalidMemoryAcces(SignalInfo):
         """
         if address is not None:
             if isinstance(address, (list, tuple)):
-                arguments = " or ".join( formatAddress(addr) for addr in address )
+                arguments = " or ".join(formatAddress(addr)
+                                        for addr in address)
             else:
                 arguments = formatAddress(address)
             message = self.PREFIX_ADDR % arguments
@@ -127,28 +140,35 @@ class InvalidMemoryAcces(SignalInfo):
         if address is not None:
             name += "-" + formatAddress(address).lower()
         SignalInfo.__init__(self, name, message,
-            address=address, size=size, instr=instr,
-            process=process, registers=registers)
+                            address=address, size=size, instr=instr,
+                            process=process, registers=registers)
+
 
 class InvalidRead(InvalidMemoryAcces):
     NAME = "invalid_read"
     PREFIX = "Invalid read"
     PREFIX_ADDR = "Invalid read from %s"
 
+
 class InvalidWrite(InvalidMemoryAcces):
     NAME = "invalid_write"
     PREFIX = "Invalid write"
     PREFIX_ADDR = "Invalid write to %s"
 
+
 class InstructionError(SignalInfo):
+
     def __init__(self, address, process=None):
         SignalInfo.__init__(self, "instr_error",
-            "UNABLE TO EXECUTE CODE AT %s (SEGMENTATION FAULT)" % formatAddress(address),
-            address=address,
-            process=process,
-            registers={'<instr pointer>': address})
+                            "UNABLE TO EXECUTE CODE AT %s (SEGMENTATION FAULT)" % formatAddress(
+                                address),
+                            address=address,
+                            process=process,
+                            registers={'<instr pointer>': address})
+
 
 class ChildExit(SignalInfo):
+
     def __init__(self, pid=None, status=None, uid=None):
         if pid is not None and status is not None:
             message = formatProcessStatus(status, "Child process %s" % pid)
@@ -162,4 +182,3 @@ class ChildExit(SignalInfo):
     def displayExtra(self, log):
         if self.uid is not None:
             log("Signal sent by user %s" % self.uid)
-

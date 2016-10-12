@@ -11,9 +11,9 @@ from ptrace.binding.func import (
     ptrace_registers_t)
 if HAS_PTRACE_EVENTS:
     from ptrace.binding.func import (WPTRACEEVENT,
-        PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE,
-        PTRACE_EVENT_EXEC,
-        ptrace_setoptions, ptrace_geteventmsg)
+                                     PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE,
+                                     PTRACE_EVENT_EXEC,
+                                     ptrace_setoptions, ptrace_geteventmsg)
 if HAS_PTRACE_SINGLESTEP:
     from ptrace.binding.func import ptrace_singlestep
 if HAS_PTRACE_SIGINFO:
@@ -23,7 +23,6 @@ if HAS_PTRACE_IO:
     from ptrace.binding.freebsd_struct import (
         ptrace_io_desc,
         PIOD_READ_D, PIOD_WRITE_D,
-        PIOD_READ_I,PIOD_WRITE_I)
+        PIOD_READ_I, PIOD_WRITE_I)
 if HAS_PTRACE_GETREGS:
     from ptrace.binding.func import ptrace_getregs
-

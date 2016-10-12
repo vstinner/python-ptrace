@@ -69,4 +69,3 @@ if CPU_INTEL:
         'of': ('eflags', 11, 1),
         'iopl': ('eflags', 12, 2),
     })
-

@@ -60,4 +60,3 @@ SYSCALL_ARG_DICT = {
 }
 
 SYSCALL_ARG_DICT["setsockopt"] = SYSCALL_ARG_DICT["getsockopt"]
-

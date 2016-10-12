@@ -2,8 +2,8 @@
 from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
-    ProcessExit, NewProcessEvent, ProcessSignal,
-    ProcessExecution, ProcessError)
+                             ProcessExit, NewProcessEvent, ProcessSignal,
+                             ProcessExecution, ProcessError)
 from optparse import OptionParser
 from os import getpid
 from sys import stdout, stderr, exit
@@ -13,7 +13,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.binding import HAS_PTRACE_SINGLESTEP
 from ptrace.disasm import HAS_DISASSEMBLER
 from ptrace.ctypes_tools import (truncateWord,
-    formatWordHex, formatAddress, formatAddressRange, word2bytes)
+                                 formatWordHex, formatAddress, formatAddressRange, word2bytes)
 from ptrace.process_tools import dumpProcessInfo
 from ptrace.tools import inverseDict
 from ptrace.func_call import FunctionCallOptions
@@ -93,6 +93,7 @@ COMMANDS = (
     ("help", "display this help"),
 )
 
+
 def formatAscii(data):
     def asciiChar(byte):
         if 32 <= byte <= 126:
@@ -104,6 +105,7 @@ def formatAscii(data):
     else:
         return u''.join(asciiChar(ord(byte)) for byte in data)
 
+
 def formatHexa(data):
     if RUNNING_PYTHON3:
         return u' '.join(u"%02x" % byte for byte in data)
@@ -112,6 +114,8 @@ def formatHexa(data):
 
 # finds possible pointer values in process memory space,
 # pointing to address
+
+
 def getPointers(process, address):
     address = word2bytes(address)
     procmaps = readProcessMappings(process)
@@ -119,7 +123,9 @@ def getPointers(process, address):
         for found in pm.search(address):
             yield found
 
+
 class Gdb(Application):
+
     def __init__(self):
         Application.__init__(self)
 
@@ -147,7 +153,8 @@ class Gdb(Application):
         self._setupLog(stdout)
 
     def parseOptions(self):
-        parser = OptionParser(usage="%prog [options] -- program [arg1 arg2 ...]")
+        parser = OptionParser(
+            usage="%prog [options] -- program [arg1 arg2 ...]")
         self.createCommonOptions(parser)
         self.createLogOptions(parser)
         self.options, self.program = parser.parse_args()
@@ -256,8 +263,8 @@ class Gdb(Application):
 
     def parseBytes(self, text):
         # FIXME: Validate input
-#        if not BYTES_REGEX.match(text):
-#            raise ValueError('Follow text must be enclosed in quotes!')
+        #        if not BYTES_REGEX.match(text):
+        #            raise ValueError('Follow text must be enclosed in quotes!')
         if PY3:
             text = 'b' + text.lstrip()
         value = eval(text)
@@ -285,7 +292,7 @@ class Gdb(Application):
     def xray(self):
         for process, procmap, address, term in self._xray():
             pointers = " ".join(formatAddress(ptr_addr)
-                for ptr_addr in getPointers(process, address))
+                                for ptr_addr in getPointers(process, address))
             print("term[%s] pid[%i] %s %s pointers: %s" % (
                 repr(term), process.pid, procmap,
                 formatAddress(address),
@@ -366,7 +373,7 @@ class Gdb(Application):
         except KeyError:
             pass
         try:
-            return SIGNALS["SIG"+command]
+            return SIGNALS["SIG" + command]
         except KeyError:
             pass
         try:
@@ -401,7 +408,7 @@ class Gdb(Application):
                 continue
             error("Address is part of mapping: %s" % map)
         return None
-    
+
     def gcore(self, process):
         import re
         childPid = str(process).split('#')[-1][:-1]
@@ -412,16 +419,16 @@ class Gdb(Application):
         for line in maps_file.readlines():  # for each mapped region
             m = re.match(r'([0-9A-Fa-f]+)-([0-9A-Fa-f]+) ([-r])', line)
             if m.group(3) == 'r':  # if this is a readable region
-                if "/lib" not in line and "/usr" not in line: # for eliminating of shared libs
+                if "/lib" not in line and "/usr" not in line:  # for eliminating of shared libs
                     start = int(m.group(1), 16)
                     end = int(m.group(2), 16)
                     mem_file.seek(start)  # seek to region start
                     chunk = mem_file.read(end - start)  # read region contents
-                    dump.write(chunk,) # dump contents to standard output
+                    dump.write(chunk,)  # dump contents to standard output
         maps_file.close()
         mem_file.close()
         dump.close()
-    
+
     def hexdump(self, command):
         max_line = 20
         width = (terminalWidth() - len(formatAddress(1)) - 3) // 4
@@ -435,11 +442,11 @@ class Gdb(Application):
                 end_address = self.parseInteger(parts[1])
                 if end_address <= start_address:
                     raise ValueError('End address (%s) is smaller than start address(%s)!'
-                        % (formatAddress(end_address), formatAddress(start_address)))
+                                     % (formatAddress(end_address), formatAddress(start_address)))
             except ValueError as err:
                 return str(err)
             size = end_address - start_address
-            max_size = width*max_line
+            max_size = width * max_line
             if max_size < size:
                 limited = max_size
                 end_address = start_address + max_size
@@ -448,7 +455,7 @@ class Gdb(Application):
                 start_address = self.parseInteger(command)
             except ValueError as err:
                 return str(err)
-            end_address = start_address + 5*width
+            end_address = start_address + 5 * width
 
         read_error = None
         address = start_address
@@ -460,7 +467,7 @@ class Gdb(Application):
 
                 # Format bytes
                 hexa = formatHexa(memory)
-                hexa = hexa.ljust(width*3-1, ' ')
+                hexa = hexa.ljust(width * 3 - 1, ' ')
 
                 ascii = formatAscii(memory)
                 ascii = ascii.ljust(width, ' ')
@@ -528,7 +535,7 @@ class Gdb(Application):
                 return 'Register name (%s) have to start with "$"' % key
             key = key[1:]
         except ValueError as err:
-             return "Invalid command: %r" % command
+            return "Invalid command: %r" % command
         try:
             value = self.parseInteger(value)
         except ValueError as err:
@@ -555,7 +562,7 @@ class Gdb(Application):
         try:
             pid = self.parseInteger(text)
         except ValueError as err:
-             return str(err)
+            return str(err)
         process = self.debugger.addProcess(pid, False)
         self.switchProcess(process)
 
@@ -625,7 +632,7 @@ class Gdb(Application):
         try:
             address = self.parseInteger(command)
         except ValueError as err:
-             return str(err)
+            return str(err)
         errmsg = self.step(False, address)
         if errmsg:
             return errmsg
@@ -645,7 +652,7 @@ class Gdb(Application):
         try:
             pid = self.parseInteger(command)
         except ValueError as err:
-             return str(err)
+            return str(err)
         try:
             process = self.debugger[pid]
             self.switchProcess(process)
@@ -728,7 +735,8 @@ class Gdb(Application):
         error('')
         error("Value can be an hexadecimal/decimal number or a register name ($reg)")
         error("You can use operators a+b, a-b, a*b, a/b, a<<b, a>>b, a**b, and parenthesis in expressions")
-        error('Use ";" to write multiple commands on the same line (eg. "step; print $eax")')
+        error(
+            'Use ";" to write multiple commands on the same line (eg. "step; print $eax")')
 
     def processSignal(self, event):
         event.display()
@@ -879,4 +887,3 @@ class Gdb(Application):
 
 if __name__ == "__main__":
     Gdb().main()
-

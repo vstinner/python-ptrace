@@ -8,7 +8,9 @@ from ptrace import six
 
 GDB = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'gdb.py'))
 
+
 class TestGdb(unittest.TestCase):
+
     def run_command(self, command):
         if isinstance(command, six.text_type):
             command = command.encode('ascii')

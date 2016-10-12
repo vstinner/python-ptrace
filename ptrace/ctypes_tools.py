@@ -2,6 +2,7 @@ from struct import pack, unpack
 from ptrace.cpu_info import CPU_64BITS
 from ctypes import cast, POINTER
 
+
 def int2uint64(value):
     """
     Convert a signed 64 bits integer into an unsigned 64 bits integer.
@@ -16,6 +17,7 @@ def int2uint64(value):
     18446744073709551614
     """
     return (value & 0xffffffffffffffff)
+
 
 def uint2int64(value):
     """
@@ -36,11 +38,13 @@ def uint2int64(value):
     else:
         return value
 
+
 def truncateWord32(value):
     """
     Truncate an unsigned integer to 32 bits.
     """
     return value & 0xFFFFFFFF
+
 
 def truncateWord64(value):
     """
@@ -48,11 +52,13 @@ def truncateWord64(value):
     """
     return value & 0xFFFFFFFFFFFFFFFF
 
+
 def formatUintHex16(value):
     """
     Format an 16 bits unsigned integer.
     """
     return u"0x%04x" % value
+
 
 def formatUintHex32(value):
     """
@@ -60,11 +66,13 @@ def formatUintHex32(value):
     """
     return u"0x%08x" % value
 
+
 def formatUintHex64(value):
     """
     Format an 64 bits unsigned integer.
     """
     return u"0x%016x" % value
+
 
 def int2uint32(value):
     """
@@ -78,6 +86,7 @@ def int2uint32(value):
     4294967295
     """
     return value & 0xffffffff
+
 
 def uint2int32(value):
     """
@@ -114,6 +123,7 @@ else:
     formatWordHex = formatUintHex32
     truncateWord = truncateWord32
 
+
 def formatAddress(address):
     """
     Format an address to hexadecimal.
@@ -124,11 +134,13 @@ def formatAddress(address):
     else:
         return u"NULL"
 
+
 def formatAddressRange(start, end):
     """
     Format an address range, eg. "0x80004000-0x8000ffff".
     """
     return u"%s-%s" % (formatWordHex(start), formatWordHex(end))
+
 
 def ntoh_ushort(value):
     """
@@ -136,11 +148,13 @@ def ntoh_ushort(value):
     """
     return unpack("<H", pack(">H", value))[0]
 
+
 def ntoh_uint(value):
     """
     Convert an unsigned integer from network endiant to host endian.
     """
     return unpack("<I", pack(">I", value))[0]
+
 
 def word2bytes(word):
     """
@@ -148,11 +162,13 @@ def word2bytes(word):
     """
     return pack("L", word)
 
+
 def bytes2word(bytes):
     """
     Convert a bytes string to an unsigned integer (a CPU word).
     """
     return unpack("L", bytes)[0]
+
 
 def bytes2type(bytes, type):
     """
@@ -160,10 +176,10 @@ def bytes2type(bytes, type):
     """
     return cast(bytes, POINTER(type))[0]
 
+
 def bytes2array(bytes, basetype, size):
     """
     Cast a bytes string to an array of objets of the specified type
     and size.
     """
     return bytes2type(bytes, basetype * size)
-

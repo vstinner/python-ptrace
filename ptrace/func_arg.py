@@ -2,6 +2,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from logging import getLogger
 from ptrace.ctypes_tools import formatAddress
 
+
 class FunctionArgument(object):
     """
     Description of a function argument. Attributes:
@@ -15,8 +16,9 @@ class FunctionArgument(object):
     Don't use text attribute directly, use getText() to format the
     argument instead.
     """
+
     def __init__(self, function, index, options,
-    value=None, type=None, name=None):
+                 value=None, type=None, name=None):
         self.function = function
         self.index = index
         self.options = options
@@ -37,8 +39,8 @@ class FunctionArgument(object):
                     self.text = repr(self.value)
             except PTRACE_ERRORS as err:
                 writeError(getLogger(), err,
-                    "Format argument %s of function %s() value error"
-                    % (self.name, self.function.name))
+                           "Format argument %s of function %s() value error"
+                           % (self.name, self.function.name))
                 self.text = repr(self.value)
         return self.text
 
@@ -101,4 +103,3 @@ class FunctionArgument(object):
 
     def __repr__(self):
         return "argument %s of %s()" % (self.name, self.function.name)
-

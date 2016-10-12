@@ -3,9 +3,10 @@ from hotshot.stats import load as loadStats
 from os import unlink
 from io import StringIO
 
+
 def runProfiler(logger, func, args=tuple(), kw={},
-verbose=True, nb_func=25,
-sort_by=('time',)):
+                verbose=True, nb_func=25,
+                sort_by=('time',)):
     """
     Run a function in a profiler and then display the functions sorted by time.
     """
@@ -30,4 +31,3 @@ sort_by=('time',)):
         return result
     finally:
         unlink(profile_filename)
-

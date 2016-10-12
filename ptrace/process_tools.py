@@ -1,7 +1,7 @@
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_WINDOWS
 if RUNNING_LINUX:
     from ptrace.linux_proc import (ProcError, openProc,
-        readProcessProcList, readProcessLink, readProcessStat)
+                                   readProcessProcList, readProcessLink, readProcessStat)
 from ptrace.signames import signalName
 if not RUNNING_WINDOWS:
     from os import (
@@ -9,6 +9,7 @@ if not RUNNING_WINDOWS:
         WIFSIGNALED, WTERMSIG,
         WIFEXITED, WEXITSTATUS,
         WCOREDUMP)
+
 
 def dumpProcessInfo(log, pid, max_length=None):
     """
@@ -50,13 +51,14 @@ def dumpProcessInfo(log, pid, max_length=None):
             index = 0
             while index < len(env):
                 var = env[index]
-                if max_length < length+len(var):
+                if max_length < length + len(var):
                     del env[index]
                     removed += 1
                 else:
                     length += len(var)
                     index += 1
-            env = ', '.join( "%s=%r" % tuple(item.split("=", 1)) for item in env )
+            env = ', '.join("%s=%r" % tuple(item.split("=", 1))
+                            for item in env)
             if removed:
                 env += ', ... (skip %s vars)' % removed
         log("Process environment: %s" % env)
@@ -75,9 +77,9 @@ def dumpProcessInfo(log, pid, max_length=None):
         status_file = openProc("%s/status" % pid)
         for line in status_file:
             if line.startswith("Uid:"):
-                user = [ int(id) for id in line[5:].split("\t") ]
+                user = [int(id) for id in line[5:].split("\t")]
             if line.startswith("Gid:"):
-                group = [ int(id) for id in line[5:].split("\t") ]
+                group = [int(id) for id in line[5:].split("\t")]
         status_file.close()
         if user:
             text = "User identifier: %s" % user[0]
@@ -92,6 +94,7 @@ def dumpProcessInfo(log, pid, max_length=None):
     except ProcError:
         # Permission denied
         pass
+
 
 def formatProcessStatus(status, title="Process"):
     """
@@ -117,4 +120,3 @@ def formatProcessStatus(status, title="Process"):
     if WCOREDUMP(status):
         text += " (core dumped)"
     return text
-

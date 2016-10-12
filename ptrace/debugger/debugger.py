@@ -12,8 +12,10 @@ if HAS_PTRACE_EVENTS:
         PTRACE_O_TRACEEXEC, PTRACE_O_TRACESYSGOOD,
         PTRACE_O_TRACECLONE, THREAD_TRACE_FLAGS)
 
+
 class DebuggerError(PtraceError):
     pass
+
 
 class PtraceDebugger(object):
     """
@@ -56,6 +58,7 @@ class PtraceDebugger(object):
      - trace_exec (bool): exec() tracing is enabled?
      - use_sysgood (bool): sysgood option is enabled?
     """
+
     def __init__(self):
         self.dict = {}   # pid -> PtraceProcess object
         self.list = []
@@ -74,7 +77,8 @@ class PtraceDebugger(object):
         """
         if pid in self.dict:
             raise KeyError("The process %s is already registered!" % pid)
-        process = PtraceProcess(self, pid, is_attached, parent=parent, is_thread=is_thread)
+        process = PtraceProcess(self, pid, is_attached,
+                                parent=parent, is_thread=is_thread)
         info("Attach %s to debugger" % process)
         self.dict[pid] = process
         self.list.append(process)
@@ -120,7 +124,8 @@ class PtraceDebugger(object):
             flags |= WNOHANG
         if wanted_pid:
             if wanted_pid not in self.dict:
-                raise DebuggerError("Unknown PID: %r" % wanted_pid, pid=wanted_pid)
+                raise DebuggerError("Unknown PID: %r" %
+                                    wanted_pid, pid=wanted_pid)
 
             process = self.dict[wanted_pid]
             if process.is_thread:
@@ -131,7 +136,7 @@ class PtraceDebugger(object):
             pid, status = waitpid(-1, flags)
         if (blocking or pid) and wanted_pid and (pid != wanted_pid):
             raise DebuggerError("Unwanted PID: %r (instead of %s)"
-                % (pid, wanted_pid), pid=pid)
+                                % (pid, wanted_pid), pid=pid)
         return pid, status
 
     def _wait_event_pid(self, wanted_pid, blocking=True):
@@ -238,7 +243,8 @@ class PtraceDebugger(object):
         Enable fork() tracing. Do nothing if it's not supported.
         """
         if not HAS_PTRACE_EVENTS:
-            raise DebuggerError("Tracing fork events is not supported on this architecture or operating system")
+            raise DebuggerError(
+                "Tracing fork events is not supported on this architecture or operating system")
         self.options |= PTRACE_O_TRACEFORK | PTRACE_O_TRACEVFORK
         self.trace_fork = True
         info("Debugger trace forks (options=%s)" % self.options)
@@ -283,4 +289,3 @@ class PtraceDebugger(object):
 
     def __len__(self):
         return len(self.list)
-

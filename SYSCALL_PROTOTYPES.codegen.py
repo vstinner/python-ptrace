@@ -11,7 +11,8 @@ import re
 url = "https://raw.githubusercontent.com/torvalds/linux/master/include/linux/syscalls.h"
 source = urllib2.urlopen(url).read()
 
-p1 = re.compile(r"^asmlinkage long sys(?:32)?_(.*?)\((.*?)\)", re.MULTILINE | re.DOTALL)
+p1 = re.compile(r"^asmlinkage long sys(?:32)?_(.*?)\((.*?)\)",
+                re.MULTILINE | re.DOTALL)
 p2 = re.compile(r"^(.*?)([^ *]+)$")
 
 SYSCALL_PROTOTYPES = {}

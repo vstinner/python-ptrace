@@ -1,6 +1,6 @@
 from ptrace.os_tools import HAS_PROC
 if HAS_PROC:
-     from ptrace.linux_proc import openProc, ProcError
+    from ptrace.linux_proc import openProc, ProcError
 from ptrace.debugger.process_error import ProcessError
 from ptrace.ctypes_tools import formatAddress
 import re
@@ -19,6 +19,7 @@ PROC_MAP_REGEX = re.compile(
     r'([0-9]+)'
     # Filename: '  /usr/bin/synergyc'
     r'(?: +(.*))?')
+
 
 class MemoryMapping(object):
     """
@@ -41,6 +42,7 @@ class MemoryMapping(object):
      - "repr(mapping)" create a string representation of the mapping,
        useful in list contexts
     """
+
     def __init__(self, process, start, end, permissions, offset, major_device, minor_device, inode, pathname):
         self._process = ref(process)
         self.start = start
@@ -67,7 +69,7 @@ class MemoryMapping(object):
         process = self._process()
 
         bytestr_len = len(bytestr)
-        buf_len = 64 * 1024 
+        buf_len = 64 * 1024
 
         if buf_len < bytestr_len:
             buf_len = bytestr_len
@@ -96,6 +98,7 @@ class MemoryMapping(object):
             covered += skip
             remaining -= skip
 
+
 def readProcessMappings(process):
     """
     Read all memory mappings of the specified process.
@@ -117,7 +120,8 @@ def readProcessMappings(process):
             line = line.rstrip()
             match = PROC_MAP_REGEX.match(line)
             if not match:
-                raise ProcessError(process, "Unable to parse memoy mapping: %r" % line)
+                raise ProcessError(
+                    process, "Unable to parse memoy mapping: %r" % line)
             map = MemoryMapping(
                 process,
                 int(match.group(1), 16),
@@ -132,4 +136,3 @@ def readProcessMappings(process):
     finally:
         mapsfile.close()
     return maps
-

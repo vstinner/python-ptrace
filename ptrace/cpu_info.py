@@ -26,10 +26,10 @@ CPU_BIGENDIAN = (byteorder == 'big')
 CPU_64BITS = (sizeof(c_void_p) == 8)
 
 if CPU_64BITS:
-    CPU_WORD_SIZE = 8 # bytes
+    CPU_WORD_SIZE = 8  # bytes
     CPU_MAX_UINT = 0xffffffffffffffff
 else:
-    CPU_WORD_SIZE = 4 # bytes
+    CPU_WORD_SIZE = 4  # bytes
     CPU_MAX_UINT = 0xffffffff
 
 if HAS_UNAME:
@@ -59,4 +59,3 @@ else:
 
 CPU_INTEL = (CPU_I386 or CPU_X86_64)
 CPU_POWERPC = (CPU_PPC32 or CPU_PPC64)
-

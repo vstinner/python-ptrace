@@ -34,12 +34,14 @@ NAMED_WORD_SIZE = {
 # Match any Intel instruction (eg. "ADD")
 INSTR_REGEX = '(?:[A-Z]{3,10})'
 
+
 def findDerefSize(match):
     name = match.group("deref_size")
     try:
         return NAMED_WORD_SIZE[name]
     except KeyError:
         return None
+
 
 def evalFaultAddress(process, match):
     expr = match.group('deref')
@@ -51,7 +53,9 @@ def evalFaultAddress(process, match):
         error("err: %s" % err)
         return None
 
+
 class ProcessSignal(ProcessEvent):
+
     def __init__(self, signum, process):
         # Initialize attributes
         self.name = signalName(signum)
@@ -87,7 +91,7 @@ class ProcessSignal(ProcessEvent):
             if fault_address is None:
                 fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidWrite(fault_address, size=findDerefSize(match),
-                instr=instr, process=self.process)
+                                       instr=instr, process=self.process)
             return
 
         # Invalid read (eg. "CMP BYTE [EAX+EDX-0x1], 0x0")
@@ -96,7 +100,7 @@ class ProcessSignal(ProcessEvent):
             if fault_address is None:
                 fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidRead(fault_address, size=findDerefSize(match),
-                instr=instr, process=self.process)
+                                      instr=instr, process=self.process)
             return
 
         # Invalid read (eg. "MOV reg, [...]")
@@ -105,11 +109,12 @@ class ProcessSignal(ProcessEvent):
             if fault_address is None:
                 fault_address = evalFaultAddress(self.process, match)
             self.reason = InvalidRead(fault_address, size=findDerefSize(match),
-                instr=instr, process=self.process)
+                                      instr=instr, process=self.process)
             return
 
         # MOVS* and SCAS* instructions (eg. "MOVSB" or "REP SCASD")
-        match = re.search(r"^(?:REP(?:NZ)? )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
+        match = re.search(
+            r"^(?:REP(?:NZ)? )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
         if match:
             self.reason = self.movsInstr(fault_address, instr, match)
             return
@@ -147,7 +152,7 @@ class ProcessSignal(ProcessEvent):
         except PtraceError:
             registers = {}
         return error_cls(fault_address, size=size, instr=instr,
-            registers=registers, process=self.process)
+                         registers=registers, process=self.process)
 
     def getSignalInfo(self):
         if RUNNING_LINUX:
@@ -161,9 +166,9 @@ class ProcessSignal(ProcessEvent):
         if siginfo:
             fault_address = siginfo._sigfault._addr
             if not fault_address:
-                 fault_address = 0
+                fault_address = 0
         else:
-             fault_address = None
+            fault_address = None
 
         # Get current instruction
         instr = self.getInstruction()
@@ -183,7 +188,8 @@ class ProcessSignal(ProcessEvent):
         if stack:
             sp = self.process.getStackPointer()
             if not (stack.start <= sp <= stack.end):
-                self.reason = StackOverflow(sp, stack, instr=instr, process=self.process)
+                self.reason = StackOverflow(
+                    sp, stack, instr=instr, process=self.process)
                 return
 
         # Guess error type using the assembler instruction
@@ -193,7 +199,8 @@ class ProcessSignal(ProcessEvent):
                 return
 
         # Last chance: use generic invalid memory access error
-        self.reason = InvalidMemoryAcces(fault_address, instr=instr, process=self.process)
+        self.reason = InvalidMemoryAcces(
+            fault_address, instr=instr, process=self.process)
 
     def mathError(self):
         instr = self.getInstruction()

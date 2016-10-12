@@ -3,106 +3,106 @@
 # List extracted from Linux kernel source code, see:
 #    arch/i386/kernel/syscall_table.S
 SYSCALL_NAMES = {
-      0: "restart_syscall",
-      1: "exit",
-      2: "fork",
-      3: "read",
-      4: "write",
-      5: "open",
-      6: "close",
-      7: "waitpid",
-      8: "creat",
-      9: "link",
-     10: "unlink",
-     11: "execve",
-     12: "chdir",
-     13: "time",
-     14: "mknod",
-     15: "chmod",
-     16: "lchown16",
-#    17: -
-     18: "stat",
-     19: "lseek",
-     20: "getpid",
-     21: "mount",
-     22: "oldumount",
-     23: "setuid16",
-     24: "getuid16",
-     25: "stime",
-     26: "ptrace",
-     27: "alarm",
-     28: "fstat",
-     29: "pause",
-     30: "utime",
-#    31: -
-#    32: -
-     33: "access",
-     34: "nice",
-#    35: -
-     36: "sync",
-     37: "kill",
-     38: "rename",
-     39: "mkdir",
-     40: "rmdir",
-     41: "dup",
-     42: "pipe",
-     43: "times",
-#    44: -
-     45: "brk",
-     46: "setgid16",
-     47: "getgid16",
-     48: "signal",
-     49: "geteuid16",
-     50: "getegid16",
-     51: "acct",
-     52: "umount",
-#    53: -
-     54: "ioctl",
-     55: "fcntl",
-#    56: -
-     57: "setpgid",
-#    58: -
-     59: "oldolduname",
-     60: "umask",
-     61: "chroot",
-     62: "ustat",
-     63: "dup2",
-     64: "getppid",
-     65: "getpgrp",
-     66: "setsid",
-     67: "sigaction",
-     68: "sgetmask",
-     69: "ssetmask",
-     70: "setreuid16",
-     71: "setregid16",
-     72: "sigsuspend",
-     73: "sigpending",
-     74: "sethostname",
-     75: "setrlimit",
-     76: "old_getrlimit",
-     77: "getrusage",
-     78: "gettimeofday",
-     79: "settimeofday",
-     80: "getgroups16",
-     81: "setgroups16",
-     82: "old_select",
-     83: "symlink",
-     84: "lstat",
-     85: "readlink",
-     86: "uselib",
-     87: "swapon",
-     88: "reboot",
-     89: "old_readdir",
-     90: "old_mmap",
-     91: "munmap",
-     92: "truncate",
-     93: "ftruncate",
-     94: "fchmod",
-     95: "fchown16",
-     96: "getpriority",
-     97: "setpriority",
-#    98: -
-     99: "statfs",
+    0: "restart_syscall",
+    1: "exit",
+    2: "fork",
+    3: "read",
+    4: "write",
+    5: "open",
+    6: "close",
+    7: "waitpid",
+    8: "creat",
+    9: "link",
+    10: "unlink",
+    11: "execve",
+    12: "chdir",
+    13: "time",
+    14: "mknod",
+    15: "chmod",
+    16: "lchown16",
+    #    17: -
+    18: "stat",
+    19: "lseek",
+    20: "getpid",
+    21: "mount",
+    22: "oldumount",
+    23: "setuid16",
+    24: "getuid16",
+    25: "stime",
+    26: "ptrace",
+    27: "alarm",
+    28: "fstat",
+    29: "pause",
+    30: "utime",
+    #    31: -
+    #    32: -
+    33: "access",
+    34: "nice",
+    #    35: -
+    36: "sync",
+    37: "kill",
+    38: "rename",
+    39: "mkdir",
+    40: "rmdir",
+    41: "dup",
+    42: "pipe",
+    43: "times",
+    #    44: -
+    45: "brk",
+    46: "setgid16",
+    47: "getgid16",
+    48: "signal",
+    49: "geteuid16",
+    50: "getegid16",
+    51: "acct",
+    52: "umount",
+    #    53: -
+    54: "ioctl",
+    55: "fcntl",
+    #    56: -
+    57: "setpgid",
+    #    58: -
+    59: "oldolduname",
+    60: "umask",
+    61: "chroot",
+    62: "ustat",
+    63: "dup2",
+    64: "getppid",
+    65: "getpgrp",
+    66: "setsid",
+    67: "sigaction",
+    68: "sgetmask",
+    69: "ssetmask",
+    70: "setreuid16",
+    71: "setregid16",
+    72: "sigsuspend",
+    73: "sigpending",
+    74: "sethostname",
+    75: "setrlimit",
+    76: "old_getrlimit",
+    77: "getrusage",
+    78: "gettimeofday",
+    79: "settimeofday",
+    80: "getgroups16",
+    81: "setgroups16",
+    82: "old_select",
+    83: "symlink",
+    84: "lstat",
+    85: "readlink",
+    86: "uselib",
+    87: "swapon",
+    88: "reboot",
+    89: "old_readdir",
+    90: "old_mmap",
+    91: "munmap",
+    92: "truncate",
+    93: "ftruncate",
+    94: "fchmod",
+    95: "fchown16",
+    96: "getpriority",
+    97: "setpriority",
+    #    98: -
+    99: "statfs",
     100: "fstatfs",
     101: "ioperm",
     102: "socketcall",
@@ -115,7 +115,7 @@ SYSCALL_NAMES = {
     109: "olduname",
     110: "iopl",
     111: "vhangup",
-#   112: old "idle"
+    #   112: old "idle"
     113: "vm86old",
     114: "wait4",
     115: "swapoff",
@@ -130,17 +130,17 @@ SYSCALL_NAMES = {
     124: "adjtimex",
     125: "mprotect",
     126: "sigprocmask",
-#   127: old "create_module"
+    #   127: old "create_module"
     128: "init_module",
     129: "delete_module",
-#   130: old "get_kernel_syms"
+    #   130: old "get_kernel_syms"
     131: "quotactl",
     132: "getpgid",
     133: "fchdir",
     134: "bdflush",
     135: "sysfs",
     136: "personality",
-#   137: reserved for afs_syscall
+    #   137: reserved for afs_syscall
     138: "setfsuid16",
     139: "setfsgid16",
     140: "llseek",
@@ -170,7 +170,7 @@ SYSCALL_NAMES = {
     164: "setresuid16",
     165: "getresuid16",
     166: "vm86",
-#   167: old "query_module"
+    #   167: old "query_module"
     168: "poll",
     169: "nfsservctl",
     170: "setresgid16",
@@ -191,8 +191,8 @@ SYSCALL_NAMES = {
     185: "capset",
     186: "sigaltstack",
     187: "sendfile",
-#   188: (reserved)
-#   189: (reserved)
+    #   188: (reserved)
+    #   189: (reserved)
     190: "vfork",
     191: "getrlimit",
     192: "mmap2",
@@ -220,14 +220,14 @@ SYSCALL_NAMES = {
     214: "setgid",
     215: "setfsuid",
     216: "setfsgid",
-# -------------------------------
+    # -------------------------------
     217: "pivot_root",
     218: "mincore",
     219: "madvise",
     220: "getdents64",
     221: "fcntl64",
-#   222: -
-#   223: -
+    #   222: -
+    #   223: -
     224: "gettid",
     225: "readahead",
     226: "setxattr",
@@ -255,7 +255,7 @@ SYSCALL_NAMES = {
     248: "io_submit",
     249: "io_cancel",
     250: "fadvise64",
-#   251: -
+    #   251: -
     252: "exit_group",
     253: "lookup_dcookie",
     254: "epoll_create",
@@ -277,7 +277,7 @@ SYSCALL_NAMES = {
     270: "tgkill",
     271: "utimes",
     272: "fadvise64_64",
-#   273: -
+    #   273: -
     274: "mbind",
     275: "get_mempolicy",
     276: "set_mempolicy",
@@ -289,7 +289,7 @@ SYSCALL_NAMES = {
     282: "mq_getsetattr",
     283: "kexec_load",
     284: "waitid",
-#   285: -
+    #   285: -
     286: "add_key",
     287: "request_key",
     288: "keyctl",
@@ -327,4 +327,3 @@ SYSCALL_NAMES = {
 }
 
 SOCKET_SYSCALL_NAMES = set(("socketcall",))
-

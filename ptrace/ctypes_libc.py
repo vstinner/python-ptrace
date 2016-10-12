@@ -9,4 +9,3 @@ from ctypes.util import find_library
 
 LIBC_FILENAME = find_library('c')
 libc = CDLL(LIBC_FILENAME, use_errno=True)
-

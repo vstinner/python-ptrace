@@ -4,16 +4,16 @@ SIGSET_SIZE = 64
 FD_SETSIZE = 1024
 
 RLIMIT_RESOURCE = {
-     0: "RLIMIT_CPU",
-     1: "RLIMIT_FSIZE",
-     2: "RLIMIT_DATA",
-     3: "RLIMIT_STACK",
-     4: "RLIMIT_CORE",
-     5: "RLIMIT_RSS",
-     6: "RLIMIT_NPROC",
-     7: "RLIMIT_NOFILE",
-     8: "RLIMIT_MEMLOCK",
-     9: "RLIMIT_AS",
+    0: "RLIMIT_CPU",
+    1: "RLIMIT_FSIZE",
+    2: "RLIMIT_DATA",
+    3: "RLIMIT_STACK",
+    4: "RLIMIT_CORE",
+    5: "RLIMIT_RSS",
+    6: "RLIMIT_NPROC",
+    7: "RLIMIT_NOFILE",
+    8: "RLIMIT_MEMLOCK",
+    9: "RLIMIT_AS",
     10: "RLIMIT_LOCKS",
     11: "RLIMIT_SIGPENDING",
     12: "RLIMIT_MSGQUEUE",
@@ -30,4 +30,3 @@ SYSCALL_ARG_DICT.update({
     "sigprocmask": {"how": SIGPROCMASK_HOW},
     "rt_sigprocmask": {"how": SIGPROCMASK_HOW},
 })
-

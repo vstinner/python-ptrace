@@ -9,7 +9,7 @@ from ptrace.syscall.posix_arg import (
     formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags, formatDirFd)
 from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
-    formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
+                                       formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 import os
 import re
@@ -28,8 +28,9 @@ from ptrace.syscall.socketcall_constants import formatSocketType
 
 KNOWN_STRUCTS = []
 if RUNNING_LINUX:
-    KNOWN_STRUCTS.extend((timeval, timespec, pollfd, rlimit, new_utsname, user_desc))
-KNOWN_STRUCTS = dict( (struct.__name__, struct) for struct in KNOWN_STRUCTS )
+    KNOWN_STRUCTS.extend(
+        (timeval, timespec, pollfd, rlimit, new_utsname, user_desc))
+KNOWN_STRUCTS = dict((struct.__name__, struct) for struct in KNOWN_STRUCTS)
 
 ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
@@ -59,13 +60,16 @@ INTEGER_TYPES = set((
     "socklen_t", "pid_t", "uid_t", "gid_t",
 ))
 
+
 def iterBits(data):
     for char in data:
         byte = ord(char)
         for index in range(8):
             yield ((byte >> index) & 1) == 1
 
+
 class SyscallArgument(FunctionArgument):
+
     def createText(self):
         value = self.value
         argtype = self.type
@@ -97,7 +101,8 @@ class SyscallArgument(FunctionArgument):
                     return str(value)
             if name == "args":
                 func_call = FunctionCall("socketcall", self.options)
-                setupSocketCall(func_call, self.function.process, self.function[0], self.value)
+                setupSocketCall(func_call, self.function.process,
+                                self.function[0], self.value)
                 text = "<%s>" % func_call.format()
                 return self.formatPointer(text, self.value)
         if syscall == "write" and name == "buf":
@@ -124,7 +129,8 @@ class SyscallArgument(FunctionArgument):
                 if text:
                     return text
             except PTRACE_ERRORS as err:
-                writeError(getLogger(), err, "Warning: Format %r value error" % self, log_level=INFO)
+                writeError(
+                    getLogger(), err, "Warning: Format %r value error" % self, log_level=INFO)
             return formatAddress(self.value)
 
         # Array like "int[2]"
@@ -173,6 +179,7 @@ class SyscallArgument(FunctionArgument):
         syscall = self.function.name
         if syscall == "rt_sigprocmask" and argtype == "sigset_t":
             size = self.function["sigsetsize"].value * 8
+
             def formatter(key):
                 key += 1
                 return signalName(key)
@@ -181,14 +188,16 @@ class SyscallArgument(FunctionArgument):
         return None
 
     def readBits(self, address, count, format=str):
-        bytes = self.function.process.readBytes(address, count//8)
-        fd_set = [ format(index) for index, bit in enumerate(iterBits(bytes)) if bit ]
+        bytes = self.function.process.readBytes(address, count // 8)
+        fd_set = [format(index)
+                  for index, bit in enumerate(iterBits(bytes)) if bit]
         return ", ".join(fd_set)
 
     def readCString(self, address):
         if address:
             max_size = self.options.string_max_length
-            data, truncated = self.function.process.readCString(address, max_size)
+            data, truncated = self.function.process.readCString(
+                address, max_size)
             if six.PY3:
                 text = os.fsdecode(data)
             else:

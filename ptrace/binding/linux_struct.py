@@ -1,6 +1,6 @@
 from ctypes import (Structure, Union, sizeof,
-    c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
-    c_uint16, c_uint32, c_uint64)
+                    c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
+                    c_uint16, c_uint32, c_uint64)
 from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_ARM
 
 pid_t = c_int
@@ -8,6 +8,8 @@ uid_t = c_ushort
 clock_t = c_uint
 
 # From /usr/include/asm-i386/user.h
+
+
 class user_regs_struct(Structure):
     if CPU_PPC32:
         _fields_ = (
@@ -50,7 +52,7 @@ class user_regs_struct(Structure):
             ("link", c_ulong),
             ("xer", c_ulong),
             ("ccr", c_ulong),
-            ("mq", c_ulong), # FIXME: ppc64 => softe
+            ("mq", c_ulong),  # FIXME: ppc64 => softe
             ("trap", c_ulong),
             ("dar", c_ulong),
             ("dsisr", c_ulong),
@@ -87,7 +89,7 @@ class user_regs_struct(Structure):
             ("es", c_ulong),
             ("fs", c_ulong),
             ("gs", c_ulong)
-            )
+        )
     else:
         _fields_ = (
             ("ebx", c_ulong),
@@ -113,7 +115,8 @@ class user_regs_struct(Structure):
             ("esp", c_ulong),
             ("ss", c_ushort),
             ("__ss", c_ushort),
-            )
+        )
+
 
 class user_fpregs_struct(Structure):
     if CPU_64BITS:
@@ -129,7 +132,7 @@ class user_fpregs_struct(Structure):
             ("st_space", c_uint32 * 32),
             ("xmm_space", c_uint32 * 64),
             ("padding", c_uint32 * 24)
-            )
+        )
     else:
         _fields_ = (
             ("cwd", c_ulong),
@@ -140,7 +143,7 @@ class user_fpregs_struct(Structure):
             ("foo", c_ulong),
             ("fos", c_ulong),
             ("st_space", c_ulong * 20)
-            )
+        )
 
 if not CPU_64BITS:
     class user_fpxregs_struct(Structure):
@@ -161,10 +164,13 @@ if not CPU_64BITS:
         )
 
 # From /usr/include/asm-generic/siginfo.h
+
+
 class _sifields_sigfault_t(Union):
     _fields_ = (
         ("_addr", c_void_p),
     )
+
 
 class _sifields_sigchld_t(Structure):
     _fields_ = (
@@ -175,16 +181,18 @@ class _sifields_sigchld_t(Structure):
         ("stime", clock_t),
     )
 
+
 class _sifields_t(Union):
     _fields_ = (
-       ("pad", c_char * (128 - 3 * sizeof(c_int))),
-       ("_sigchld", _sifields_sigchld_t),
-       ("_sigfault", _sifields_sigfault_t),
-#        ("_kill", _sifields_kill_t),
-#        ("_timer", _sifields_timer_t),
-#        ("_rt", _sifields_rt_t),
-#        ("_sigpoll", _sifields_sigpoll_t),
+        ("pad", c_char * (128 - 3 * sizeof(c_int))),
+        ("_sigchld", _sifields_sigchld_t),
+        ("_sigfault", _sifields_sigfault_t),
+        #        ("_kill", _sifields_kill_t),
+        #        ("_timer", _sifields_timer_t),
+        #        ("_rt", _sifields_rt_t),
+        #        ("_sigpoll", _sifields_sigpoll_t),
     )
+
 
 class siginfo(Structure):
     _fields_ = (
@@ -192,6 +200,5 @@ class siginfo(Structure):
         ("si_errno", c_int),
         ("si_code", c_int),
         ("_sifields", _sifields_t)
-        )
+    )
     _anonymous_ = ("_sifields",)
-

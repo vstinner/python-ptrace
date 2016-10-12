@@ -4,6 +4,7 @@ from socket import inet_ntoa
 from struct import pack
 from ptrace.ctypes_tools import ntoh_uint, ntoh_ushort
 
+
 def ip_int2str(ip):
     """
     Convert an IP address (as an interger) to a string.
@@ -19,6 +20,7 @@ if RUNNING_BSD:
 else:
     sa_family_t = c_ushort
 
+
 class sockaddr(Structure):
     if RUNNING_BSD:
         _fields_ = (
@@ -30,6 +32,7 @@ class sockaddr(Structure):
             ("family", sa_family_t),
         )
 
+
 class in_addr(Structure):
     _fields_ = (
         ("s_addr", c_uint32),
@@ -38,6 +41,7 @@ class in_addr(Structure):
     def __repr__(self):
         ip = ntoh_uint(self.s_addr)
         return ip_int2str(ip)
+
 
 class in6_addr(Union):
     _fields_ = (
@@ -51,6 +55,8 @@ class in6_addr(Union):
         return "<in6_addr %s>" % text
 
 # INET socket
+
+
 class sockaddr_in(Structure):
     if RUNNING_BSD:
         _fields_ = (
@@ -65,6 +71,7 @@ class sockaddr_in(Structure):
             ("sin_port", c_uint16),
             ("sin_addr", in_addr),
         )
+
 
 class sockaddr_in6(Structure):
     if RUNNING_BSD:
@@ -85,10 +92,12 @@ class sockaddr_in6(Structure):
         )
 
 # UNIX socket
+
+
 class sockaddr_un(Structure):
     _fields_ = (
         ("sun_family", sa_family_t),
-        ("sun_path", c_char*108),
+        ("sun_path", c_char * 108),
     )
 
 # Netlink socket
@@ -100,4 +109,3 @@ if RUNNING_LINUX:
             ("nl_pid", c_uint32),
             ("nl_groups", c_uint32),
         )
-

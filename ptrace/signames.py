@@ -8,6 +8,7 @@ even if the signal is unknown.
 
 PREFERRED_NAMES = ("SIGABRT", "SIGHUP", "SIGCHLD", "SIGPOLL")
 
+
 def getSignalNames():
     """
     Create signal names dictionay (eg. 9 => 'SIGKILL') using dir(signal).
@@ -19,7 +20,7 @@ def getSignalNames():
     for name in dir(signal):
         if not name.startswith("SIG"):
             continue
-        signum = getattr(signal,name)
+        signum = getattr(signal, name)
         try:
             allnames[signum].append(name)
         except KeyError:
@@ -40,6 +41,7 @@ def getSignalNames():
     return signames
 SIGNAMES = getSignalNames()
 
+
 def signalName(signum):
     """
     Get the name of a signal
@@ -54,4 +56,3 @@ def signalName(signum):
         return SIGNAMES[signum]
     except KeyError:
         return "signal<%s>" % signum
-

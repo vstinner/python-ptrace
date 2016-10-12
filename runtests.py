@@ -75,11 +75,13 @@ ARGS.add_option(
 
 if sys.version_info >= (3, 3):
     import importlib.machinery
+
     def load_module(modname, sourcefile):
         loader = importlib.machinery.SourceFileLoader(modname, sourcefile)
         return loader.load_module()
 else:
     import imp
+
     def load_module(modname, sourcefile):
         return imp.load_source(modname, sourcefile)
 
@@ -103,7 +105,7 @@ def load_modules(basedir, suffix='.py'):
             else:
                 if (name != '__init__.py' and
                     name.endswith(suffix) and
-                    not name.startswith(('.', '_'))):
+                        not name.startswith(('.', '_'))):
                     files.append(('{0}{1}'.format(prefix, name[:-3]), path))
 
         return files
@@ -197,9 +199,9 @@ class TestRunner(unittest.TextTestRunner):
         if result.leaks:
             self.stream.writeln("{0} tests leaks:".format(len(result.leaks)))
             for name, leaks in result.leaks:
-                self.stream.writeln(' '*4 + name + ':')
+                self.stream.writeln(' ' * 4 + name + ':')
                 for leak in leaks:
-                    self.stream.writeln(' '*8 + repr(leak))
+                    self.stream.writeln(' ' * 8 + repr(leak))
         return result
 
 

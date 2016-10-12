@@ -2,9 +2,9 @@
 from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
-    ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
+                             ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
 from ptrace.syscall import (SYSCALL_NAMES, SYSCALL_PROTOTYPES,
-    FILENAME_ARGUMENTS, SOCKET_SYSCALL_NAMES)
+                            FILENAME_ARGUMENTS, SOCKET_SYSCALL_NAMES)
 from ptrace.func_call import FunctionCallOptions
 from sys import stderr, exit
 from optparse import OptionParser
@@ -14,7 +14,9 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.ctypes_tools import formatAddress
 import re
 
+
 class SyscallTracer(Application):
+
     def __init__(self):
         Application.__init__(self)
 
@@ -34,43 +36,44 @@ class SyscallTracer(Application):
         self._setupLog(fd)
 
     def parseOptions(self):
-        parser = OptionParser(usage="%prog [options] -- program [arg1 arg2 ...]")
+        parser = OptionParser(
+            usage="%prog [options] -- program [arg1 arg2 ...]")
         self.createCommonOptions(parser)
         parser.add_option("--enter", help="Show system call enter and exit",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--profiler", help="Use profiler",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--type", help="Display arguments type and result type (default: no)",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--name", help="Display argument name (default: no)",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--string-length", "-s", help="String max length (default: 300)",
-            type="int", default=300)
+                          type="int", default=300)
         parser.add_option("--array-count", help="Maximum number of array items (default: 20)",
-            type="int", default=20)
+                          type="int", default=20)
         parser.add_option("--raw-socketcall", help="Raw socketcall form",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--output", "-o", help="Write output to specified log file",
-            type="str")
+                          type="str")
         parser.add_option("--ignore-regex", help="Regex used to filter syscall names (eg. --ignore='^(gettimeofday|futex|f?stat)')",
-            type="str")
+                          type="str")
         parser.add_option("--address", help="Display structure addressl",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--syscalls", '-e', help="Comma separated list of shown system calls (other will be skipped)",
-            type="str", default=None)
+                          type="str", default=None)
         parser.add_option("--socket", help="Show only socket functions",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--filename", help="Show only syscall using filename",
-            action="store_true", default=False)
+                          action="store_true", default=False)
         parser.add_option("--show-pid",
-            help="Prefix line with process identifier",
-            action="store_true", default=False)
+                          help="Prefix line with process identifier",
+                          action="store_true", default=False)
         parser.add_option("--list-syscalls",
-            help="Display system calls and exit",
-            action="store_true", default=False)
+                          help="Display system calls and exit",
+                          action="store_true", default=False)
         parser.add_option("-i", "--show-ip",
-            help="print instruction pointer at time of syscall",
-            action="store_true", default=False)
+                          help="print instruction pointer at time of syscall",
+                          action="store_true", default=False)
 
         self.createLogOptions(parser)
 
@@ -103,7 +106,8 @@ class SyscallTracer(Application):
                         ok = False
                 if not ok:
                     print(file=stderr)
-                    print("Use --list-syscalls options to get system calls list", file=stderr)
+                    print(
+                        "Use --list-syscalls options to get system calls list", file=stderr)
                     exit(1)
                 # remove duplicates
                 only.add(item)
@@ -195,8 +199,8 @@ class SyscallTracer(Application):
         # Display syscall which has not exited
         state = event.process.syscall_state
         if (state.next_event == "exit") \
-        and (not self.options.enter) \
-        and state.syscall:
+                and (not self.options.enter) \
+                and state.syscall:
             self.displaySyscall(state.syscall)
 
         # Display exit message
@@ -267,4 +271,3 @@ class SyscallTracer(Application):
 
 if __name__ == "__main__":
     SyscallTracer().main()
-

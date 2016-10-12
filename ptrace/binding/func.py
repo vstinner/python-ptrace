@@ -22,7 +22,7 @@ elif RUNNING_LINUX:
         from ptrace.binding.linux_struct import user_fpxregs_struct
 else:
     raise NotImplementedError("Unknown OS!")
-REGISTER_NAMES = tuple( name for name, type in ptrace_registers_t._fields_ )
+REGISTER_NAMES = tuple(name for name, type in ptrace_registers_t._fields_)
 
 HAS_PTRACE_SINGLESTEP = True
 HAS_PTRACE_EVENTS = False
@@ -62,10 +62,10 @@ if RUNNING_OPENBSD:
     HAS_PTRACE_IO = True
     PTRACE_IO = 11
     HAS_PTRACE_SINGLESTEP = True
-    PTRACE_SINGLESTEP = 32 # PT_STEP
+    PTRACE_SINGLESTEP = 32  # PT_STEP
     #HAS_PTRACE_EVENTS = True
-    #PTRACE_SETOPTIONS = 12 # PT_SET_EVENT_MASK
-    #PTRACE_GETEVENTMSG = 14 # PT_GET_PROCESS_STATE
+    # PTRACE_SETOPTIONS = 12 # PT_SET_EVENT_MASK
+    # PTRACE_GETEVENTMSG = 14 # PT_GET_PROCESS_STATE
 elif RUNNING_BSD:
     # FreeBSD 7.0RC1 i386
     PTRACE_ATTACH = 10
@@ -102,21 +102,21 @@ if RUNNING_LINUX:
     # Linux introduces the __WALL flag for wait
     THREAD_TRACE_FLAGS = 0x40000000
 
-PTRACE_O_TRACESYSGOOD   = 0x00000001
-PTRACE_O_TRACEFORK      = 0x00000002
-PTRACE_O_TRACEVFORK     = 0x00000004
-PTRACE_O_TRACECLONE     = 0x00000008
-PTRACE_O_TRACEEXEC      = 0x00000010
+PTRACE_O_TRACESYSGOOD = 0x00000001
+PTRACE_O_TRACEFORK = 0x00000002
+PTRACE_O_TRACEVFORK = 0x00000004
+PTRACE_O_TRACECLONE = 0x00000008
+PTRACE_O_TRACEEXEC = 0x00000010
 PTRACE_O_TRACEVFORKDONE = 0x00000020
-PTRACE_O_TRACEEXIT      = 0x00000040
+PTRACE_O_TRACEEXIT = 0x00000040
 
 # Wait extended result codes for the above trace options
-PTRACE_EVENT_FORK       = 1
-PTRACE_EVENT_VFORK      = 2
-PTRACE_EVENT_CLONE      = 3
-PTRACE_EVENT_EXEC       = 4
+PTRACE_EVENT_FORK = 1
+PTRACE_EVENT_VFORK = 2
+PTRACE_EVENT_CLONE = 3
+PTRACE_EVENT_EXEC = 4
 PTRACE_EVENT_VFORK_DONE = 5
-PTRACE_EVENT_EXIT       = 6
+PTRACE_EVENT_EXIT = 6
 
 try:
     from cptrace import ptrace as _ptrace
@@ -130,6 +130,7 @@ except ImportError:
     _ptrace = libc.ptrace
     _ptrace.argtypes = (c_ulong, c_ulong, c_ulong, c_ulong)
     _ptrace.restype = c_ulong
+
 
 def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
     if HAS_CPTRACE:
@@ -155,14 +156,18 @@ def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
                 raise PtraceError(message, errno=errno, pid=pid)
     return result
 
+
 def ptrace_traceme():
     ptrace(PTRACE_TRACEME)
+
 
 def ptrace_attach(pid):
     ptrace(PTRACE_ATTACH, pid)
 
+
 def ptrace_detach(pid, signal=0):
-    ptrace(PTRACE_DETACH, pid, 0, signal);
+    ptrace(PTRACE_DETACH, pid, 0, signal)
+
 
 def _peek(command, pid, address):
     if address % CPU_WORD_SIZE:
@@ -171,6 +176,7 @@ def _peek(command, pid, address):
             % formatAddress(address), pid=pid)
     return ptrace(command, pid, address, check_errno=True)
 
+
 def _poke(command, pid, address, word):
     if address % CPU_WORD_SIZE:
         raise PtraceError(
@@ -178,23 +184,30 @@ def _poke(command, pid, address, word):
             % formatAddress(address), pid=pid)
     ptrace(command, pid, address, word)
 
+
 def ptrace_peektext(pid, address):
     return _peek(PTRACE_PEEKTEXT, pid, address)
+
 
 def ptrace_peekdata(pid, address):
     return _peek(PTRACE_PEEKDATA, pid, address)
 
+
 def ptrace_peekuser(pid, address):
     return _peek(PTRACE_PEEKUSER, pid, address)
+
 
 def ptrace_poketext(pid, address, word):
     _poke(PTRACE_POKETEXT, pid, address, word)
 
+
 def ptrace_pokedata(pid, address, word):
     _poke(PTRACE_POKEDATA, pid, address, word)
 
+
 def ptrace_pokeuser(pid, address, word):
     _poke(PTRACE_POKEUSER, pid, address, word)
+
 
 def ptrace_kill(pid):
     ptrace(PTRACE_KILL, pid)
@@ -279,4 +292,3 @@ else:
 if HAS_PTRACE_IO:
     def ptrace_io(pid, io_desc):
         ptrace(PTRACE_IO, pid, addressof(io_desc))
-

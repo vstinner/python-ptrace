@@ -3,6 +3,7 @@ from ptrace.cpu_info import CPU_WORD_SIZE, CPU_MAX_UINT
 from ptrace import PtraceError
 from ptrace.six.moves import xrange
 
+
 class BacktraceFrame(object):
     """
     Backtrace frame.
@@ -12,6 +13,7 @@ class BacktraceFrame(object):
      - name: name of the function
      - arguments: value of the arguments
     """
+
     def __init__(self, ip):
         self.ip = ip
         self.name = u"???"
@@ -21,10 +23,12 @@ class BacktraceFrame(object):
         arguments = (formatWordHex(arg) for arg in self.arguments)
         return u"IP=%s: %s (%s)" % (formatAddress(self.ip), self.name, ", ".join(arguments))
 
+
 class Backtrace(object):
     """
     Backtrace: all process frames since the start function.
     """
+
     def __init__(self):
         self.frames = []
         self.truncated = False
@@ -37,6 +41,7 @@ class Backtrace(object):
 
     def __len__(self):
         return len(self.frames)
+
 
 def getBacktrace(process, max_args=6, max_depth=20):
     """
@@ -80,13 +85,14 @@ def getBacktrace(process, max_args=6, max_depth=20):
             break
 
         # Move to next instruction/frame pointer
-        ip = process.readWord(fp+CPU_WORD_SIZE)
+        ip = process.readWord(fp + CPU_WORD_SIZE)
         if ip == CPU_MAX_UINT:
             # Linux hack to detect end of the stack
             break
         fp = nextfp
         depth += 1
     return backtrace
+
 
 def getBacktraceFrame(process, ip, fp, nargs):
     """
@@ -108,4 +114,3 @@ def getBacktraceFrame(process, ip, fp, nargs):
         # Ignore argument read error
         pass
     return frame
-

@@ -7,9 +7,12 @@ import tempfile
 import unittest
 from ptrace import six
 
-STRACE = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
+STRACE = os.path.normpath(os.path.join(
+    os.path.dirname(__file__), '..', 'strace.py'))
+
 
 class TestStrace(unittest.TestCase):
+
     def strace(self, *args):
         """ Strace the given command and return the strace output. """
         with tempfile.NamedTemporaryFile(mode='wb+') as temp:
@@ -58,7 +61,7 @@ class TestStrace(unittest.TestCase):
         else:
             code = 'open(%r).close()' % __file__
         self.assert_syscall(code,
-            br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
+                            br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
 
     def test_chdir(self):
         self.assert_syscall(
@@ -67,13 +70,13 @@ class TestStrace(unittest.TestCase):
 
     def test_rename(self):
         self.assert_syscall(
-                "import os; os.rename('oldpath', 'newpath')",
-                br"^rename\('oldpath', 'newpath'\)")
+            "import os; os.rename('oldpath', 'newpath')",
+            br"^rename\('oldpath', 'newpath'\)")
 
     def test_link(self):
         self.assert_syscall(
-                "import os; os.link('oldpath', 'newpath')",
-                br"^link\('oldpath', 'newpath'\)")
+            "import os; os.link('oldpath', 'newpath')",
+            br"^link\('oldpath', 'newpath'\)")
 
     def test_symlink(self):
         try:

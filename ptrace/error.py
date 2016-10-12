@@ -5,6 +5,7 @@ from ptrace.logging_tools import getLogFunc, changeLogLevel
 
 PTRACE_ERRORS = Exception
 
+
 def writeBacktrace(logger, log_level=ERROR):
     """
     Write a backtrace into the logger with the specified log level.
@@ -22,12 +23,14 @@ def writeBacktrace(logger, log_level=ERROR):
         pass
     log_func("Unable to get backtrace")
 
+
 def formatError(error):
     """
     Format an error as a string. Write the error type as prefix.
     Eg. "[ValueError] invalid value".
     """
     return "[%s] %s" % (error.__class__.__name__, error)
+
 
 def writeError(logger, error, title="ERROR", log_level=ERROR):
     """
@@ -48,12 +51,13 @@ def writeError(logger, error, title="ERROR", log_level=ERROR):
     log_func("%s: %s" % (title, formatError(error)))
     writeBacktrace(logger, log_level=changeLogLevel(log_level, -1))
 
+
 class PtraceError(Exception):
     """
     Ptrace error: have the optional attributes errno and pid.
     """
+
     def __init__(self, message, errno=None, pid=None):
         Exception.__init__(self, message)
         self.errno = errno
         self.pid = pid
-

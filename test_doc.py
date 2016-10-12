@@ -3,6 +3,7 @@ from doctest import testfile, ELLIPSIS, testmod
 from sys import exit, path as sys_path
 from os.path import dirname
 
+
 def testDoc(filename, name=None):
     print("--- %s: Run tests" % filename)
     failure, nb_test = testfile(
@@ -11,12 +12,14 @@ def testDoc(filename, name=None):
         exit(1)
     print("--- %s: End of tests" % filename)
 
+
 def importModule(name):
     mod = __import__(name)
     components = name.split('.')
     for comp in components[1:]:
         mod = getattr(mod, comp)
     return mod
+
 
 def testModule(name):
     print("--- Test module %s" % name)
@@ -26,12 +29,13 @@ def testModule(name):
         exit(1)
     print("--- End of test")
 
+
 def main():
     ptrace_dir = dirname(__file__)
     sys_path.append(ptrace_dir)
 
     # Test documentation in doc/*.rst files
-    #testDoc('doc/c_tools.rst')
+    # testDoc('doc/c_tools.rst')
 
     # Test documentation of some functions/classes
     testModule("ptrace.ctypes_tools")
@@ -43,4 +47,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

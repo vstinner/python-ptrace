@@ -13,11 +13,13 @@ from datetime import timedelta
 
 PAGE_SIZE = getpagesize()
 
+
 class ProcError(Exception):
     """
     Linux proc directory error.
     """
     pass
+
 
 def openProc(path):
     """
@@ -29,6 +31,7 @@ def openProc(path):
     except IOError as err:
         raise ProcError("Unable to open %r: %s" % (filename, err))
 
+
 def readProc(path):
     """
     Read the content of a proc entry.
@@ -36,6 +39,7 @@ def readProc(path):
     """
     with openProc(path) as procfile:
         return procfile.read()
+
 
 def readProcessProc(pid, key):
     """
@@ -48,6 +52,7 @@ def readProcessProc(pid, key):
             return proc.read()
     except IOError as err:
         raise ProcError("Process %s doesn't exist: %s" % (pid, err))
+
 
 class ProcessState(object):
     """
@@ -72,6 +77,7 @@ class ProcessState(object):
         "T": "traced",
         "W": "pagging",
     }
+
     def __init__(self, stat):
         # pid (program) ... => "pid (program", "..."
         part, stat = stat.rsplit(')', 1)
@@ -81,7 +87,7 @@ class ProcessState(object):
         # "state ..." => state, "..."
         stat = stat.split()
         self.state = stat[0]
-        stat = [ int(item) for item in stat[1:] ]
+        stat = [int(item) for item in stat[1:]]
 
         # Read next numbers
         self.ppid = stat[0]
@@ -93,6 +99,7 @@ class ProcessState(object):
         self.stime = stat[11]
         self.starttime = stat[18]
 
+
 def readProcessStat(pid):
     """
     Read the process state ('stat') as a ProcessState object.
@@ -100,14 +107,16 @@ def readProcessStat(pid):
     stat = readProcessProc(pid, 'stat')
     return ProcessState(stat)
 
+
 def readProcessStatm(pid):
     """
     Read the process memory status ('statm') as a list of integers.
     Values are in bytes (and not in pages).
     """
     statm = readProcessProc(pid, 'statm')
-    statm = [ int(item)*PAGE_SIZE for item in statm.split() ]
+    statm = [int(item) * PAGE_SIZE for item in statm.split()]
     return statm
+
 
 def readProcessProcList(pid, key):
     """
@@ -122,6 +131,7 @@ def readProcessProcList(pid, key):
         del data[-1]
     return data
 
+
 def readProcessLink(pid, key):
     """
     Read a process link.
@@ -131,6 +141,7 @@ def readProcessLink(pid, key):
         return readlink(filename)
     except OSError as err:
         raise ProcError("Unable to read proc link %r: %s" % (filename, err))
+
 
 def readProcesses():
     """
@@ -145,6 +156,7 @@ def readProcesses():
         except ValueError:
             # Filename is not an integer (eg. "stat" from /proc/stat)
             continue
+
 
 def readProcessCmdline(pid, escape_stat=True):
     """
@@ -169,6 +181,7 @@ def readProcessCmdline(pid, escape_stat=True):
     except ProcError:
         return None
 
+
 def searchProcessesByName(process_name):
     """
     Find all processes matching the program name pattern.
@@ -180,7 +193,7 @@ def searchProcessesByName(process_name):
        for pid in searchProcessByName(pattern):
           ...
     """
-    suffix = '/'+process_name
+    suffix = '/' + process_name
     for pid in readProcesses():
         cmdline = readProcessCmdline(pid)
         if not cmdline:
@@ -188,6 +201,7 @@ def searchProcessesByName(process_name):
         program = cmdline[0]
         if program == process_name or program.endswith(suffix):
             yield pid
+
 
 def searchProcessByName(process_name):
     """
@@ -199,6 +213,7 @@ def searchProcessByName(process_name):
         return pid
     raise ProcError("Unable to find process: %r" % process_name)
 
+
 def getUptime():
     """
     Get the system uptime as a datetime.timedelta object.
@@ -207,6 +222,7 @@ def getUptime():
     uptime = uptime.strip().split()
     uptime = float(uptime[0])
     return timedelta(seconds=uptime)
+
 
 def getSystemBoot():
     """
@@ -226,4 +242,3 @@ def getSystemBoot():
             raise ProcError("Unable to read system boot time!")
     return getSystemBoot.value
 getSystemBoot.value = None
-

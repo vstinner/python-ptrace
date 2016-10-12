@@ -13,6 +13,7 @@ if RUNNING_LINUX:
 
 AF_FILE = 1
 
+
 def formatOptVal(argument):
     function = argument.function
     optlen = function["optlen"].value
@@ -22,6 +23,7 @@ def formatOptVal(argument):
         return argument.formatPointer("<%s>" % text, addr)
     else:
         return None
+
 
 def formatSockaddr(argument, argtype):
     address = argument.value
@@ -39,6 +41,7 @@ def formatSockaddr(argument, argtype):
     family = SOCKET_FAMILY.get(family, family)
     return argument.formatPointer("<sockaddr family=%s>" % family, address)
 
+
 def setupSocketCall(function, process, socketcall, address):
     # Reset function call
     function.clearArguments()
@@ -55,15 +58,16 @@ def setupSocketCall(function, process, socketcall, address):
         function.addArgument(value, argname, argtype)
         address += CPU_WORD_SIZE
 
+
 def formatSockaddrInStruct(argument, name, value):
     if name == "sin_port":
         return ntoh_ushort(value)
     return None
 
+
 def formatSockaddrIn6Struct(argument, name, value):
     if name == "sin6_port":
         return ntoh_ushort(value)
-    #if name == "sin6_addr":
+    # if name == "sin6_addr":
         # FIXME: ...
     return None
-

@@ -20,11 +20,14 @@ try:
 except:
     MAXFD = 256
 
+
 class ChildError(RuntimeError):
     pass
 
+
 class ChildPtraceError(ChildError):
     pass
+
 
 def _set_cloexec_flag(fd):
     if RUNNING_WINDOWS:
@@ -37,6 +40,7 @@ def _set_cloexec_flag(fd):
     old = fcntl.fcntl(fd, fcntl.F_GETFD)
     fcntl.fcntl(fd, fcntl.F_SETFD, old | cloexec_flag)
 
+
 def _waitpid_no_intr(pid, options):
     """Like os.waitpid, but retries on EINTR"""
     while True:
@@ -47,6 +51,7 @@ def _waitpid_no_intr(pid, options):
                 continue
             else:
                 raise
+
 
 def _read_no_intr(fd, buffersize):
     """Like os.read, but retries on EINTR"""
@@ -59,6 +64,7 @@ def _read_no_intr(fd, buffersize):
             else:
                 raise
 
+
 def _write_no_intr(fd, s):
     """Like os.write, but retries on EINTR"""
     while True:
@@ -70,14 +76,16 @@ def _write_no_intr(fd, s):
             else:
                 raise
 
+
 def _createParent(pid, errpipe_read):
     # Wait for exec to fail or succeed; possibly raising exception
-    data = _read_no_intr(errpipe_read, 1048576) # Exceptions limited to 1 MB
+    data = _read_no_intr(errpipe_read, 1048576)  # Exceptions limited to 1 MB
     close(errpipe_read)
     if data:
         _waitpid_no_intr(pid, 0)
         child_exception = pickle.loads(data)
         raise child_exception
+
 
 def _createChild(arguments, no_stdout, env, errpipe_write):
     # Child code
@@ -104,6 +112,7 @@ def _createChild(arguments, no_stdout, env, errpipe_write):
         _write_no_intr(errpipe_write, pickle.dumps(exc_value))
     exit(255)
 
+
 def _execChild(arguments, no_stdout, env):
     if no_stdout:
         try:
@@ -121,6 +130,7 @@ def _execChild(arguments, no_stdout, env):
             execv(arguments[0], arguments)
     except Exception as err:
         raise ChildError(str(err))
+
 
 def createChild(arguments, no_stdout, env=None):
     """
@@ -145,4 +155,3 @@ def createChild(arguments, no_stdout, env=None):
     else:
         close(errpipe_read)
         _createChild(arguments, no_stdout, env, errpipe_write)
-

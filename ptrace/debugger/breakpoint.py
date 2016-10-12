@@ -6,12 +6,14 @@ from ptrace.cpu_info import CPU_POWERPC, CPU_WORD_SIZE
 from ptrace.ctypes_tools import word2bytes
 from ptrace.six import b
 
+
 class Breakpoint(object):
     """
     Software breakpoint.
 
     Use desinstall() method to remove the breakpoint from the process.
     """
+
     def __init__(self, process, address, size=None):
         self._installed = False
         self.process = ref(process)
@@ -63,4 +65,3 @@ class Breakpoint(object):
             self.desinstall(False)
         except PtraceError:
             pass
-

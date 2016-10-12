@@ -4,11 +4,12 @@ from datetime import datetime, timedelta
 from os import getenv, access, X_OK, pathsep, getcwd
 from os.path import join as path_join, isabs, dirname, normpath
 
+
 def dumpRegs(log, regs):
     """
     Dump all registers using log callback (write one line).
     """
-    width = max( len(name) for name, type in regs._fields_ )
+    width = max(len(name) for name, type in regs._fields_)
     name_format = "%% %us" % width
     for name, type in regs._fields_:
         value = getattr(regs, name)
@@ -20,6 +21,7 @@ def dumpRegs(log, regs):
         else:
             value = formatWordHex(value)
         log("%s = %s" % (name, value))
+
 
 def readBits(value, bitmasks):
     """
@@ -45,6 +47,7 @@ def readBits(value, bitmasks):
     if value:
         bitset.append(str(value))
     return bitset
+
 
 def formatBits(value, bitmasks, empty_text=None, format_value=str):
     """
@@ -74,10 +77,12 @@ def formatBits(value, bitmasks, empty_text=None, format_value=str):
         else:
             return str(value)
 
-LOCAL_TIMEZONE_OFFSET = datetime.fromtimestamp(0) - datetime.utcfromtimestamp(0)
+LOCAL_TIMEZONE_OFFSET = datetime.fromtimestamp(
+    0) - datetime.utcfromtimestamp(0)
 
 # Start of UNIX timestamp (Epoch): 1st January 1970 at 00:00
 UNIX_TIMESTAMP_T0 = datetime(1970, 1, 1)
+
 
 def timestampUNIX(value, is_local):
     """
@@ -96,6 +101,7 @@ def timestampUNIX(value, is_local):
     if is_local:
         timestamp += LOCAL_TIMEZONE_OFFSET
     return timestamp
+
 
 def locateProgram(program):
     """
@@ -120,6 +126,7 @@ def locateProgram(program):
             return filename
     return program
 
+
 def minmax(min_value, value, max_value):
     """
     Restrict value to [min_value; max_value]
@@ -133,6 +140,7 @@ def minmax(min_value, value, max_value):
     """
     return min(max(min_value, value), max_value)
 
+
 def inverseDict(data):
     """
     Inverse a dictionary.
@@ -144,4 +152,3 @@ def inverseDict(data):
     for key, value in data.items():
         result[value] = key
     return result
-

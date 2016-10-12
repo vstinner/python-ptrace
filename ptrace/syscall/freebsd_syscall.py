@@ -11,10 +11,10 @@ SYSCALL_NAMES = {
     5: "open",
     6: "close",
     7: "wait4",
-#   8: old creat
+    #   8: old creat
     9: "link",
     10: "unlink",
-#   11: obsolete execv
+    #   11: obsolete execv
     12: "chdir",
     13: "fchdir",
     14: "mknod",
@@ -22,7 +22,7 @@ SYSCALL_NAMES = {
     16: "chown",
     17: "break",
     18: "freebsd4_getfsstat",
-#   19: old lseek
+    #   19: old lseek
     20: "getpid",
     21: "mount",
     22: "unmount",
@@ -41,21 +41,21 @@ SYSCALL_NAMES = {
     35: "fchflags",
     36: "sync",
     37: "kill",
-#   38: old stat
+    #   38: old stat
     39: "getppid",
-#   40: old lstat
+    #   40: old lstat
     41: "dup",
     42: "pipe",
     43: "getegid",
     44: "profil",
     45: "ktrace",
-#   46: old sigaction
+    #   46: old sigaction
     47: "getgid",
-#   48: old sigprocmask
+    #   48: old sigprocmask
     49: "getlogin",
     50: "setlogin",
     51: "acct",
-#   52: old sigpending
+    #   52: old sigpending
     53: "sigaltstack",
     54: "ioctl",
     55: "reboot",
@@ -65,33 +65,33 @@ SYSCALL_NAMES = {
     59: "execve",
     60: "umask",
     61: "chroot",
-#   62: old fstat
-#   63: old getkerninfo
-#   64: old getpagesize
+    #   62: old fstat
+    #   63: old getkerninfo
+    #   64: old getpagesize
     65: "msync",
     66: "vfork",
-#   67: obsolete vread
-#   68: obsolete vwrite
+    #   67: obsolete vread
+    #   68: obsolete vwrite
     69: "sbrk",
     70: "sstk",
-#   71: old mmap
+    #   71: old mmap
     72: "vadvise",
     73: "munmap",
     74: "mprotect",
     75: "madvise",
-#   76: obsolete vhangup
-#   77: obsolete vlimit
+    #   76: obsolete vhangup
+    #   77: obsolete vlimit
     78: "mincore",
     79: "getgroups",
     80: "setgroups",
     81: "getpgrp",
     82: "setpgid",
     83: "setitimer",
-#   84: old wait
+    #   84: old wait
     85: "swapon",
     86: "getitimer",
-#   87: old gethostname
-#   88: old sethostname
+    #   87: old gethostname
+    #   88: old sethostname
     89: "getdtablesize",
     90: "dup2",
     92: "fcntl",
@@ -100,23 +100,23 @@ SYSCALL_NAMES = {
     96: "setpriority",
     97: "socket",
     98: "connect",
-#   99: old accept
+    #   99: old accept
     100: "getpriority",
-#   101: old send
-#   102: old recv
-#   103: old sigreturn
+    #   101: old send
+    #   102: old recv
+    #   103: old sigreturn
     104: "bind",
     105: "setsockopt",
     106: "listen",
-#   107: obsolete vtimes
-#   108: old sigvec
-#   109: old sigblock
-#   110: old sigsetmask
-#   111: old sigsuspend
-#   112: old sigstack
-#   113: old recvmsg
-#   114: old sendmsg
-#   115: obsolete vtrace
+    #   107: obsolete vtimes
+    #   108: old sigvec
+    #   109: old sigblock
+    #   110: old sigsetmask
+    #   111: old sigsuspend
+    #   112: old sigstack
+    #   113: old recvmsg
+    #   114: old sendmsg
+    #   115: obsolete vtrace
     116: "gettimeofday",
     117: "getrusage",
     118: "getsockopt",
@@ -125,12 +125,12 @@ SYSCALL_NAMES = {
     122: "settimeofday",
     123: "fchown",
     124: "fchmod",
-#   125: old recvfrom
+    #   125: old recvfrom
     126: "setreuid",
     127: "setregid",
     128: "rename",
-#   129: old truncate
-#   130: old ftruncate
+    #   129: old truncate
+    #   130: old ftruncate
     131: "flock",
     132: "mkfifo",
     133: "sendto",
@@ -139,20 +139,20 @@ SYSCALL_NAMES = {
     136: "mkdir",
     137: "rmdir",
     138: "utimes",
-#   139: obsolete 4.2 sigreturn
+    #   139: obsolete 4.2 sigreturn
     140: "adjtime",
-#   141: old getpeername
-#   142: old gethostid
-#   143: old sethostid
-#   144: old getrlimit
-#   145: old setrlimit
-#   146: old killpg
+    #   141: old getpeername
+    #   142: old gethostid
+    #   143: old sethostid
+    #   144: old getrlimit
+    #   145: old setrlimit
+    #   146: old killpg
     147: "setsid",
     148: "quotactl",
-#   149: old quota
-#   150: old getsockname
+    #   149: old quota
+    #   150: old getsockname
     155: "nfssvc",
-#   156: old getdirentries
+    #   156: old getdirentries
     157: "freebsd4_statfs",
     158: "freebsd4_fstatfs",
     160: "lgetfh",
@@ -246,7 +246,7 @@ SYSCALL_NAMES = {
     310: "getsid",
     311: "setresuid",
     312: "setresgid",
-#   313: obsolete signanosleep
+    #   313: obsolete signanosleep
     314: "aio_return",
     315: "aio_suspend",
     316: "aio_cancel",
@@ -255,8 +255,8 @@ SYSCALL_NAMES = {
     319: "oaio_write",
     320: "olio_listio",
     321: "yield",
-#   322: obsolete thr_sleep
-#   323: obsolete thr_wakeup
+    #   322: obsolete thr_sleep
+    #   323: obsolete thr_wakeup
     324: "mlockall",
     325: "munlockall",
     326: "__getcwd",

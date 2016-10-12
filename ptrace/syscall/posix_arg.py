@@ -10,6 +10,7 @@ MMAP_PROT_BITMASK = (
     (0x02000000, "PROT_GROWSUP"),
 )
 
+
 def formatMmapProt(argument):
     return formatBits(argument.value, MMAP_PROT_BITMASK, "PROT_NONE")
 
@@ -19,6 +20,7 @@ ACCESS_MODE_BITMASK = (
     (2, "W_OK"),
     (4, "R_OK"),
 )
+
 
 def formatAccessMode(argument):
     return formatBits(argument.value, ACCESS_MODE_BITMASK, "F_OK")
@@ -41,9 +43,10 @@ OPEN_MODE_BITMASK = [
     (0o400000, "O_NOFOLLOW"),
     (0o1000000, "O_NOATIME"),
     (0o2000000, "O_CLOEXEC"),
-    (0o10000000, "O_PATH"), # Linux 2.6.39
-    (0o20200000, "O_TMPFILE"), # Linux 3.11
+    (0o10000000, "O_PATH"),  # Linux 2.6.39
+    (0o20200000, "O_TMPFILE"),  # Linux 3.11
 ]
+
 
 def formatOpenMode(argument):
     value = argument.value
@@ -80,6 +83,7 @@ CLONE_FLAGS_BITMASK = (
     (0x08000000, "CLONE_NEWIPC"),
 )
 
+
 def formatCloneFlags(argument):
     flags = argument.value
     bits = readBits(flags, CLONE_FLAGS_BITMASK)
@@ -94,6 +98,6 @@ def formatCloneFlags(argument):
 
 AT_FDCWD = -100
 
+
 def formatDirFd(value):
     return "AT_FDCWD" if value == AT_FDCWD else str(value)
-

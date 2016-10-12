@@ -12,6 +12,7 @@ HEXADECIMAL_REGEX = re.compile(r"0x[0-9a-f]+")
 #  340&91
 EXPR_REGEX = re.compile(r"^[()<>+*/&0-9-]+$")
 
+
 def replaceHexadecimal(regs):
     """
     Convert an hexadecimal number to decimal number (as string).
@@ -24,6 +25,7 @@ def replaceHexadecimal(regs):
         return text
     value = int(text, 16)
     return str(value)
+
 
 def parseExpression(process, text):
     """
@@ -72,4 +74,3 @@ def parseExpression(process, text):
     except SyntaxError:
         raise ValueError("Invalid expression: %r" % orig_text)
     return value
-

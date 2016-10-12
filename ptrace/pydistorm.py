@@ -47,14 +47,17 @@ DECRES_INPUTERR = 3
 MAX_INSTRUCTIONS = 100
 MAX_TEXT_SIZE = 60
 
+
 class _WString(Structure):
     _fields_ = (
         ("pos", c_uint),
         ("p", c_char * MAX_TEXT_SIZE),
     )
+
     def __str__(self):
         # FIXME: Use pos?
         return self.p
+
 
 class _DecodedInst(Structure):
     _fields_ = (
@@ -64,10 +67,13 @@ class _DecodedInst(Structure):
         ("size", c_uint),
         ("offset", _OffsetType),
     )
+
     def __str__(self):
         return "%s %s" % (self.mnemonic, self.operands)
 
-internal_decode.argtypes = (_OffsetType, c_void_p, c_int, c_int, c_void_p, c_uint, POINTER(c_uint))
+internal_decode.argtypes = (_OffsetType, c_void_p,
+                            c_int, c_int, c_void_p, c_uint, POINTER(c_uint))
+
 
 def Decode(codeOffset, code, dt=Decode32Bits):
     """
@@ -80,19 +86,21 @@ def Decode(codeOffset, code, dt=Decode32Bits):
         raise TypeError("code have to be a %s, not %s"
                         % (binary_type.__name__, type(code).__name__))
     if dt not in DECODERS:
-        raise IndexError("Decoding-type must be either Decode16Bits, Decode32Bits or Decode64Bits.")
+        raise IndexError(
+            "Decoding-type must be either Decode16Bits, Decode32Bits or Decode64Bits.")
 
     # Allocate memory for decoder
     code_buffer = create_string_buffer(code)
     decodedInstructionsCount = c_uint()
-    result = create_string_buffer(sizeof(_DecodedInst)*MAX_INSTRUCTIONS)
+    result = create_string_buffer(sizeof(_DecodedInst) * MAX_INSTRUCTIONS)
 
     # Prepare arguments
     codeLen = len(code)
     code = addressof(code_buffer)
     while codeLen:
         # Call internal decoder
-        res = internal_decode(codeOffset, code, codeLen, dt, result, MAX_INSTRUCTIONS, byref(decodedInstructionsCount))
+        res = internal_decode(codeOffset, code, codeLen, dt, result,
+                              MAX_INSTRUCTIONS, byref(decodedInstructionsCount))
 
         # Check for errors
         if res == DECRES_INPUTERR:
@@ -117,4 +125,3 @@ def Decode(codeOffset, code, dt=Decode32Bits):
         code += size
         codeOffset += size
         codeLen -= size
-

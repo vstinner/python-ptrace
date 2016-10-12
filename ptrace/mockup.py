@@ -2,7 +2,9 @@
 Mockup classes used in unit tests.
 """
 
+
 class FakeProcess(object):
+
     def __init__(self):
         self.regs = {}
 
@@ -11,4 +13,3 @@ class FakeProcess(object):
 
     def getreg(self, name):
         return self.regs[name]
-

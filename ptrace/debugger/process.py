@@ -20,7 +20,8 @@ if HAS_PTRACE_EVENTS:
         ptrace_setoptions, ptrace_geteventmsg, WPTRACEEVENT,
         PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE,
         PTRACE_EVENT_EXEC)
-    NEW_PROCESS_EVENT = (PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE)
+    NEW_PROCESS_EVENT = (
+        PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE)
 if HAS_PTRACE_GETREGS:
     from ptrace.binding import ptrace_getregs
 else:
@@ -36,11 +37,11 @@ from logging import info, warning, error
 from ptrace.error import PtraceError
 from errno import ESRCH, EACCES
 from ptrace.debugger import (Breakpoint,
-    ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
+                             ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
 from os import (kill,
-    WIFSTOPPED, WSTOPSIG,
-    WIFSIGNALED, WTERMSIG,
-    WIFEXITED, WEXITSTATUS)
+                WIFSTOPPED, WSTOPSIG,
+                WIFSIGNALED, WTERMSIG,
+                WIFEXITED, WEXITSTATUS)
 from ptrace.disasm import HAS_DISASSEMBLER
 if HAS_DISASSEMBLER:
     from ptrace.disasm import disassemble, disassembleOne, MAX_INSTR_SIZE
@@ -57,6 +58,7 @@ MIN_CODE_SIZE = 32
 MAX_CODE_SIZE = 1024
 DEFAULT_NB_INSTR = 10
 DEFAULT_CODE_SIZE = 24
+
 
 class PtraceProcess(object):
     """
@@ -153,6 +155,7 @@ class PtraceProcess(object):
     Sometimes, is_stopped value is wrong. You might use isTraced() to
     make sure that the process is stopped.
     """
+
     def __init__(self, debugger, pid, is_attached, parent=None, is_thread=False):
         self.debugger = debugger
         self.breakpoints = {}
@@ -216,9 +219,9 @@ class PtraceProcess(object):
                 size = MIN_CODE_SIZE
             code = self.readBytes(start, size)
             if RUNNING_PYTHON3:
-                text = " ".join( "%02x" % byte for byte in code )
+                text = " ".join("%02x" % byte for byte in code)
             else:
-                text = " ".join( "%02x" % ord(byte) for byte in code )
+                text = " ".join("%02x" % ord(byte) for byte in code)
             log("CODE: %s" % text)
             return
 
@@ -232,18 +235,20 @@ class PtraceProcess(object):
                     bp = True
                 else:
                     instr = self.disassembleOne(address)
-                text = "%s| %s (%s)" % (formatAddress(instr.address), instr.text, instr.hexa)
+                text = "%s| %s (%s)" % (formatAddress(
+                    instr.address), instr.text, instr.hexa)
                 if instr.address == ip:
                     text += " <=="
                 if bp:
                     text += "     * BREAKPOINT *"
                 log(text)
-                address = address+instr.size
+                address = address + instr.size
                 if stop is not None and stop <= address:
                     break
         else:
             for instr in self.disassemble(start, stop):
-                text = "%s| %s (%s)" % (formatAddress(instr.address), instr.text, instr.hexa)
+                text = "%s| %s (%s)" % (formatAddress(
+                    instr.address), instr.text, instr.hexa)
                 if instr.address == ip:
                     text += " <=="
                 log(text)
@@ -264,7 +269,7 @@ class PtraceProcess(object):
         code = self.readBytes(start, size)
         for index, instr in enumerate(disassemble(code, start)):
             yield instr
-            if nb_instr and nb_instr <= (index+1):
+            if nb_instr and nb_instr <= (index + 1):
                 break
 
     def disassembleOne(self, address=None):
@@ -272,7 +277,7 @@ class PtraceProcess(object):
             self.notImplementedError()
         if address is None:
             address = self.getInstrPointer()
-        code = self.readBytes(address, MAX_INSTR_SIZE )
+        code = self.readBytes(address, MAX_INSTR_SIZE)
         return disassembleOne(code, address)
 
     def findStack(self):
@@ -401,7 +406,8 @@ class PtraceProcess(object):
         if event in NEW_PROCESS_EVENT:
             new_pid = ptrace_geteventmsg(self.pid)
             is_thread = (event == PTRACE_EVENT_CLONE)
-            new_process = self.debugger.addProcess(new_pid, is_attached=True, parent=self, is_thread=is_thread)
+            new_process = self.debugger.addProcess(
+                new_pid, is_attached=True, parent=self, is_thread=is_thread)
             return NewProcessEvent(new_process)
         elif event == PTRACE_EVENT_EXEC:
             return ProcessExecution(self)
@@ -475,13 +481,15 @@ class PtraceProcess(object):
         if CPU_INSTR_POINTER:
             self.setreg(CPU_INSTR_POINTER, ip)
         else:
-            raise ProcessError(self, "Instruction pointer register is not defined")
+            raise ProcessError(
+                self, "Instruction pointer register is not defined")
 
     def getInstrPointer(self):
         if CPU_INSTR_POINTER:
             return self.getreg(CPU_INSTR_POINTER)
         else:
-            raise ProcessError(self, "Instruction pointer register is not defined")
+            raise ProcessError(
+                self, "Instruction pointer register is not defined")
 
     def getStackPointer(self):
         if CPU_STACK_POINTER:
@@ -505,7 +513,7 @@ class PtraceProcess(object):
 
             # Read some bytes from the word
             subsize = min(CPU_WORD_SIZE - offset, size)
-            data = bytes[offset:offset+subsize]   # <-- FIXME: Big endian!
+            data = bytes[offset:offset + subsize]   # <-- FIXME: Big endian!
 
             # Move cursor
             size -= subsize
@@ -604,9 +612,11 @@ class PtraceProcess(object):
                 word = self.readBytes(address, CPU_WORD_SIZE)
                 if len(bytes) < size:
                     size = len(bytes)
-                    word = word[:offset] + bytes[:size] + word[offset + size:]  # <-- FIXME: Big endian!
+                    word = word[:offset] + bytes[:size] + \
+                        word[offset + size:]  # <-- FIXME: Big endian!
                 else:
-                    word = word[:offset] + bytes[:size]   # <-- FIXME: Big endian!
+                    # <-- FIXME: Big endian!
+                    word = word[:offset] + bytes[:size]
                 self.writeWord(address, bytes2word(word))
                 bytes = bytes[size:]
                 address += CPU_WORD_SIZE
@@ -637,7 +647,7 @@ class PtraceProcess(object):
         return bytes2type(bytes, struct)
 
     def readArray(self, address, basetype, count):
-        bytes = self.readBytes(address, sizeof(basetype)*count)
+        bytes = self.readBytes(address, sizeof(basetype) * count)
         bytes = c_char_p(bytes)
         return bytes2array(bytes, basetype, count)
 
@@ -652,8 +662,8 @@ class PtraceProcess(object):
             if pos != -1:
                 done = True
                 data = data[:pos]
-            if max_size <= size+chunk_length:
-                data = data[:(max_size-size)]
+            if max_size <= size + chunk_length:
+                data = data[:(max_size - size)]
                 string.append(data)
                 truncated = True
                 break
@@ -675,7 +685,7 @@ class PtraceProcess(object):
     def _dumpStack(self, log):
         sp = self.getStackPointer()
         displayed = 0
-        for index in range(-5, 5+1):
+        for index in range(-5, 5 + 1):
             delta = index * CPU_WORD_SIZE
             try:
                 value = self.readWord(sp + delta)
@@ -767,4 +777,3 @@ class PtraceProcess(object):
 
     def notImplementedError(self):
         raise NotImplementedError()
-

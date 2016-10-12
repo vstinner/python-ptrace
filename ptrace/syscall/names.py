@@ -10,4 +10,3 @@ elif RUNNING_FREEBSD:
 else:
     SYSCALL_NAMES = {}
     SOCKET_SYSCALL_NAMES = set()
-
