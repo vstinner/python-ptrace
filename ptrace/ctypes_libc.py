@@ -4,9 +4,9 @@ Load the system C library. Variables:
  - libc: the loaded library
 """
 
-from ctypes import cdll
+from ctypes import CDLL
 from ctypes.util import find_library
 
 LIBC_FILENAME = find_library('c')
-libc = cdll.LoadLibrary(LIBC_FILENAME)
+libc = CDLL(LIBC_FILENAME, use_errno=True)
 

@@ -1,7 +1,6 @@
 from os import strerror
-from ctypes import addressof, c_int
+from ctypes import addressof, c_int, get_errno, set_errno
 from ptrace import PtraceError
-from ptrace.ctypes_errno import get_errno
 from ptrace.ctypes_tools import formatAddress
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD, RUNNING_OPENBSD
 from ptrace.cpu_info import CPU_64BITS, CPU_WORD_SIZE, CPU_POWERPC
@@ -135,6 +134,7 @@ except ImportError:
 def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
     if HAS_CPTRACE:
         try:
+            set_errno(0)
             result = _ptrace(command, pid, arg1, arg2, check_errno)
         except ValueError as errobj:
             message = str(errobj)

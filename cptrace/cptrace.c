@@ -21,6 +21,7 @@ static bool cpython_cptrace(
     unsigned long *result)
 {
     unsigned long ret;
+    errno = 0;
     ret = ptrace(request, pid, arg1, arg2);
     if ((long)ret == -1) {
         /**
