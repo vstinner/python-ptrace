@@ -1,22 +1,28 @@
 #!/usr/bin/env python
 
-# Produce to release a new version:
+# Prepare a release:
+#
 #  - git pull --rebase  # check that there is no incoming changesets
-#  - run tests, type: tox
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in doc/changelog.rst
 #  - check that "python setup.py sdist" contains all files tracked by
 #    the SCM (Mercurial): update MANIFEST.in if needed
-#  - git commit -a
+#  - git commit -a -m "prepare release VERSION"
+#  - run tests, type: tox
 #  - git push
+#  - check Travis status:
+#    https://travis-ci.org/haypo/python-ptrace
 #
-#  - git tag python-ptrace-x.y
+# Release a new version:
+#
+#  - git tag python-ptrace-VERSION
 #  - git push --tags
+#  - python3 setup.py sdist register bdist_wheel upload
 #
-#  - ./setup.py sdist register bdist_wheel upload
-#  - update the doc
+# After the release:
+#
 #  - increment version in  ptrace/version.py and doc/conf.py
-#  - git commit
+#  - git commit -a -m "post-release"
 #  - git push
 
 from __future__ import with_statement
