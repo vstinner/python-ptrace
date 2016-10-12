@@ -9,7 +9,6 @@ from ptrace.func_call import FunctionCallOptions
 from sys import stderr, exit
 from optparse import OptionParser
 from logging import getLogger, error
-from ptrace.syscall.socketcall_constants import SOCKETCALL
 from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.ctypes_tools import formatAddress
 import re
@@ -143,7 +142,6 @@ class SyscallTracer(Application):
         return False
 
     def displaySyscall(self, syscall):
-        name = syscall.name
         text = syscall.format()
         if syscall.result is not None:
             text = "%-40s = %s" % (text, syscall.result_text)

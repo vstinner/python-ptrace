@@ -1,10 +1,11 @@
 from ptrace.os_tools import HAS_PROC
-if HAS_PROC:
-    from ptrace.linux_proc import openProc, ProcError
 from ptrace.debugger.process_error import ProcessError
 from ptrace.ctypes_tools import formatAddress
 import re
 from weakref import ref
+
+if HAS_PROC:
+    from ptrace.linux_proc import openProc, ProcError
 
 PROC_MAP_REGEX = re.compile(
     # Address range: '08048000-080b0000 '

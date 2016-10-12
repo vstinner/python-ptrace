@@ -31,7 +31,7 @@ def extractRegisters(process, instr):
         try:
             value = process.getreg(name)
             registers[name] = value
-        except PtraceError as err:
+        except PtraceError:
             pass
     return registers
 

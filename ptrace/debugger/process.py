@@ -6,6 +6,30 @@ from ptrace.binding import (
     ptrace_setregs,
     ptrace_peektext, ptrace_poketext,
     REGISTER_NAMES)
+from ptrace.os_tools import HAS_PROC, RUNNING_BSD, RUNNING_PYTHON3
+from ptrace.tools import dumpRegs
+from ptrace.cpu_info import CPU_WORD_SIZE
+from ptrace.ctypes_tools import bytes2word, word2bytes, bytes2type, bytes2array
+from signal import SIGTRAP, SIGSTOP, SIGKILL
+from ptrace.ctypes_tools import formatAddress, formatWordHex
+from ctypes import sizeof, c_char_p
+from logging import info, warning, error
+from ptrace.error import PtraceError
+from errno import ESRCH, EACCES
+from ptrace.debugger import (Breakpoint,
+                             ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
+from os import (kill,
+                WIFSTOPPED, WSTOPSIG,
+                WIFSIGNALED, WTERMSIG,
+                WIFEXITED, WEXITSTATUS)
+from ptrace.disasm import HAS_DISASSEMBLER
+from ptrace.debugger.backtrace import getBacktrace
+from ptrace.debugger.process_error import ProcessError
+from ptrace.debugger.memory_mapping import readProcessMappings
+from ptrace.binding.cpu import CPU_INSTR_POINTER, CPU_STACK_POINTER, CPU_FRAME_POINTER, CPU_SUB_REGISTERS
+from ptrace.debugger.syscall_state import SyscallState
+from ptrace.six import b
+
 if HAS_PTRACE_SINGLESTEP:
     from ptrace.binding import ptrace_singlestep
 if HAS_PTRACE_SIGINFO:
@@ -26,31 +50,8 @@ if HAS_PTRACE_GETREGS:
     from ptrace.binding import ptrace_getregs
 else:
     from ptrace.binding import ptrace_peekuser, ptrace_registers_t
-from ptrace.os_tools import HAS_PROC, RUNNING_BSD, RUNNING_PYTHON3
-from ptrace.tools import dumpRegs
-from ptrace.cpu_info import CPU_WORD_SIZE
-from ptrace.ctypes_tools import bytes2word, word2bytes, bytes2type, bytes2array
-from signal import SIGTRAP, SIGSTOP, SIGKILL
-from ptrace.ctypes_tools import formatAddress, formatWordHex
-from ctypes import sizeof, c_char_p
-from logging import info, warning, error
-from ptrace.error import PtraceError
-from errno import ESRCH, EACCES
-from ptrace.debugger import (Breakpoint,
-                             ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)
-from os import (kill,
-                WIFSTOPPED, WSTOPSIG,
-                WIFSIGNALED, WTERMSIG,
-                WIFEXITED, WEXITSTATUS)
-from ptrace.disasm import HAS_DISASSEMBLER
 if HAS_DISASSEMBLER:
     from ptrace.disasm import disassemble, disassembleOne, MAX_INSTR_SIZE
-from ptrace.debugger.backtrace import getBacktrace
-from ptrace.debugger.process_error import ProcessError
-from ptrace.debugger.memory_mapping import readProcessMappings
-from ptrace.binding.cpu import CPU_INSTR_POINTER, CPU_STACK_POINTER, CPU_FRAME_POINTER, CPU_SUB_REGISTERS
-from ptrace.debugger.syscall_state import SyscallState
-from ptrace.six import b
 if HAS_PROC:
     from ptrace.linux_proc import readProcessStat
 

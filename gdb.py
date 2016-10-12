@@ -38,14 +38,14 @@ import re
 if stdout.isatty():
     try:
         # Use readline for better raw_input()
-        import readline
+        import readline   # noqa
     except ImportError:
         pass
 
 # Match a register name: $eax, $gp0, $orig_eax
 REGISTER_REGEX = re.compile(r"\$[a-z]+[a-z0-9_]+")
 
-#BYTES_REGEX = re.compile(r"""(?:'([^'\\]*)'|"([^"\\]*)")""")
+# BYTES_REGEX = re.compile(r"""(?:'([^'\\]*)'|"([^"\\]*)")""")
 
 SIGNALS = inverseDict(SIGNAMES)   # name -> signum
 
@@ -378,7 +378,7 @@ class Gdb(Application):
             pass
         try:
             return self.parseInteger(command)
-        except ValueError as err:
+        except ValueError:
             raise ValueError("Invalid signal number: %r" % command)
 
     def signal(self, command):

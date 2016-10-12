@@ -21,7 +21,7 @@ class TestStrace(unittest.TestCase):
                 proc = subprocess.Popen(args,
                                         stdout=devnull,
                                         stderr=subprocess.STDOUT)
-                exitcode = proc.wait()
+                proc.wait()
 
             temp.seek(0)
             strace = temp.readlines()

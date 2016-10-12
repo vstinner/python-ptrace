@@ -2,7 +2,7 @@ from ptrace.os_tools import RUNNING_LINUX, RUNNING_WINDOWS
 if RUNNING_LINUX:
     from ptrace.linux_proc import (ProcError, openProc,
                                    readProcessProcList, readProcessLink, readProcessStat)
-from ptrace.signames import signalName
+from ptrace.signames import signalName   # noqa
 if not RUNNING_WINDOWS:
     from os import (
         WIFSTOPPED, WSTOPSIG,

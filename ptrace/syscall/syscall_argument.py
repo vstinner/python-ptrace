@@ -16,6 +16,7 @@ import re
 from ptrace import six
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
+from ptrace.syscall.socketcall_constants import formatSocketType
 if RUNNING_LINUX:
     from ptrace.syscall.linux_struct import (
         timeval, timespec, pollfd, rlimit, new_utsname, user_desc)
@@ -24,7 +25,6 @@ elif RUNNING_FREEBSD:
     from ptrace.syscall.freebsd_constants import SYSCALL_ARG_DICT
 else:
     SYSCALL_ARG_DICT = {}
-from ptrace.syscall.socketcall_constants import formatSocketType
 
 KNOWN_STRUCTS = []
 if RUNNING_LINUX:

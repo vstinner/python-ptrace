@@ -1,5 +1,5 @@
 from ctypes import (Structure,
-                    c_char, c_short, c_int, c_uint, c_long,  c_ulong)
+                    c_char, c_short, c_int, c_uint, c_long, c_ulong)
 
 time_t = c_long
 suseconds_t = c_long
@@ -54,10 +54,10 @@ class user_desc(Structure):
         ("base_addr", c_ulong),
         ("limit", c_uint),
         ("_bits_", c_char),
-        #	unsigned int  seg_32bit:1;
-        #	unsigned int  contents:2;
-        #	unsigned int  read_exec_only:1;
-        #	unsigned int  limit_in_pages:1;
-        #	unsigned int  seg_not_present:1;
-        #	unsigned int  useable:1;
+        # unsigned int  seg_32bit:1;
+        # unsigned int  contents:2;
+        # unsigned int  read_exec_only:1;
+        # unsigned int  limit_in_pages:1;
+        # unsigned int  seg_not_present:1;
+        # unsigned int  useable:1;
     )

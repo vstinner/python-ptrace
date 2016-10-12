@@ -18,6 +18,15 @@
 
 from __future__ import with_statement
 
+from imp import load_source
+from os import path
+try:
+    # setuptools supports bdist_wheel
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
+
 MODULES = ["ptrace", "ptrace.binding", "ptrace.syscall", "ptrace.debugger"]
 
 SCRIPTS = ("strace.py", "gdb.py")
@@ -35,15 +44,6 @@ CLASSIFIERS = [
 
 with open('README.rst') as fp:
     LONG_DESCRIPTION = fp.read()
-
-from imp import load_source
-from os import path
-from sys import argv
-try:
-    # setuptools supports bdist_wheel
-    from setuptools import setup, Extension
-except ImportError:
-    from distutils.core import setup
 
 ptrace = load_source("version", path.join("ptrace", "version.py"))
 PACKAGES = {}

@@ -1,12 +1,11 @@
 from ptrace.cpu_info import CPU_WORD_SIZE
-from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint
+from ptrace.ctypes_tools import ntoh_ushort, ntoh_uint  # noqa
 from ptrace.syscall import SYSCALL_PROTOTYPES
-from ptrace.syscall.socketcall_constants import SOCKETCALL, SOCKET_FAMILY
+from ptrace.syscall.socketcall_constants import SOCKETCALL, SOCKET_FAMILY  # noqa
 from ptrace.syscall.socketcall_struct import sockaddr, sockaddr_in, sockaddr_in6, sockaddr_un
 from ctypes import c_int
 from ptrace.os_tools import RUNNING_LINUX
-from socket import AF_INET, AF_INET6, inet_ntoa
-from struct import pack
+from socket import AF_INET, AF_INET6, inet_ntoa   # noqa
 if RUNNING_LINUX:
     from socket import AF_NETLINK
     from ptrace.syscall.socketcall_struct import sockaddr_nl

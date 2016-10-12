@@ -1,2 +1,2 @@
-from ptrace.signames import SIGNAMES, signalName
-from ptrace.error import PtraceError
+from ptrace.signames import SIGNAMES, signalName   # noqa
+from ptrace.error import PtraceError   # noqa
