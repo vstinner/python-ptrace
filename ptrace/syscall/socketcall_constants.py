@@ -66,7 +66,7 @@ def formatSocketType(argument):
         value &= ~socket.SOCK_CLOEXEC
     else:
         cloexec = False
-    text = str(SOCKET_TYPE.get(value, value))
+    text = SOCKET_TYPE.get(value, str(value))
     if cloexec:
         text += '|SOCK_CLOEXEC'
     return text
