@@ -3,8 +3,8 @@
 Changelog
 =========
 
-python-ptrace 0.9.1
--------------------
+python-ptrace 0.9.1 (2016-10-12)
+--------------------------------
 
 * Added tracing of processes created with the clone syscall (commonly known as
   threads).

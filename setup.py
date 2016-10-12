@@ -4,7 +4,7 @@
 #  - git pull --rebase  # check that there is no incoming changesets
 #  - run tests, type: tox
 #  - check version in ptrace/version.py and doc/conf.py
-#  - set release date in the ChangeLog
+#  - set release date in doc/changelog.rst
 #  - check that "python setup.py sdist" contains all files tracked by
 #    the SCM (Mercurial): update MANIFEST.in if needed
 #  - git commit -a
