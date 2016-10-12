@@ -126,9 +126,10 @@ class PtraceSyscall(FunctionCall):
         else:
             uresult = self.result
             self.result = ulong2long(self.result)
-            if self.result < 0:
+            if self.result < 0 and (-self.result) in errorcode:
+                errcode = -self.result
                 text = "%s %s (%s)" % (
-                    self.result, errorcode[-self.result], strerror(-self.result))
+                    self.result, errorcode[errcode], strerror(errcode))
             elif not(0 <= self.result <= 9):
                 text = "%s (%s)" % (self.result, formatWordHex(uresult))
             else:
