@@ -6,13 +6,17 @@ Changelog
 python-ptrace 0.9.1
 -------------------
 
+* Added tracing of processes created with the clone syscall (commonly known as
+  threads).
+* gdb.py: add ``gcore`` command, dump the process memory.
+* Allow command names without absolute path.
+* Fix ptrace binding: clear errno before calling ptrace().
+* Fix PtraceSyscall.exit() for unknow error code
 * Project moved to GitHub: https://github.com/haypo/python-ptrace
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   the ``ctypes.get_errno()`` function
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   ``ctypes.c_int8``, ``ctypes.c_uint32``, ... types
-* Allow command names without absolute path.
-
 
 python-ptrace 0.9 (2016-04-23)
 ------------------------------
