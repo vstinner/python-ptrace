@@ -7,6 +7,8 @@ python-ptrace 0.9.1
 -------------------
 
 * Project moved to GitHub: https://github.com/haypo/python-ptrace
+* Remove the ``ptrace.ctypes_errno`` module: use directly
+  the ``ctypes.get_errno()`` function
 
 python-ptrace 0.9 (2016-04-23)
 ------------------------------
