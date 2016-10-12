@@ -4,7 +4,6 @@ TODO
 Main tasks
 ----------
 
-* Remove ptrace.ctypes_stdint
 * Fix strace.py --socketcall: SyscallState.enter() calls ignore_callback
   before socketcall are proceed
 * Support other backends:
