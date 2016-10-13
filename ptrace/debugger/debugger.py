@@ -44,7 +44,7 @@ class PtraceDebugger(object):
     Operations
     ==========
 
-     - iterarate on all processes: "for process in debugger: ..."
+     - iterate on all processes: "for process in debugger: ..."
      - get a process by its identifier: "process = debugger[pid]"
      - get the number of processes: len(debugger)
 
@@ -117,7 +117,7 @@ class PtraceDebugger(object):
         set) or any process (wanted_pid=None). The call is blocking is
         blocking option is True. Return the tuple (pid, status).
 
-        See os.waitpid() documentation for explainations about the result.
+        See os.waitpid() documentation for explanations about the result.
         """
         flags = 0
         if not blocking:
@@ -143,7 +143,7 @@ class PtraceDebugger(object):
         """
         Wait for a process event from the specified process identifier. If
         blocking=False, return None if there is no new event, otherwise return
-        an objet based on ProcessEvent.
+        an object based on ProcessEvent.
         """
         process = None
         while not process:
@@ -186,7 +186,7 @@ class PtraceDebugger(object):
         """
         Wait for a process event from a specific process (if pid option is
         set) or any process (default). If blocking=False, return None if there
-        is no new event, otherwise return an objet based on ProcessEvent.
+        is no new event, otherwise return an object based on ProcessEvent.
         """
         return self._wait_event(pid, blocking)
 

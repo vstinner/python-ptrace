@@ -135,7 +135,7 @@ def _execChild(arguments, no_stdout, env):
 def createChild(arguments, no_stdout, env=None):
     """
     Create a child process:
-     - arguments: list of string where (eg. ['ls', '-la'])
+     - arguments: list of string where (e.g. ['ls', '-la'])
      - no_stdout: if True, use null device for stdout/stderr
      - env: environment variables dictionary
 

@@ -122,7 +122,7 @@ def readProcessMappings(process):
             match = PROC_MAP_REGEX.match(line)
             if not match:
                 raise ProcessError(
-                    process, "Unable to parse memoy mapping: %r" % line)
+                    process, "Unable to parse memory mapping: %r" % line)
             map = MemoryMapping(
                 process,
                 int(match.group(1), 16),

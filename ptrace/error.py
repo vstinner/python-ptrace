@@ -36,8 +36,8 @@ def writeError(logger, error, title="ERROR", log_level=ERROR):
     """
     Write an error into the logger:
      - logger: the logger (if None, use getLogger())
-     - error: the exception objet
-     - title: error message prefix (eg. title="Initialization error")
+     - error: the exception object
+     - title: error message prefix (e.g. title="Initialization error")
      - log_level: log level of the error
 
     If the exception is a SystemExit or a KeyboardInterrupt, re-emit

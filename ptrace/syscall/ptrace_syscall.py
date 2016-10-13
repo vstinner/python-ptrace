@@ -113,7 +113,7 @@ class PtraceSyscall(FunctionCall):
             preformat = set()
 
         # Data pointed by arguments may have changed during the syscall
-        # eg. uname() syscall
+        # e.g. uname() syscall
         for index, argument in enumerate(self.arguments):
             if index in preformat:
                 # Don't lose preformatted arguments

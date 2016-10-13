@@ -10,7 +10,7 @@ All process events are based on ProcessEvent class.
 * ProcessExit: process exited with an exitcode, killed by a signal
   or exited abnormally
 * ProcessSignal: process received a signal
-* NewProcessEvent: new process created, eg. after a fork() syscall
+* NewProcessEvent: new process created, e.g. after a fork() syscall
 
 Attributes:
 

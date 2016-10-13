@@ -11,7 +11,7 @@ python-ptrace 0.9.1 (2016-10-12)
 * gdb.py: add ``gcore`` command, dump the process memory.
 * Allow command names without absolute path.
 * Fix ptrace binding: clear errno before calling ptrace().
-* Fix PtraceSyscall.exit() for unknow error code
+* Fix PtraceSyscall.exit() for unknown error code
 * Project moved to GitHub: https://github.com/haypo/python-ptrace
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   the ``ctypes.get_errno()`` function
@@ -22,7 +22,7 @@ python-ptrace 0.9 (2016-04-23)
 ------------------------------
 
 * Add all Linux syscall prototypes
-* Add error symbols (eg. ENOENT), in addition to error text, for strace
+* Add error symbols (e.g. ENOENT), in addition to error text, for strace
 * Fix open mode so O_RDONLY shows if it's the only file access mode
 * Python 3: fix formatting of string syscall arguments (ex: filenames), decode
   bytes from the locale encoding
@@ -69,7 +69,7 @@ python-ptrace 0.6.5 (2013-06-06)
 --------------------------------
 
 * syscall: fix parsing socketcall on Linux x86
-* syscall: fix protoype of socket()
+* syscall: fix prototype of socket()
 
 python-ptrace 0.6.4 (2012-02-26)
 --------------------------------
@@ -137,7 +137,7 @@ Visible changes:
 * gdb.py: create "dbginfo" command
 * Parse socket syscalls on FreeBSD
 * On invalid memory access (SIGSEGV), eval the dereference expression to get
-  the fault address on OS without siginfo (eg. FreeBSD)
+  the fault address on OS without siginfo (e.g. FreeBSD)
 * Fixes to get minimal Windows support: fix imports, fix locateProgram()
 
 Other changes:
@@ -156,12 +156,12 @@ python-ptrace 0.4.2 (2008-08-28)
 
 * BUGFIX: Fix typo in gdb.py (commands => command_str), it wasn't possible to
   write more than one command...
-* BUGIFX: Fix typo in SignalInfo class (remove "self."). When a process
+* BUGFIX: Fix typo in SignalInfo class (remove "self."). When a process
   received a signal SIGCHLD (because of a fork), the debugger exited because
   of this bug.
 * BUGFIX: Debugger._wait() return abnormal process exit as a normal event,
   the event is not raised as an exception
-* PtraceSignal: don't clear preformatted arguments (eg. arguments of execve)
+* PtraceSignal: don't clear preformatted arguments (e.g. arguments of execve)
 
 python-ptrace 0.4.1 (2008-08-23)
 --------------------------------

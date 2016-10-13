@@ -75,7 +75,7 @@ class ProcessState(object):
         "D": "disk",
         "Z": "zombie",
         "T": "traced",
-        "W": "pagging",
+        "W": "paging",
     }
 
     def __init__(self, stat):
@@ -154,14 +154,14 @@ def readProcesses():
         try:
             yield int(filename)
         except ValueError:
-            # Filename is not an integer (eg. "stat" from /proc/stat)
+            # Filename is not an integer (e.g. "stat" from /proc/stat)
             continue
 
 
 def readProcessCmdline(pid, escape_stat=True):
     """
     Read the process command line. If escape_stat is True, format program name
-    with "[%s]" if the process has no command line, eg. "[khelper]".
+    with "[%s]" if the process has no command line, e.g. "[khelper]".
     """
     # Try /proc/42/cmdline
     try:

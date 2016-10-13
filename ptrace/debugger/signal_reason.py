@@ -116,7 +116,7 @@ class StackOverflow(SignalInfo):
         self.stack_map = stack_map
 
 
-class InvalidMemoryAcces(SignalInfo):
+class InvalidMemoryAccess(SignalInfo):
     NAME = "invalid_mem_access"
     PREFIX = "Invalid memory access"
     PREFIX_ADDR = "Invalid memory access to %s"
@@ -144,13 +144,13 @@ class InvalidMemoryAcces(SignalInfo):
                             process=process, registers=registers)
 
 
-class InvalidRead(InvalidMemoryAcces):
+class InvalidRead(InvalidMemoryAccess):
     NAME = "invalid_read"
     PREFIX = "Invalid read"
     PREFIX_ADDR = "Invalid read from %s"
 
 
-class InvalidWrite(InvalidMemoryAcces):
+class InvalidWrite(InvalidMemoryAccess):
     NAME = "invalid_write"
     PREFIX = "Invalid write"
     PREFIX_ADDR = "Invalid write to %s"

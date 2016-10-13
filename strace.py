@@ -54,9 +54,9 @@ class SyscallTracer(Application):
                           action="store_true", default=False)
         parser.add_option("--output", "-o", help="Write output to specified log file",
                           type="str")
-        parser.add_option("--ignore-regex", help="Regex used to filter syscall names (eg. --ignore='^(gettimeofday|futex|f?stat)')",
+        parser.add_option("--ignore-regex", help="Regex used to filter syscall names (e.g. --ignore='^(gettimeofday|futex|f?stat)')",
                           type="str")
-        parser.add_option("--address", help="Display structure addressl",
+        parser.add_option("--address", help="Display structure address",
                           action="store_true", default=False)
         parser.add_option("--syscalls", '-e', help="Comma separated list of shown system calls (other will be skipped)",
                           type="str", default=None)
@@ -101,7 +101,7 @@ class SyscallTracer(Application):
                 valid_names = list(SYSCALL_NAMES.values())
                 for name in only:
                     if name not in valid_names:
-                        print("ERROR: unknow syscall %r" % name, file=stderr)
+                        print("ERROR: unknown syscall %r" % name, file=stderr)
                         ok = False
                 if not ok:
                     print(file=stderr)

@@ -19,7 +19,7 @@ Example::
     mmap2(0xb7e87000, 81920, 3, 2066, 4, 297) = 0xb7e87000
     rt_sigaction(SIGWINCH, 0xbfb7d4a8, 0xbfb7d41c, 8) = 0
 
-You can get more  informations: result type, value address, argument types, and
+You can get more information: result type, value address, argument types, and
 argument names.
 
 Examples::

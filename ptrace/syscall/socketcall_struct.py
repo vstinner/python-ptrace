@@ -7,7 +7,7 @@ from ptrace.ctypes_tools import ntoh_uint, ntoh_ushort
 
 def ip_int2str(ip):
     """
-    Convert an IP address (as an interger) to a string.
+    Convert an IP address (as an integer) to a string.
 
     >>> ip_int2str(0x7f000001)
     '127.0.0.1'

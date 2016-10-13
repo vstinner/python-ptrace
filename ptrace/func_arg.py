@@ -6,9 +6,9 @@ from ptrace.ctypes_tools import formatAddress
 class FunctionArgument(object):
     """
     Description of a function argument. Attributes:
-     - function: a Function objet
+     - function: a Function object
      - index (int): index of the argument (starting at zero)
-     - options: a FunctionCallOptions objet
+     - options: a FunctionCallOptions object
      - value (int)
      - type (str, optional)
      - text (str): string describing the argument
