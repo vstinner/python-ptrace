@@ -6,7 +6,7 @@
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in doc/changelog.rst
 #  - check that "python setup.py sdist" contains all files tracked by
-#    the SCM (Mercurial): update MANIFEST.in if needed
+#    the SCM (Git): update MANIFEST.in if needed
 #  - git commit -a -m "prepare release VERSION"
 #  - run tests, type: tox
 #  - git push

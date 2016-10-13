@@ -25,7 +25,7 @@ Get the latest tarball at the `Python Package Index (PyPI)
 Download development version
 ----------------------------
 
-Download the development version using Mercurial::
+Download the development version using Git::
 
     git clone https://github.com/haypo/python-ptrace.git
 
