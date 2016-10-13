@@ -11,7 +11,7 @@ Linux packages
 * Arch Linux: `python-ptrace Arch Linux package <http://aur.archlinux.org/packages.php?ID=19609>`_
 * Gentoo: `dev-python/python-ptrace <http://packages.gentoo.org/package/dev-python/python-ptrace>`_
 
-See also `python-ptrace on Python Package Index (PyPI) <http://pypi.python.org/pypi/python-ptrace>`_
+See also `python-ptrace on Python Package Index (PyPI) <https://pypi.python.org/pypi/python-ptrace>`_
 
 Install from source
 ===================
@@ -20,7 +20,7 @@ Download tarball
 ----------------
 
 Get the latest tarball at the `Python Package Index (PyPI)
-<http://pypi.python.org/pypi/python-ptrace>`_.
+<https://pypi.python.org/pypi/python-ptrace>`_.
 
 Download development version
 ----------------------------

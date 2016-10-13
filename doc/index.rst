@@ -10,7 +10,7 @@ trace processes) written in Python.
 * `python-ptrace at GitHub
   <https://github.com/haypo/python-ptrace>`_
 * `python-ptrace at the Python Cheeseshop (PyPI)
-  <http://pypi.python.org/pypi/python-ptrace>`_
+  <https://pypi.python.org/pypi/python-ptrace>`_
 
 python-ptrace is an opensource project written in Python under GNU GPLv2
 license.
