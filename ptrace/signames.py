@@ -11,9 +11,9 @@ PREFERRED_NAMES = ("SIGABRT", "SIGHUP", "SIGCHLD", "SIGPOLL")
 
 def getSignalNames():
     """
-    Create signal names dictionay (eg. 9 => 'SIGKILL') using dir(signal).
+    Create signal names dictionary (e.g. 9 => 'SIGKILL') using dir(signal).
     If multiple signal names have the same number, use the first matching name
-    in PREFERRED_NAME to select preferred name (eg. SIGIOT=SIGABRT=17).
+    in PREFERRED_NAME to select preferred name (e.g. SIGIOT=SIGABRT=17).
     """
     import signal
     allnames = {}

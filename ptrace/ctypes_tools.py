@@ -137,21 +137,21 @@ def formatAddress(address):
 
 def formatAddressRange(start, end):
     """
-    Format an address range, eg. "0x80004000-0x8000ffff".
+    Format an address range, e.g. "0x80004000-0x8000ffff".
     """
     return u"%s-%s" % (formatWordHex(start), formatWordHex(end))
 
 
 def ntoh_ushort(value):
     """
-    Convert an unsigned short integer from network endiant to host endian.
+    Convert an unsigned short integer from network endian to host endian.
     """
     return unpack("<H", pack(">H", value))[0]
 
 
 def ntoh_uint(value):
     """
-    Convert an unsigned integer from network endiant to host endian.
+    Convert an unsigned integer from network endian to host endian.
     """
     return unpack("<I", pack(">I", value))[0]
 
@@ -172,14 +172,14 @@ def bytes2word(bytes):
 
 def bytes2type(bytes, type):
     """
-    Cast a bytes string to an objet of the specified type.
+    Cast a bytes string to an object of the specified type.
     """
     return cast(bytes, POINTER(type))[0]
 
 
 def bytes2array(bytes, basetype, size):
     """
-    Cast a bytes string to an array of objets of the specified type
+    Cast a bytes string to an array of objects of the specified type
     and size.
     """
     return bytes2type(bytes, basetype * size)

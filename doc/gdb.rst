@@ -64,8 +64,8 @@ Features
   (ex: ``print *($ebx+0xc)``).
 
 
-Screnshot
-=========
+Screenshot
+==========
 
 ::
 

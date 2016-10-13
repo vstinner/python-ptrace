@@ -88,7 +88,7 @@ class PtraceProcess(object):
        - getInstrPointer(): get the instruction pointer
        - getStackPointer(): get the stack pointer
        - getFramePointer(): get the stack pointer
-       - getregs(): get all registers, eg. regs=getregs(); print regs.eax
+       - getregs(): get all registers, e.g. regs=getregs(); print regs.eax
        - disassemble(): assembler code of the next instructions
        - disassembleOne(): assembler code of the next instruction
        - findStack(): get stack memory mapping

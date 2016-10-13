@@ -62,7 +62,7 @@ COMMANDS = (
 
     # current process info
     ("regs", "display registers"),
-    ("where", "display true code content (show breakpoints effects on code). eg. 'where $eip', 'where $eip $eip+20'"),
+    ("where", "display true code content (show breakpoints effects on code). e.g. 'where $eip', 'where $eip $eip+20'"),
     ("print", "display a value (print <value>)"),
     ("hexdump", "dump memory as specified address or address range (hexdump <address> or hexdump <start> <stop>)"),
     ("gcore", "generate core file of the process"),
@@ -78,11 +78,11 @@ COMMANDS = (
     ("delete", "delete a breakpoint (delete <address>)"),
 
     # processes
-    ("attach", 'attach a new process (eg. "attach 2390")'),
+    ("attach", 'attach a new process (e.g. "attach 2390")'),
     ("proclist", "list of traced processes"),
     ("switch", "switch active process (switch or switch <pid>)"),
 
-    ("follow", r'''follow a term (eg. "follow '\x12\x14\x27\x13'")'''),
+    ("follow", r'''follow a term (e.g. "follow '\x12\x14\x27\x13'")'''),
     ("showfollow", 'show all "followed" terms'),
     ("resetfollow", 'reset all "followed" terms'),
     ("xray", 'show addresses of (and possible pointers to) "followed" terms'),
@@ -603,7 +603,7 @@ class Gdb(Application):
     def newProcess(self, event):
         error("New process: %s" % event.process)
 
-    # FIXME: This function doesn't work multiple multiple processes
+    # FIXME: This function doesn't work with multiple processes
     # especially when a parent waits for a child
     def syscallTrace(self):
         # Trace until syscall enter
@@ -736,7 +736,7 @@ class Gdb(Application):
         error("Value can be an hexadecimal/decimal number or a register name ($reg)")
         error("You can use operators a+b, a-b, a*b, a/b, a<<b, a>>b, a**b, and parenthesis in expressions")
         error(
-            'Use ";" to write multiple commands on the same line (eg. "step; print $eax")')
+            'Use ";" to write multiple commands on the same line (e.g. "step; print $eax")')
 
     def processSignal(self, event):
         event.display()

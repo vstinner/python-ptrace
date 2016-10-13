@@ -16,12 +16,12 @@ from ptrace.error import PtraceError
 from ptrace import signalName
 from ptrace.debugger.signal_reason import (
     DivisionByZero, Abort, StackOverflow,
-    InvalidMemoryAcces, InvalidRead, InvalidWrite,
+    InvalidMemoryAccess, InvalidRead, InvalidWrite,
     InstructionError, ChildExit)
 from ptrace.debugger.parse_expr import parseExpression
 import re
 
-# Match a pointer dereference (eg. "DWORD [EDX+0x8]")
+# Match a pointer dereference (e.g. "DWORD [EDX+0x8]")
 DEREF_REGEX = r'(?P<deref_size>(BYTE|WORD|DWORD|DQWORD) )?\[(?P<deref>[^]]+)\]'
 
 NAMED_WORD_SIZE = {
@@ -31,7 +31,7 @@ NAMED_WORD_SIZE = {
     'DQWORD': 8,
 }
 
-# Match any Intel instruction (eg. "ADD")
+# Match any Intel instruction (e.g. "ADD")
 INSTR_REGEX = '(?:[A-Z]{3,10})'
 
 
@@ -85,7 +85,7 @@ class ProcessSignal(ProcessEvent):
     def memoryFaultInstr(self, instr, fault_address):
         asm = instr.text
 
-        # Invalid write (eg. "MOV [...], value")
+        # Invalid write (e.g. "MOV [...], value")
         match = re.search(r"^(?:MOV|TEST)[A-Z]* %s," % DEREF_REGEX, asm)
         if match:
             if fault_address is None:
@@ -94,7 +94,7 @@ class ProcessSignal(ProcessEvent):
                                        instr=instr, process=self.process)
             return
 
-        # Invalid read (eg. "CMP BYTE [EAX+EDX-0x1], 0x0")
+        # Invalid read (e.g. "CMP BYTE [EAX+EDX-0x1], 0x0")
         match = re.search(r"^%s %s," % (INSTR_REGEX, DEREF_REGEX), asm)
         if match:
             if fault_address is None:
@@ -103,7 +103,7 @@ class ProcessSignal(ProcessEvent):
                                       instr=instr, process=self.process)
             return
 
-        # Invalid read (eg. "MOV reg, [...]")
+        # Invalid read (e.g. "MOV reg, [...]")
         match = re.match(r"%s [^,]+, %s" % (INSTR_REGEX, DEREF_REGEX), asm)
         if match:
             if fault_address is None:
@@ -112,7 +112,7 @@ class ProcessSignal(ProcessEvent):
                                       instr=instr, process=self.process)
             return
 
-        # MOVS* and SCAS* instructions (eg. "MOVSB" or "REP SCASD")
+        # MOVS* and SCAS* instructions (e.g. "MOVSB" or "REP SCASD")
         match = re.search(
             r"^(?:REP(?:NZ)? )?(?P<operator>MOVS|SCAS)(?P<suffix>[BWD])?", asm)
         if match:
@@ -123,7 +123,7 @@ class ProcessSignal(ProcessEvent):
         operator = match.group("operator")
         suffix = match.group("suffix")
         size = {'B': 1, 'W': 2, 'D': 4}.get(suffix)
-        error_cls = InvalidMemoryAcces
+        error_cls = InvalidMemoryAccess
         try:
             process = self.process
             if CPU_64BITS:
@@ -199,7 +199,7 @@ class ProcessSignal(ProcessEvent):
                 return
 
         # Last chance: use generic invalid memory access error
-        self.reason = InvalidMemoryAcces(
+        self.reason = InvalidMemoryAccess(
             fault_address, instr=instr, process=self.process)
 
     def mathError(self):

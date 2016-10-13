@@ -3,7 +3,7 @@ import re
 # Match a register name: $eax, $gp0, $orig_eax
 REGISTER_REGEX = re.compile(r"([a-z]+[a-z0-9_]+)")
 
-# Hexadacimel number (eg. 0xa)
+# Hexadecimal number (e.g. 0xa)
 HEXADECIMAL_REGEX = re.compile(r"0x[0-9a-f]+")
 
 # Make sure that the expression does not contain invalid characters

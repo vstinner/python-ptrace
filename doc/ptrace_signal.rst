@@ -7,17 +7,17 @@ python-ptrace signal handling
 Introduction
 ============
 
-PtraceSignal tries to display useful informations when a signal is received.
-Depending on the signal number, it show different informations.
+PtraceSignal tries to display useful information when a signal is received.
+Depending on the signal number, it shows different information.
 
 It uses the current instruction decoded as assembler code to understand why
 the signal is raised.
 
 Only Intel x86 (i386, maybe x86_64) is supported now.
 
-When a process receives a signal, python-ptrace tries to explain why the signal was emited.
+When a process receives a signal, python-ptrace tries to explain why the signal was emitted.
 
-General informations (not shown for all signals, eg. not for SIGABRT):
+General information (not shown for all signals, e.g. not for SIGABRT):
 
 * CPU instruction causing the crash
 * CPU registers related to the crash
@@ -77,7 +77,7 @@ Invalid memory read/write (SIGSEGV)
     - mapping: 0x00000008..0x0000000b is not mapped in memory
     - register eax=0x00000000
 
-Given informations:
+Given information:
 
 * Address of the segmentation fault
 * (if possible) Size of the invalid memory read/write
@@ -107,7 +107,7 @@ Child exit (SIGCHLD)
     Child process 24009 exited normally
     Signal sent by user 1000
 
-Informations:
+Information:
 
 * Child process identifier
 * Child process user identifier

@@ -86,7 +86,7 @@ Similar projects
 * `strace <http://sourceforge.net/projects/strace/>`_ program (Linux, BSD)
 * ltrace program (Linux)
 * truss program (Solaris and BSD)
-* `pytstop <http://www.secdev.org/projects/pytstop/>`_ by Philippe Biondi: debugger similar to gdb but in very alpha stage (eg. no disassembler), using ptrace Python binding written in C (from subterfuge)
+* `pytstop <http://www.secdev.org/projects/pytstop/>`_ by Philippe Biondi: debugger similar to gdb but in very alpha stage (e.g. no disassembler), using ptrace Python binding written in C (from subterfuge)
 * `strace.py <http://www.secdev.org/articles/reverse/strace.py>`_ by Philippe Biondi
 * `Fenris <http://lcamtuf.coredump.cx/fenris/>`_: suite of tools suitable for code analysis, debugging, protocol analysis, reverse engineering, forensics, diagnostics, security audits, vulnerability research
 * `PyDBG <http://pedram.redhive.com/PaiMei/docs/>`_: Windows debugger written in pure Python
