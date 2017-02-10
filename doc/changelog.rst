@@ -3,6 +3,12 @@
 Changelog
 =========
 
+python-ptrace 0.9.2
+-------------------
+
+* Issue #35: Fix strace.py when tracing multiple processes: use the correct
+  process. Fix suggested by Daniel Trnka.
+
 python-ptrace 0.9.1 (2016-10-12)
 --------------------------------
 
