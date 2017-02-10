@@ -212,6 +212,7 @@ def ptrace_pokeuser(pid, address, word):
 def ptrace_kill(pid):
     ptrace(PTRACE_KILL, pid)
 
+
 if HAS_PTRACE_EVENTS:
     def WPTRACEEVENT(status):
         return status >> 16

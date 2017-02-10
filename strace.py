@@ -267,5 +267,6 @@ class SyscallTracer(Application):
             program[0], program, pid))
         return pid
 
+
 if __name__ == "__main__":
     SyscallTracer().main()

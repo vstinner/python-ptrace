@@ -75,5 +75,6 @@ class TestGdb(unittest.TestCase):
         self.check_stdout(b'^python-ptrace version [0-9]+\\.[0-9]+', stdout)
         self.check_stdout(b'^Website: ', stdout)
 
+
 if __name__ == "__main__":
     unittest.main()

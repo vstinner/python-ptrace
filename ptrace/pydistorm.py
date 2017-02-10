@@ -71,6 +71,7 @@ class _DecodedInst(Structure):
     def __str__(self):
         return "%s %s" % (self.mnemonic, self.operands)
 
+
 internal_decode.argtypes = (_OffsetType, c_void_p,
                             c_int, c_int, c_void_p, c_uint, POINTER(c_uint))
 

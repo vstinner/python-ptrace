@@ -77,6 +77,7 @@ def formatBits(value, bitmasks, empty_text=None, format_value=str):
         else:
             return str(value)
 
+
 LOCAL_TIMEZONE_OFFSET = datetime.fromtimestamp(
     0) - datetime.utcfromtimestamp(0)
 

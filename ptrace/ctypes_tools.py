@@ -110,6 +110,7 @@ def uint2int32(value):
         v = value
     return v
 
+
 uint2int = uint2int32
 int2uint = int2uint32
 if CPU_64BITS:

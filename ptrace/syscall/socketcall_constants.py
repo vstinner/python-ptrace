@@ -72,6 +72,7 @@ def formatSocketType(argument):
         text += '|SOCK_CLOEXEC'
     return text
 
+
 SOCKET_PROTOCOL = {
     1: "IPPROTO_ICMP",
     58: "IPPROTO_ICMPV6",

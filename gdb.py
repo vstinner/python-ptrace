@@ -885,5 +885,6 @@ class Gdb(Application):
         error("Quit gdb.")
         self.restoreTerminal()
 
+
 if __name__ == "__main__":
     Gdb().main()

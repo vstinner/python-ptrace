@@ -145,6 +145,7 @@ class user_fpregs_struct(Structure):
             ("st_space", c_ulong * 20)
         )
 
+
 if not CPU_64BITS:
     class user_fpxregs_struct(Structure):
         _fields_ = (

@@ -39,6 +39,8 @@ def getSignalNames():
             name = names[0]
         signames[signum] = name
     return signames
+
+
 SIGNAMES = getSignalNames()
 
 

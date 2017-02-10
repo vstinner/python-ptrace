@@ -14,6 +14,7 @@ MMAP_PROT_BITMASK = (
 def formatMmapProt(argument):
     return formatBits(argument.value, MMAP_PROT_BITMASK, "PROT_NONE")
 
+
 # From /usr/include/bits/mman.h (Ubuntu Feisty, i386)
 ACCESS_MODE_BITMASK = (
     (1, "X_OK"),
@@ -24,6 +25,7 @@ ACCESS_MODE_BITMASK = (
 
 def formatAccessMode(argument):
     return formatBits(argument.value, ACCESS_MODE_BITMASK, "F_OK")
+
 
 # From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
 OPEN_MODE_BITMASK = [
@@ -61,6 +63,7 @@ def formatOpenMode(argument):
         text = "%s (%s)" % (text, oct(argument.value))
     return text
 
+
 CLONE_FLAGS_BITMASK = (
     (0x00000100, "CLONE_VM"),
     (0x00000200, "CLONE_FS"),
@@ -95,6 +98,7 @@ def formatCloneFlags(argument):
         return "<%s> (%s)" % (bits, str(flags))
     else:
         return str(flags)
+
 
 AT_FDCWD = -100
 

@@ -241,4 +241,6 @@ def getSystemBoot():
         if getSystemBoot.value is None:
             raise ProcError("Unable to read system boot time!")
     return getSystemBoot.value
+
+
 getSystemBoot.value = None

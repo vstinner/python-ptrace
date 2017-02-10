@@ -15,6 +15,7 @@ def ip_int2str(ip):
     ip_bytes = pack("!I", ip)
     return inet_ntoa(ip_bytes)
 
+
 if RUNNING_BSD:
     sa_family_t = c_ubyte
 else:
@@ -99,6 +100,7 @@ class sockaddr_un(Structure):
         ("sun_family", sa_family_t),
         ("sun_path", c_char * 108),
     )
+
 
 # Netlink socket
 if RUNNING_LINUX:
