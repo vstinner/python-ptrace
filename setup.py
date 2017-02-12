@@ -17,7 +17,9 @@
 #
 #  - git tag python-ptrace-VERSION
 #  - git push --tags
-#  - python3 setup.py sdist register bdist_wheel upload
+#  - rm -rf dist/
+#  - python3 setup.py sdist bdist_wheel
+#  - twine upload dist/*
 #
 # After the release:
 #
