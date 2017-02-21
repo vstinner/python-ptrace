@@ -292,12 +292,8 @@ class PtraceProcess(object):
             return
         self.is_attached = False
         if self.running:
-            if self.was_attached:
-                info("Detach %s" % self)
-                ptrace_detach(self.pid)
-            elif self.is_stopped:
-                info("Continue process %s execution" % self.pid)
-                self.cont()
+            info("Detach %s" % self)
+            ptrace_detach(self.pid)
         self.debugger.deleteProcess(process=self)
 
     def _notRunning(self):
