@@ -5,7 +5,6 @@ from os import (
     fork, execvp, execvpe, waitpid,
     close, dup2, pipe,
     read, write, devnull, sysconf, listdir, stat)
-from os.path import isdir
 from sys import exc_info
 from traceback import format_exception
 from ptrace.os_tools import RUNNING_WINDOWS, RUNNING_FREEBSD, HAS_PROC
