@@ -4,11 +4,11 @@ Error pipe and serialization code comes from Python 2.5 subprocess module.
 from os import (
     fork, execvp, execvpe, waitpid,
     close, dup2, pipe,
-    read, write, devnull, sysconf, listdir)
+    read, write, devnull, sysconf, listdir, stat)
 from os.path import isdir
 from sys import exc_info
 from traceback import format_exception
-from ptrace.os_tools import RUNNING_WINDOWS
+from ptrace.os_tools import RUNNING_WINDOWS, RUNNING_FREEBSD, HAS_PROC
 from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
@@ -98,15 +98,29 @@ def _closeFdsExcept(fds, ignore_fds):
 
 
 def _closeFds(ignore_fds):
-    for path in ['/proc/self/fd', '/dev/fd']:
+    path = None
+    if HAS_PROC:
+        path = '/proc/self/fd'
+    elif _hasDevFd():
+        path = '/dev/fd'
+
+    if path:
         try:
-            if isdir(path):
-                _closeFdsExcept([int(i) for i in listdir(path)], ignore_fds)
-                return
+            _closeFdsExcept([int(i) for i in listdir(path)], ignore_fds)
+            return
         except OSError:
             pass
 
     _closeFdsExcept(range(0, MAXFD), ignore_fds)
+
+
+def _hasDevFd():
+    try:
+        # have fdescfs if /dev/fd is on different device
+        # see https://github.com/python/cpython/blob/master/Modules/_posixsubprocess.c
+        return RUNNING_FREEBSD and stat("/dev/fd/").st_dev != stat("/dev/").st_dev
+    except OSError:
+        return False
 
 
 def _createChild(arguments, no_stdout, env, errpipe_write):
