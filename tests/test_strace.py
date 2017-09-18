@@ -61,7 +61,7 @@ class TestStrace(unittest.TestCase):
         else:
             code = 'open(%r).close()' % __file__
         self.assert_syscall(code,
-                            br"^open\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
+                            br"^open(at)?\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
 
     def test_chdir(self):
         self.assert_syscall(
