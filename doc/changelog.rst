@@ -3,6 +3,11 @@
 Changelog
 =========
 
+python-ptrace 0.9.3 (2017-09-19)
+--------------------------------
+
+* Issue #42: Fix test_strace.py: tolerate the openat() syscall.
+
 python-ptrace 0.9.2 (2017-02-12)
 --------------------------------
 
