@@ -91,7 +91,7 @@ class PtraceDebugger(object):
                 % pid)
         except ProcessSignal as event:
             event.display()
-        except:
+        except:   # noqa: E722
             process.is_attached = False
             process.detach()
             raise
