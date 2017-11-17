@@ -27,10 +27,10 @@ Download development version
 
 Download the development version using Git::
 
-    git clone https://github.com/haypo/python-ptrace.git
+    git clone https://github.com/vstinner/python-ptrace.git
 
 `Browse python-ptrace source code
-<https://github.com/haypo/python-ptrace>`_.
+<https://github.com/vstinner/python-ptrace>`_.
 
 
 python-ptrace dependencies

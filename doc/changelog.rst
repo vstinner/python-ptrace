@@ -23,7 +23,7 @@ python-ptrace 0.9.1 (2016-10-12)
 * Allow command names without absolute path.
 * Fix ptrace binding: clear errno before calling ptrace().
 * Fix PtraceSyscall.exit() for unknown error code
-* Project moved to GitHub: https://github.com/haypo/python-ptrace
+* Project moved to GitHub: https://github.com/vstinner/python-ptrace
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   the ``ctypes.get_errno()`` function
 * Remove the ``ptrace.ctypes_errno`` module: use directly
