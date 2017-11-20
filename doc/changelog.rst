@@ -110,7 +110,7 @@ python-ptrace 0.6.1 (2009-11-07)
 
 * Create follow, showfollow, resetfollow, xray commands in gdb.py. Patch
   written by Dimitris Glynos
-* Project website moved to http://bitbucket.org/haypo/python-ptrace/
+* Project website moved to: ``http://bitbucket.org/haypo/python-ptrace/``
 * Replace types (u)intXX_t by c_(u)intXX
 * Create MemoryMapping.search() method and MemoryMapping now keeps a weak
   reference to the process

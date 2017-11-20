@@ -11,7 +11,7 @@
 #  - run tests, type: tox
 #  - git push
 #  - check Travis status:
-#    https://travis-ci.org/haypo/python-ptrace
+#    https://travis-ci.org/vstinner/python-ptrace
 #
 # Release a new version:
 #
