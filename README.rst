@@ -10,6 +10,10 @@ python-ptrace
    :alt: Build status of python-ptrace on Travis CI
    :target: https://travis-ci.org/vstinner/python-ptrace
 
+.. image:: http://unmaintained.tech/badge.svg
+   :target: http://unmaintained.tech/
+   :alt: No Maintenance Intended
+
 python-ptrace is a debugger using ptrace (Linux, BSD and Darwin system call to
 trace processes) written in Python.
 
