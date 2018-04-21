@@ -8,7 +8,7 @@ trace processes) written in Python.
 * `python-ptrace documentation
   <http://python-ptrace.readthedocs.io/>`_
 * `python-ptrace at GitHub
-  <https://github.com/haypo/python-ptrace>`_
+  <https://github.com/vstinner/python-ptrace>`_
 * `python-ptrace at the Python Cheeseshop (PyPI)
   <https://pypi.python.org/pypi/python-ptrace>`_
 

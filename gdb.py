@@ -594,7 +594,7 @@ class Gdb(Application):
             self.process.waitSignals(SIGTRAP)
             if breakpoint:
                 breakpoint.desinstall(set_ip=True)
-        except:
+        except:   # noqa: E722
             if breakpoint:
                 breakpoint.desinstall()
             raise

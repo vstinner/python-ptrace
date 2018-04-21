@@ -19,7 +19,7 @@ def writeBacktrace(logger, log_level=ERROR):
             for line in trace.split("\n"):
                 log_func(line.rstrip())
             return
-    except:
+    except Exception:
         pass
     log_func("Unable to get backtrace")
 

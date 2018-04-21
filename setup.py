@@ -11,13 +11,13 @@
 #  - run tests, type: tox
 #  - git push
 #  - check Travis status:
-#    https://travis-ci.org/haypo/python-ptrace
+#    https://travis-ci.org/vstinner/python-ptrace
 #
 # Release a new version:
 #
 #  - git tag python-ptrace-VERSION
 #  - git push --tags
-#  - rm -rf dist/
+#  - git clean -fdx  # WARNING: Remove all untracked files!
 #  - python3 setup.py sdist bdist_wheel
 #  - twine upload dist/*
 #

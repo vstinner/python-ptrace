@@ -86,7 +86,7 @@ Screenshot
     Process ID: 16182
     Process command line: [['/bin/ls']
     Process|environment: ['TERM=xterm', 'SHELL=/bin/bash', (...)]]
-    Process working directory: /home/haypo/prog/fusil/ptrace/trunk
+    Process working directory: /home/vstinner/prog/fusil/ptrace/trunk
     (gdb) stack
     STACK: 0xbfc58000..0xbfc6e000
     STACK -8: 0x00000000

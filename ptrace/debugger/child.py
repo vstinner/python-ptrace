@@ -17,7 +17,7 @@ import pickle
 
 try:
     MAXFD = sysconf("SC_OPEN_MAX")
-except:
+except Exception:
     MAXFD = 256
 
 
@@ -104,7 +104,7 @@ def _createChild(arguments, no_stdout, env, errpipe_write):
             pass
     try:
         _execChild(arguments, no_stdout, env)
-    except:
+    except:   # noqa: E722
         exc_type, exc_value, tb = exc_info()
         # Save the traceback and attach it to the exception object
         exc_lines = format_exception(exc_type, exc_value, tb)

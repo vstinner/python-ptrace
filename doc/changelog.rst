@@ -3,6 +3,11 @@
 Changelog
 =========
 
+python-ptrace 0.9.3 (2017-09-19)
+--------------------------------
+
+* Issue #42: Fix test_strace.py: tolerate the openat() syscall.
+
 python-ptrace 0.9.2 (2017-02-12)
 --------------------------------
 
@@ -18,7 +23,7 @@ python-ptrace 0.9.1 (2016-10-12)
 * Allow command names without absolute path.
 * Fix ptrace binding: clear errno before calling ptrace().
 * Fix PtraceSyscall.exit() for unknown error code
-* Project moved to GitHub: https://github.com/haypo/python-ptrace
+* Project moved to GitHub: https://github.com/vstinner/python-ptrace
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   the ``ctypes.get_errno()`` function
 * Remove the ``ptrace.ctypes_errno`` module: use directly
@@ -105,7 +110,7 @@ python-ptrace 0.6.1 (2009-11-07)
 
 * Create follow, showfollow, resetfollow, xray commands in gdb.py. Patch
   written by Dimitris Glynos
-* Project website moved to http://bitbucket.org/haypo/python-ptrace/
+* Project website moved to: ``http://bitbucket.org/haypo/python-ptrace/``
 * Replace types (u)intXX_t by c_(u)intXX
 * Create MemoryMapping.search() method and MemoryMapping now keeps a weak
   reference to the process
