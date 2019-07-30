@@ -45,7 +45,7 @@ SCRIPTS = ("strace.py", "gdb.py")
 
 CLASSIFIERS = [
     'Intended Audience :: Developers',
-    'Development Status :: 4 - Beta',
+    'Development Status :: 7 - Inactive',
     'Environment :: Console',
     'License :: OSI Approved :: GNU General Public License (GPL)',
     'Operating System :: OS Independent',

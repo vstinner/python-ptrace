@@ -6,7 +6,9 @@ Changelog
 python-ptrace 0.9.4
 -------------------
 
+* Issue #36: Fix detaching from process object created without is_attached=True
 * The project now requires the six module.
+* Project moved to: https://github.com/vstinner/python-ptrace
 
 python-ptrace 0.9.3 (2017-09-19)
 --------------------------------
@@ -28,7 +30,7 @@ python-ptrace 0.9.1 (2016-10-12)
 * Allow command names without absolute path.
 * Fix ptrace binding: clear errno before calling ptrace().
 * Fix PtraceSyscall.exit() for unknown error code
-* Project moved to GitHub: https://github.com/vstinner/python-ptrace
+* Project moved to GitHub: https://github.com/haypo/python-ptrace
 * Remove the ``ptrace.ctypes_errno`` module: use directly
   the ``ctypes.get_errno()`` function
 * Remove the ``ptrace.ctypes_errno`` module: use directly
