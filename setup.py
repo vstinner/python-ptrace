@@ -5,7 +5,7 @@
 #  - git pull --rebase  # check that there is no incoming changesets
 #  - check version in ptrace/version.py and doc/conf.py
 #  - set release date in doc/changelog.rst
-#  - check that "python setup.py sdist" contains all files tracked by
+#  - check that "python3 setup.py sdist" contains all files tracked by
 #    the SCM (Git): update MANIFEST.in if needed
 #  - git commit -a -m "prepare release VERSION"
 #  - Remove untracked files/dirs: git clean -fdx
@@ -16,7 +16,7 @@
 #
 # Release a new version:
 #
-#  - git tag python-ptrace-VERSION
+#  - git tag VERSION
 #  - git push --tags
 #  - Remove untracked files/dirs: git clean -fdx
 #  - python3 setup.py sdist bdist_wheel
