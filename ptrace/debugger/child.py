@@ -120,7 +120,7 @@ def _execChild(arguments, no_stdout, env):
             dup2(null.fileno(), 1)
             dup2(1, 2)
             null.close()
-        except IOError as err:
+        except IOError:
             close(2)
             close(1)
     try:

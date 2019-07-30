@@ -9,7 +9,7 @@ Python binding of diStorm64 library written by Victor Stinner
 """
 
 from ctypes import cdll, c_long, c_ulong, c_int, c_uint, c_char, POINTER, Structure, addressof, byref, c_void_p, create_string_buffer, sizeof, cast
-from six import binary_type
+from six import binary_type, integer_types
 
 # Define (u)int32_t and (u)int64_t types
 int32_t = c_int
@@ -81,7 +81,7 @@ def Decode(codeOffset, code, dt=Decode32Bits):
     Errors: TypeError, IndexError, MemoryError, ValueError
     """
     # Check arguments
-    if not isinstance(codeOffset, (int, long)):
+    if not isinstance(codeOffset, integer_types):
         raise TypeError("codeOffset have to be an integer")
     if not isinstance(code, binary_type):
         raise TypeError("code have to be a %s, not %s"

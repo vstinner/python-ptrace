@@ -534,7 +534,7 @@ class Gdb(Application):
             if not key.startswith("$"):
                 return 'Register name (%s) have to start with "$"' % key
             key = key[1:]
-        except ValueError as err:
+        except ValueError:
             return "Invalid command: %r" % command
         try:
             value = self.parseInteger(value)
