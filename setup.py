@@ -8,6 +8,7 @@
 #  - check that "python setup.py sdist" contains all files tracked by
 #    the SCM (Git): update MANIFEST.in if needed
 #  - git commit -a -m "prepare release VERSION"
+#  - Remove untracked files/dirs: git clean -fdx
 #  - run tests, type: tox
 #  - git push
 #  - check Travis status:
@@ -17,7 +18,7 @@
 #
 #  - git tag python-ptrace-VERSION
 #  - git push --tags
-#  - git clean -fdx  # WARNING: Remove all untracked files!
+#  - Remove untracked files/dirs: git clean -fdx
 #  - python3 setup.py sdist bdist_wheel
 #  - twine upload dist/*
 #

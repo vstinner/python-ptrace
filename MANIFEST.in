@@ -6,6 +6,8 @@ include MANIFEST.in
 include README.cptrace
 include TODO
 include tox.ini
+include SYSCALL_PROTOTYPES.codegen.py
+
 include cptrace/Makefile
 include cptrace/cptrace.c
 include cptrace/version.py
