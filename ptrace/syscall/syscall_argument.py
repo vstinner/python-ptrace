@@ -14,6 +14,8 @@ from ptrace.syscall.socketcall_constants import SOCKETCALL
 import os
 import re
 
+import six
+
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
 from ptrace.syscall.socketcall_constants import formatSocketType
@@ -25,8 +27,6 @@ elif RUNNING_FREEBSD:
     from ptrace.syscall.freebsd_constants import SYSCALL_ARG_DICT
 else:
     SYSCALL_ARG_DICT = {}
-
-import six
 
 
 KNOWN_STRUCTS = []
@@ -137,7 +137,7 @@ class SyscallArgument(FunctionArgument):
             return formatAddress(self.value)
 
         # Array like "int[2]"
-        match = re.match("(.*)\[([0-9])+\]", argtype)
+        match = re.match(r"(.*)\[([0-9])+\]", argtype)
         if match:
             basetype = match.group(1)
             count = int(match.group(2))
