@@ -14,10 +14,6 @@ python-ptrace
    :alt: Build status of python-ptrace on Travis CI
    :target: https://travis-ci.org/vstinner/python-ptrace
 
-.. image:: http://unmaintained.tech/badge.svg
-   :target: http://unmaintained.tech/
-   :alt: No Maintenance Intended
-
 **This project is no longer maintained and is looking for a new maintainer.**
 
 python-ptrace is a debugger using ptrace (Linux, BSD and Darwin system call to
