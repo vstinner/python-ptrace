@@ -74,6 +74,7 @@ install_options = {
     "packages": list(PACKAGES.keys()),
     "package_dir": PACKAGES,
     "scripts": SCRIPTS,
+    "install_requires": ["six"],
 }
 
 setup(**install_options)

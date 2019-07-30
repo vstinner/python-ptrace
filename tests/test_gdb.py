@@ -4,7 +4,8 @@ import re
 import subprocess
 import sys
 import unittest
-from ptrace import six
+
+import six
 
 GDB = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'gdb.py'))
 

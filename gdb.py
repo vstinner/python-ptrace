@@ -18,7 +18,7 @@ from ptrace.process_tools import dumpProcessInfo
 from ptrace.tools import inverseDict
 from ptrace.func_call import FunctionCallOptions
 from ptrace.signames import signalName, SIGNAMES
-from ptrace.six import PY3, binary_type
+from six import PY3, binary_type
 from signal import SIGTRAP, SIGINT
 from ptrace.terminal import enableEchoMode, terminalWidth
 from errno import ESRCH

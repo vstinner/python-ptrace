@@ -1,7 +1,7 @@
 from ptrace.ctypes_tools import formatAddress, formatWordHex
 from ptrace.cpu_info import CPU_WORD_SIZE, CPU_MAX_UINT
 from ptrace import PtraceError
-from ptrace.six.moves import xrange
+from six.moves import xrange
 
 
 class BacktraceFrame(object):

@@ -5,7 +5,9 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from ptrace import six
+
+import six
+
 
 STRACE = os.path.normpath(os.path.join(
     os.path.dirname(__file__), '..', 'strace.py'))

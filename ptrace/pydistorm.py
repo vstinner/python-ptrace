@@ -9,7 +9,7 @@ Python binding of diStorm64 library written by Victor Stinner
 """
 
 from ctypes import cdll, c_long, c_ulong, c_int, c_uint, c_char, POINTER, Structure, addressof, byref, c_void_p, create_string_buffer, sizeof, cast
-from ptrace.six import binary_type
+from six import binary_type
 
 # Define (u)int32_t and (u)int64_t types
 int32_t = c_int

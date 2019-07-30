@@ -13,7 +13,7 @@ from ptrace.syscall.socketcall import (setupSocketCall,
 from ptrace.syscall.socketcall_constants import SOCKETCALL
 import os
 import re
-from ptrace import six
+
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
 from ptrace.syscall.socketcall_constants import formatSocketType
@@ -25,6 +25,9 @@ elif RUNNING_FREEBSD:
     from ptrace.syscall.freebsd_constants import SYSCALL_ARG_DICT
 else:
     SYSCALL_ARG_DICT = {}
+
+import six
+
 
 KNOWN_STRUCTS = []
 if RUNNING_LINUX:

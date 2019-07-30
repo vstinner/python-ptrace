@@ -3,6 +3,11 @@
 Changelog
 =========
 
+python-ptrace 0.9.4
+-------------------
+
+* The project now requires the six module.
+
 python-ptrace 0.9.3 (2017-09-19)
 --------------------------------
 
