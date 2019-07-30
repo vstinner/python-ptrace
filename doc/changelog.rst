@@ -3,8 +3,8 @@
 Changelog
 =========
 
-python-ptrace 0.9.4
--------------------
+python-ptrace 0.9.4 (2019-07-30)
+--------------------------------
 
 * Issue #36: Fix detaching from process object created without is_attached=True
 * The project now requires the six module.
