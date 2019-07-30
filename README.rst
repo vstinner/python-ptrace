@@ -2,6 +2,10 @@
 python-ptrace
 =============
 
+.. image:: http://unmaintained.tech/badge.svg
+   :target: http://unmaintained.tech/
+   :alt: No Maintenance Intended
+
 .. image:: https://img.shields.io/pypi/v/python-ptrace.svg
    :alt: Latest release on the Python Cheeseshop (PyPI)
    :target: https://pypi.python.org/pypi/python-ptrace
@@ -13,6 +17,8 @@ python-ptrace
 .. image:: http://unmaintained.tech/badge.svg
    :target: http://unmaintained.tech/
    :alt: No Maintenance Intended
+
+**This project is no longer maintained and is looking for a new maintainer.**
 
 python-ptrace is a debugger using ptrace (Linux, BSD and Darwin system call to
 trace processes) written in Python.
