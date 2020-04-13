@@ -8,6 +8,3 @@ install: pip install -U tox
 # https://github.com/travis-ci/travis-ci/issues/9033
 sudo: required
 script: tox
-notifications:
-  email:
-    - victor.stinner@gmail.com
