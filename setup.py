@@ -64,7 +64,7 @@ for name in MODULES:
 
 install_options = {
     "name": ptrace.PACKAGE,
-    "version": ptrace.VERSION,
+    "version": ptrace.__version__,
     "url": ptrace.WEBSITE,
     "download_url": ptrace.WEBSITE,
     "author": "Victor Stinner",
