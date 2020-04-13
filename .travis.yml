@@ -1,7 +1,6 @@
 language: python
 env:
   - TOXENV=pep8
-  - TOXENV=py2
   - TOXENV=py3
 install: pip install -U tox
 # SYS_PTRACE capability is not available in default containers,

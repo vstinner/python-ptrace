@@ -19,7 +19,7 @@ trace processes) written in Python.
   <https://pypi.python.org/pypi/python-ptrace>`_
 
 python-ptrace is an opensource project written in Python under GNU GPLv2
-license.
+license. It supports Python 3.6 and newer.
 
 
 Features

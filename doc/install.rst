@@ -2,6 +2,8 @@
 Install python-ptrace
 +++++++++++++++++++++
 
+python-ptrace supports Python 3.6 and newer.
+
 Linux packages
 ==============
 
@@ -33,25 +35,24 @@ Download the development version using Git::
 <https://github.com/vstinner/python-ptrace>`_.
 
 
-python-ptrace dependencies
---------------------------
+Option dependency
+-----------------
 
-* Python 2.6+/3.3+:
-  http://python.org/
 * distorm disassembler (optional)
   http://www.ragestorm.net/distorm/
-
 
 Installation
 ------------
 
+Note: pip is strongly recommanded.
+
 Type as root::
 
-   python setup.py install
+   python3 setup.py install
 
 Or using sudo program::
 
-   sudo python setup.py install
+   sudo python3 setup.py install
 
 
 cptrace
@@ -60,7 +61,7 @@ cptrace
 For faster debug and to avoid ctypes, you can also install cptrace: Python
 binding of the ptrace() function written in C::
 
-    python setup_cptrace.py install
+    python3 setup_cptrace.py install
 
 
 Run tests
@@ -69,22 +70,12 @@ Run tests
 Run tests with tox
 ------------------
 
-The `tox project <https://testrun.org/tox/latest/>`_ can be used to build a
-virtual environment run tests against different Python versions (Python 2 and
-Python 3).
-
-To run all tests on Python 2 and Python 3, just type::
+To run all tests, just type::
 
     tox
 
-To only run tests on Python 2.7, type::
-
-    tox -e py2
-
-Available environments:
-
-* ``py2``: Python 2
-* ``py3``: Python 3
+The `tox project <https://testrun.org/tox/latest/>`_ creates a clean virtual
+environment to run tests.
 
 
 Run tests manually
@@ -92,9 +83,9 @@ Run tests manually
 
 Type::
 
-    python runtests.py
-    python test_doc.py
+    python3 runtests.py
+    python3 test_doc.py
 
 It's also possible to run a specific test::
 
-    PYTHONPATH=$PWD python tests/test_strace.py
+    PYTHONPATH=$PWD python3 tests/test_strace.py

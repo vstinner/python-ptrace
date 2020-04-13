@@ -3,6 +3,11 @@
 Changelog
 =========
 
+python-ptrace 0.9.5
+-------------------
+
+* Drop Python 2 support.
+
 python-ptrace 0.9.4 (2019-07-30)
 --------------------------------
 
