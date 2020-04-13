@@ -9,7 +9,7 @@
 #    the SCM (Git): update MANIFEST.in if needed
 #  - git commit -a -m "prepare release VERSION"
 #  - Remove untracked files/dirs: git clean -fdx
-#  - run tests, type: tox
+#  - run tests, type: tox --parallel auto
 #  - git push
 #  - check Travis status:
 #    https://travis-ci.org/vstinner/python-ptrace
