@@ -6,6 +6,7 @@ Changelog
 python-ptrace 0.9.5
 -------------------
 
+* Fix readProcessMappings() for device id on 3 digits. Patch by Cat Stevens.
 * Drop Python 2 support.
 
 python-ptrace 0.9.4 (2019-07-30)
