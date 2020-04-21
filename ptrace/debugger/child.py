@@ -4,10 +4,10 @@ Error pipe and serialization code comes from Python 2.5 subprocess module.
 from os import (
     fork, execvp, execvpe, waitpid,
     close, dup2, pipe,
-    read, write, devnull, sysconf)
+    read, write, devnull, sysconf, listdir, stat)
 from sys import exc_info
 from traceback import format_exception
-from ptrace.os_tools import RUNNING_WINDOWS
+from ptrace.os_tools import RUNNING_WINDOWS, RUNNING_FREEBSD, HAS_PROC
 from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
@@ -87,6 +87,41 @@ def _createParent(pid, errpipe_read):
         raise child_exception
 
 
+def _closeFdsExcept(fds, ignore_fds):
+    for fd in fds:
+        if fd not in ignore_fds:
+            try:
+                close(fd)
+            except OSError:
+                pass
+
+
+def _closeFds(ignore_fds):
+    path = None
+    if HAS_PROC:
+        path = '/proc/self/fd'
+    elif _hasDevFd():
+        path = '/dev/fd'
+
+    if path:
+        try:
+            _closeFdsExcept([int(i) for i in listdir(path)], ignore_fds)
+            return
+        except OSError:
+            pass
+
+    _closeFdsExcept(range(0, MAXFD), ignore_fds)
+
+
+def _hasDevFd():
+    try:
+        # have fdescfs if /dev/fd is on different device
+        # see https://github.com/python/cpython/blob/master/Modules/_posixsubprocess.c
+        return RUNNING_FREEBSD and stat("/dev/fd/").st_dev != stat("/dev/").st_dev
+    except OSError:
+        return False
+
+
 def _createChild(arguments, no_stdout, env, errpipe_write):
     # Child code
     try:
@@ -95,13 +130,8 @@ def _createChild(arguments, no_stdout, env, errpipe_write):
         raise ChildError(str(err))
 
     # Close all files except 0, 1, 2 and errpipe_write
-    for fd in range(3, MAXFD):
-        if fd == errpipe_write:
-            continue
-        try:
-            close(fd)
-        except OSError:
-            pass
+    _closeFds([0, 1, 2, errpipe_write])
+
     try:
         _execChild(arguments, no_stdout, env)
     except:   # noqa: E722
