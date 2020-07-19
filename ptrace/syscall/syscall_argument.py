@@ -66,7 +66,7 @@ INTEGER_TYPES = set((
 
 def iterBits(data):
     for char in data:
-        byte = ord(char)
+        byte = ord(chr(char))
         for index in range(8):
             yield ((byte >> index) & 1) == 1
 
