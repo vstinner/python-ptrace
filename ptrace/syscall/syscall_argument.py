@@ -177,8 +177,10 @@ class SyscallArgument(FunctionArgument):
             struct = KNOWN_STRUCTS[argtype]
             return self.readStruct(address, struct)
         if RUNNING_LINUX and argtype == "fd_set":
-            fd_set = self.readBits(address, FD_SETSIZE)
-            return self.formatPointer("<fdset=(%s)>" % fd_set, address)
+            # The function is either select or pselect, so arg[0] is nfds
+            nfds = self.function.arguments[0].value
+            fd_set = filter(lambda x: int(x) < nfds, self.readBits(address, FD_SETSIZE))
+            return self.formatPointer("[%s]" % " ".join(fd_set), address)
 
         syscall = self.function.name
         if syscall == "rt_sigprocmask" and argtype == "sigset_t":
@@ -188,14 +190,14 @@ class SyscallArgument(FunctionArgument):
                 key += 1
                 return signalName(key)
             fd_set = self.readBits(address, size, format=formatter)
-            return self.formatPointer("<sigset=(%s)>" % fd_set, address)
+            return self.formatPointer("<sigset=(%s)>" % " ".join(fd_set), address)
         return None
 
     def readBits(self, address, count, format=str):
         bytes = self.function.process.readBytes(address, count // 8)
         fd_set = [format(index)
                   for index, bit in enumerate(iterBits(bytes)) if bit]
-        return ", ".join(fd_set)
+        return fd_set
 
     def readCString(self, address):
         if address:
