@@ -1250,11 +1250,11 @@ SYSCALL_PROTOTYPES = {
         ("const char *", "uargs"),
     )),
     "select": ("long", (
-        ("int", "n"),
-        ("fd_set *", "inp"),
-        ("fd_set *", "outp"),
-        ("fd_set *", "exp"),
-        ("struct timeval *", "tvp"),
+        ("int", "nfds"),
+        ("fd_set *", "readfd"),
+        ("fd_set *", "writefd"),
+        ("fd_set *", "errorfd"),
+        ("struct timeval *", "timeout"),
     )),
     "semctl": ("long", (
         ("int", "semid"),
