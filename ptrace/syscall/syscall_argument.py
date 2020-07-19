@@ -128,7 +128,8 @@ class SyscallArgument(FunctionArgument):
         # Format depending on the type
         if argtype.endswith("*"):
             try:
-                text = self.formatValuePointer(argtype[:-1])
+                # Strip in case there is a space between the name and '*'
+                text = self.formatValuePointer(argtype[:-1].strip())
                 if text:
                     return text
             except PTRACE_ERRORS as err:
