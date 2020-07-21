@@ -17,7 +17,7 @@ import re
 import six
 
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
-from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
+from ptrace.syscall import FILENAME_ARGUMENTS
 from ptrace.syscall.socketcall_constants import formatSocketType
 if RUNNING_LINUX:
     from ptrace.syscall.linux_struct import (
@@ -39,7 +39,8 @@ ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
     "open": {"flags": formatOpenMode, "mode": formatOpenMode},
-    "openat": {"flags": formatOpenMode, "mode": formatOpenMode},
+    "openat": {"dirfd": formatDirFd, "flags": formatOpenMode, "mode": formatOpenMode},
+    "name_to_handle_at": {"dirfd": formatDirFd},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},
@@ -115,8 +116,6 @@ class SyscallArgument(FunctionArgument):
                 return self.readString(value, length)
         if name == "signum":
             return signalName(value)
-        if name in DIRFD_ARGUMENTS and argtype == "int":
-            return formatDirFd(uint2int(value))
 
         # Remove "const " prefix
         if argtype.startswith("const "):

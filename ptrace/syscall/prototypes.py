@@ -20,8 +20,6 @@ ALIASES = {
 FILENAME_ARGUMENTS = set(
     ("filename", "pathname", "path", "oldname", "newname", "old", "new"))
 
-DIRFD_ARGUMENTS = set(("dirfd", "olddirfd", "newdirfd"))
-
 SYSCALL_PROTOTYPES = {
     "accept": ("long", (
         ("int", "sockfd"),
@@ -859,7 +857,7 @@ SYSCALL_PROTOTYPES = {
         ("size_t", "len"),
     )),
     "name_to_handle_at": ("long", (
-        ("int", "dfd"),
+        ("int", "dirfd"),
         ("const char *", "name"),
         ("struct file_handle *", "handle"),
         ("int *", "mnt_id"),
@@ -922,12 +920,12 @@ SYSCALL_PROTOTYPES = {
         ("umode_t", "mode"),
     )),
     "open_by_handle_at": ("long", (
-        ("int", "mountdirfd"),
+        ("int", "mount_fd"),
         ("struct file_handle *", "handle"),
         ("int", "flags"),
     )),
     "openat": ("long", (
-        ("int", "dfd"),
+        ("int", "dirfd"),
         ("const char *", "filename"),
         ("int", "flags"),
         ("umode_t", "mode"),
