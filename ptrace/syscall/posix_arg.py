@@ -29,7 +29,7 @@ def formatAccessMode(argument):
 
 
 # From /usr/include/bits/fcntl.h (Ubuntu Feisty, i386)
-OPEN_MODE_BITMASK = [
+OPEN_FLAGS_BITMASK = [
     (0o1, "O_WRONLY"),
     (0o2, "O_RDWR"),
     (0o100, "O_CREAT"),
@@ -51,9 +51,9 @@ OPEN_MODE_BITMASK = [
 ]
 
 
-def formatOpenMode(argument):
+def formatOpenFlags(argument):
     value = argument.value
-    flags = readBits(int(value), OPEN_MODE_BITMASK)
+    flags = readBits(int(value), OPEN_FLAGS_BITMASK)
 
     # Add default access mode if neither of the others are present.
     if not flags or flags[0] not in ("O_WRONLY", "O_RDWR"):
@@ -62,6 +62,31 @@ def formatOpenMode(argument):
     text = "|".join(flags)
     if value:
         text = "%s (%s)" % (text, oct(argument.value))
+    return text
+
+
+OPEN_MODE_BITMASK = [
+    (0o0400, "S_IRUSR"),
+    (0o0200, "S_IWUSR"),
+    (0o0100, "S_IXUSR"),
+    (0o0040, "S_IRGRP"),
+    (0o0020, "S_IWGRP"),
+    (0o0010, "S_IXGRP"),
+    (0o0004, "S_IROTH"),
+    (0o0002, "S_IWOTH"),
+    (0o0001, "S_IXOTH"),
+]
+
+
+def formatOpenMode(argument):
+    value = argument.value
+    flags = readBits(int(value), OPEN_MODE_BITMASK)
+
+    text = "|".join(flags)
+
+    # Overwrite text, add it depending on verbosity later
+    if value:
+        text = "%s" % oct(argument.value)
     return text
 
 

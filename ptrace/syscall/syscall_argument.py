@@ -6,7 +6,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from logging import getLogger, INFO
 from ptrace.func_arg import FunctionArgument
 from ptrace.syscall.posix_arg import (
-    formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags, formatDirFd)
+    formatMmapProt, formatAccessMode, formatOpenFlags, formatCloneFlags, formatDirFd, formatOpenMode)
 from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
                                        formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
@@ -38,8 +38,8 @@ KNOWN_STRUCTS = dict((struct.__name__, struct) for struct in KNOWN_STRUCTS)
 ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
-    "open": {"flags": formatOpenMode, "mode": formatOpenMode},
-    "openat": {"dirfd": formatDirFd, "flags": formatOpenMode, "mode": formatOpenMode},
+    "open": {"flags": formatOpenFlags, "mode": formatOpenMode},
+    "openat": {"dirfd": formatDirFd, "flags": formatOpenFlags, "mode": formatOpenMode},
     "name_to_handle_at": {"dirfd": formatDirFd},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
