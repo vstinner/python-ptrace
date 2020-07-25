@@ -36,7 +36,7 @@ if HAS_UNAME:
     # guess machine type using uname()
     _machine = uname()[4]
     CPU_PPC32 = (_machine == 'ppc')
-    CPU_PPC64 = (_machine == 'ppc64')
+    CPU_PPC64 = (_machine in ('ppc64', 'ppc64le'))
     CPU_I386 = (_machine in ("i386", "i686"))    # compatible Intel 32 bits
     CPU_X86_64 = (_machine in ("x86_64", "amd64"))  # compatible Intel 64 bits
     CPU_ARM = _machine.startswith('arm')
