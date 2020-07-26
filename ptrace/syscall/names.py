@@ -1,10 +1,17 @@
-from ptrace.cpu_info import CPU_64BITS
+from ptrace.cpu_info import CPU_X86_64, CPU_I386, CPU_PPC64, CPU_PPC32
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 if RUNNING_LINUX:
-    if CPU_64BITS:
-        from ptrace.syscall.linux_syscall64 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
+    if CPU_X86_64:
+        from ptrace.syscall.linux.x86_64 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
+    elif CPU_I386:
+        from ptrace.syscall.linux.i386 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
+    elif CPU_PPC64:
+        from ptrace.syscall.linux.powerpc64 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
+    elif CPU_PPC32:
+        from ptrace.syscall.linux.powerpc32 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
     else:
-        from ptrace.syscall.linux_syscall32 import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
+        raise NotImplementedError("Unsupported CPU architecture")
+
 elif RUNNING_FREEBSD:
     from ptrace.syscall.freebsd_syscall import SYSCALL_NAMES, SOCKET_SYSCALL_NAMES
 else:
