@@ -1,13 +1,15 @@
 from ctypes import (Structure, Union, sizeof,
                     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
                     c_uint16, c_uint32, c_uint64)
-from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_ARM
+from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM
 
 pid_t = c_int
 uid_t = c_ushort
 clock_t = c_uint
 
 # From /usr/include/asm-i386/user.h
+# Also more reliably in the kernel sources:
+# arch/$ARCH/include/uapi/asm/ptrace.h
 
 
 class user_regs_struct(Structure):
@@ -53,6 +55,53 @@ class user_regs_struct(Structure):
             ("xer", c_ulong),
             ("ccr", c_ulong),
             ("mq", c_ulong),  # FIXME: ppc64 => softe
+            ("trap", c_ulong),
+            ("dar", c_ulong),
+            ("dsisr", c_ulong),
+            ("result", c_ulong),
+        )
+    elif CPU_PPC64:
+        _fields_ = (
+            ("gpr0", c_ulong),
+            ("gpr1", c_ulong),
+            ("gpr2", c_ulong),
+            ("gpr3", c_ulong),
+            ("gpr4", c_ulong),
+            ("gpr5", c_ulong),
+            ("gpr6", c_ulong),
+            ("gpr7", c_ulong),
+            ("gpr8", c_ulong),
+            ("gpr9", c_ulong),
+            ("gpr10", c_ulong),
+            ("gpr11", c_ulong),
+            ("gpr12", c_ulong),
+            ("gpr13", c_ulong),
+            ("gpr14", c_ulong),
+            ("gpr15", c_ulong),
+            ("gpr16", c_ulong),
+            ("gpr17", c_ulong),
+            ("gpr18", c_ulong),
+            ("gpr19", c_ulong),
+            ("gpr20", c_ulong),
+            ("gpr21", c_ulong),
+            ("gpr22", c_ulong),
+            ("gpr23", c_ulong),
+            ("gpr24", c_ulong),
+            ("gpr25", c_ulong),
+            ("gpr26", c_ulong),
+            ("gpr27", c_ulong),
+            ("gpr28", c_ulong),
+            ("gpr29", c_ulong),
+            ("gpr30", c_ulong),
+            ("gpr31", c_ulong),
+            ("nip", c_ulong),
+            ("msr", c_ulong),
+            ("orig_gpr3", c_ulong),
+            ("ctr", c_ulong),
+            ("link", c_ulong),
+            ("xer", c_ulong),
+            ("ccr", c_ulong),
+            ("softe", c_ulong),
             ("trap", c_ulong),
             ("dar", c_ulong),
             ("dsisr", c_ulong),
