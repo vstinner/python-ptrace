@@ -1249,9 +1249,9 @@ SYSCALL_PROTOTYPES = {
     )),
     "select": ("long", (
         ("int", "nfds"),
-        ("fd_set *", "readfd"),
-        ("fd_set *", "writefd"),
-        ("fd_set *", "errorfd"),
+        ("fd_set *", "readfds"),
+        ("fd_set *", "writefds"),
+        ("fd_set *", "errorfds"),
         ("struct timeval *", "timeout"),
     )),
     "semctl": ("long", (
