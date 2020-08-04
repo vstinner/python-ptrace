@@ -37,7 +37,7 @@ else:
     raise NotImplementedError("Unsupported CPU architecture")
 
 PREFORMAT_ARGUMENTS = {
-    "select": (2, 3, 4),
+    "select": (1, 2, 3),
     "execve": (0, 1, 2),
     "clone": (0, 1),
 }

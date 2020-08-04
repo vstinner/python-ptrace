@@ -6,7 +6,7 @@ from ptrace.error import PTRACE_ERRORS, writeError
 from logging import getLogger, INFO
 from ptrace.func_arg import FunctionArgument
 from ptrace.syscall.posix_arg import (
-    formatMmapProt, formatAccessMode, formatOpenMode, formatCloneFlags, formatDirFd)
+    formatMmapProt, formatAccessMode, formatOpenFlags, formatCloneFlags, formatDirFd, formatOpenMode)
 from ptrace.func_call import FunctionCall
 from ptrace.syscall.socketcall import (setupSocketCall,
                                        formatOptVal, formatSockaddr, formatSockaddrInStruct, formatSockaddrIn6Struct)
@@ -17,7 +17,7 @@ import re
 import six
 
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
-from ptrace.syscall import FILENAME_ARGUMENTS, DIRFD_ARGUMENTS
+from ptrace.syscall import FILENAME_ARGUMENTS
 from ptrace.syscall.socketcall_constants import formatSocketType
 if RUNNING_LINUX:
     from ptrace.syscall.linux_struct import (
@@ -38,8 +38,9 @@ KNOWN_STRUCTS = dict((struct.__name__, struct) for struct in KNOWN_STRUCTS)
 ARGUMENT_CALLBACK = {
     # Prototype: callback(argument) -> str
     "access": {"mode": formatAccessMode},
-    "open": {"flags": formatOpenMode, "mode": formatOpenMode},
-    "openat": {"flags": formatOpenMode, "mode": formatOpenMode},
+    "open": {"flags": formatOpenFlags, "mode": formatOpenMode},
+    "openat": {"dirfd": formatDirFd, "flags": formatOpenFlags, "mode": formatOpenMode},
+    "name_to_handle_at": {"dirfd": formatDirFd},
     "mmap": {"prot": formatMmapProt},
     "mmap2": {"prot": formatMmapProt},
     "clone": {"flags": formatCloneFlags},
@@ -66,7 +67,7 @@ INTEGER_TYPES = set((
 
 def iterBits(data):
     for char in data:
-        byte = ord(char)
+        byte = ord(chr(char))
         for index in range(8):
             yield ((byte >> index) & 1) == 1
 
@@ -115,8 +116,6 @@ class SyscallArgument(FunctionArgument):
                 return self.readString(value, length)
         if name == "signum":
             return signalName(value)
-        if name in DIRFD_ARGUMENTS and argtype == "int":
-            return formatDirFd(uint2int(value))
 
         # Remove "const " prefix
         if argtype.startswith("const "):
@@ -128,7 +127,8 @@ class SyscallArgument(FunctionArgument):
         # Format depending on the type
         if argtype.endswith("*"):
             try:
-                text = self.formatValuePointer(argtype[:-1])
+                # Strip in case there is a space between the name and '*'
+                text = self.formatValuePointer(argtype[:-1].strip())
                 if text:
                     return text
             except PTRACE_ERRORS as err:
@@ -176,8 +176,10 @@ class SyscallArgument(FunctionArgument):
             struct = KNOWN_STRUCTS[argtype]
             return self.readStruct(address, struct)
         if RUNNING_LINUX and argtype == "fd_set":
-            fd_set = self.readBits(address, FD_SETSIZE)
-            return self.formatPointer("<fdset=(%s)>" % fd_set, address)
+            # The function is either select or pselect, so arg[0] is nfds
+            nfds = self.function.arguments[0].value
+            fd_set = filter(lambda x: int(x) < nfds, self.readBits(address, FD_SETSIZE))
+            return self.formatPointer("[%s]" % " ".join(fd_set), address)
 
         syscall = self.function.name
         if syscall == "rt_sigprocmask" and argtype == "sigset_t":
@@ -187,14 +189,14 @@ class SyscallArgument(FunctionArgument):
                 key += 1
                 return signalName(key)
             fd_set = self.readBits(address, size, format=formatter)
-            return self.formatPointer("<sigset=(%s)>" % fd_set, address)
+            return self.formatPointer("<sigset=(%s)>" % " ".join(fd_set), address)
         return None
 
     def readBits(self, address, count, format=str):
         bytes = self.function.process.readBytes(address, count // 8)
         fd_set = [format(index)
                   for index, bit in enumerate(iterBits(bytes)) if bit]
-        return ", ".join(fd_set)
+        return fd_set
 
     def readCString(self, address):
         if address:

@@ -62,6 +62,11 @@ class FunctionCall(object):
 
     def format(self):
         arguments = [arg.format() for arg in self.arguments]
+
+        # Remove empty optionnal arguments
+        while arguments and not arguments[-1]:
+            arguments.pop(-1)
+
         arguments = ", ".join(arguments)
         if self.restype and self.options.write_types:
             return "%s %s(%s)" % (self.restype, self.name, arguments)
