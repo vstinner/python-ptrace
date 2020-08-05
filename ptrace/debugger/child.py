@@ -12,6 +12,7 @@ from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
 from errno import EINTR
+from logging import warning
 import fcntl
 import pickle
 
@@ -87,21 +88,28 @@ def _createParent(pid, errpipe_read):
         raise child_exception
 
 
-def _createChild(arguments, no_stdout, env, errpipe_write):
+def _createChild(arguments,
+                 no_stdout,
+                 env,
+                 errpipe_write,
+                 close_fds=True,
+                 pass_fds=()):
     # Child code
     try:
         ptrace_traceme()
     except PtraceError as err:
         raise ChildError(str(err))
 
-    # Close all files except 0, 1, 2 and errpipe_write
-    for fd in range(3, MAXFD):
-        if fd == errpipe_write:
-            continue
-        try:
-            close(fd)
-        except OSError:
-            pass
+    if close_fds:
+        # Close all files except 0, 1, 2 and errpipe_write
+        for fd in range(3, MAXFD):
+            if fd == errpipe_write or (fd in pass_fds):
+                continue
+            try:
+                close(fd)
+            except OSError:
+                pass
+
     try:
         _execChild(arguments, no_stdout, env)
     except:   # noqa: E722
@@ -132,7 +140,7 @@ def _execChild(arguments, no_stdout, env):
         raise ChildError(str(err))
 
 
-def createChild(arguments, no_stdout, env=None):
+def createChild(arguments, no_stdout, env=None, close_fds=True, pass_fds=()):
     """
     Create a child process:
      - arguments: list of string where (e.g. ['ls', '-la'])
@@ -143,6 +151,12 @@ def createChild(arguments, no_stdout, env=None):
      - env={} to start with an empty environment
      - env=None (default) to copy the environment
     """
+
+    if not RUNNING_WINDOWS:
+        if pass_fds and not close_fds:
+            warning("pass_fds overriding close_fds.")
+            close_fds = True
+
     errpipe_read, errpipe_write = pipe()
     _set_cloexec_flag(errpipe_write)
 
@@ -154,4 +168,9 @@ def createChild(arguments, no_stdout, env=None):
         return pid
     else:
         close(errpipe_read)
-        _createChild(arguments, no_stdout, env, errpipe_write)
+        _createChild(arguments,
+                     no_stdout,
+                     env,
+                     errpipe_write,
+                     close_fds=close_fds,
+                     pass_fds=pass_fds)
