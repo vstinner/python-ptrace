@@ -4,7 +4,7 @@ Error pipe and serialization code comes from Python 2.5 subprocess module.
 from os import (
     fork, execvp, execvpe, waitpid,
     close, dup2, pipe,
-    read, write, devnull, sysconf)
+    read, write, devnull, sysconf, set_inheritable)
 from sys import exc_info
 from traceback import format_exception
 from ptrace.os_tools import RUNNING_WINDOWS
@@ -99,6 +99,9 @@ def _createChild(arguments,
         ptrace_traceme()
     except PtraceError as err:
         raise ChildError(str(err))
+
+    for fd in pass_fds:
+        set_inheritable(fd, True)
 
     if close_fds:
         # Close all files except 0, 1, 2 and errpipe_write
