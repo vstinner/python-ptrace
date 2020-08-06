@@ -12,7 +12,6 @@ from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
 from errno import EINTR
-from logging import warning
 import fcntl
 import pickle
 
@@ -155,10 +154,8 @@ def createChild(arguments, no_stdout, env=None, close_fds=True, pass_fds=()):
      - env=None (default) to copy the environment
     """
 
-    if not RUNNING_WINDOWS:
-        if pass_fds and not close_fds:
-            warning("pass_fds overriding close_fds.")
-            close_fds = True
+    if pass_fds and not close_fds:
+        close_fds = True
 
     errpipe_read, errpipe_write = pipe()
     _set_cloexec_flag(errpipe_write)
