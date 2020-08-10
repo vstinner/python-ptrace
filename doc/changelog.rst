@@ -8,6 +8,12 @@ python-ptrace 0.9.6
 
 * Remove RUNNING_WINDOWS constant: python-ptrace doesn't not support Windows.
 * Drop Python 2.7 support. six dependency is no longer needed.
+* Add close_fds and pass_fds to createChild() function.
+  Patch by Jean-Baptiste Skutnik.
+* Enhance strace.py output for open flags and open optional parameters.
+  Patch by Jean-Baptiste Skutnik.
+* Add support for PowerPC 64-bit (ppc64).
+  Patch by Jean-Baptiste Skutnik.
 
 python-ptrace 0.9.5 (2020-04-13)
 --------------------------------
