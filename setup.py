@@ -37,13 +37,13 @@ except ImportError:
     from distutils.core import setup
 
 
-MODULES = ["ptrace", "ptrace.binding", "ptrace.syscall", "ptrace.debugger"]
+MODULES = ["ptrace", "ptrace.binding", "ptrace.syscall", "ptrace.syscall.linux", "ptrace.debugger"]
 
 SCRIPTS = ("strace.py", "gdb.py")
 
 CLASSIFIERS = [
     'Intended Audience :: Developers',
-    'Development Status :: 7 - Inactive',
+    'Development Status :: 4 - Beta',
     'Environment :: Console',
     'License :: OSI Approved :: GNU General Public License (GPL)',
     'Operating System :: OS Independent',

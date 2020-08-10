@@ -6,6 +6,10 @@ Changelog
 python-ptrace 0.9.7
 -------------------
 
+* Update README.rst
+* Project back in beta and maintenance
+* Add missing module to install directives
+
 python-ptrace 0.9.6 (2020-08-10)
 --------------------------------
 
