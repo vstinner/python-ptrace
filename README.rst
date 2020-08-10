@@ -10,9 +10,9 @@ python-ptrace
    :alt: Latest release on the Python Cheeseshop (PyPI)
    :target: https://pypi.python.org/pypi/python-ptrace
 
-.. image:: https://travis-ci.org/vstinner/python-ptrace.svg?branch=master
+.. image:: https://travis-ci.com/vstinner/python-ptrace.svg?branch=master
    :alt: Build status of python-ptrace on Travis CI
-   :target: https://travis-ci.org/vstinner/python-ptrace
+   :target: https://travis-ci.com/github/vstinner/python-ptrace
 
 **This project is no longer maintained and is looking for a new maintainer.**
 

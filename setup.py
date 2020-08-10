@@ -12,7 +12,7 @@
 #  - run tests, type: tox --parallel auto
 #  - git push
 #  - check Travis status:
-#    https://travis-ci.org/vstinner/python-ptrace
+#    https://travis-ci.com/github/vstinner/python-ptrace
 #
 # Release a new version:
 #
