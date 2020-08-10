@@ -3,8 +3,8 @@
 Changelog
 =========
 
-python-ptrace 0.9.6
--------------------
+python-ptrace 0.9.6 (2020-08-10)
+--------------------------------
 
 * Remove RUNNING_WINDOWS constant: python-ptrace doesn't not support Windows.
 * Drop Python 2.7 support. six dependency is no longer needed.
