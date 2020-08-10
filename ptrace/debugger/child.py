@@ -7,7 +7,6 @@ from os import (
     read, write, devnull, sysconf, set_inheritable)
 from sys import exc_info
 from traceback import format_exception
-from ptrace.os_tools import RUNNING_WINDOWS
 from ptrace.binding import ptrace_traceme
 from ptrace import PtraceError
 from sys import exit
@@ -30,8 +29,6 @@ class ChildPtraceError(ChildError):
 
 
 def _set_cloexec_flag(fd):
-    if RUNNING_WINDOWS:
-        return
     try:
         cloexec_flag = fcntl.FD_CLOEXEC
     except AttributeError:

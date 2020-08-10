@@ -3,6 +3,11 @@
 Changelog
 =========
 
+python-ptrace 0.9.6
+-------------------
+
+* Remove RUNNING_WINDOWS constant: python-ptrace doesn't not support Windows.
+
 python-ptrace 0.9.5 (2020-04-13)
 --------------------------------
 

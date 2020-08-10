@@ -2,7 +2,6 @@
 Constants about the operating system:
 
  - RUNNING_PYPY (bool)
- - RUNNING_WINDOWS (bool)
  - RUNNING_LINUX (bool)
  - RUNNING_FREEBSD (bool)
  - RUNNING_OPENBSD (bool)
@@ -16,7 +15,6 @@ from sys import platform, version, version_info
 
 RUNNING_PYTHON3 = version_info[0] == 3
 RUNNING_PYPY = ("pypy" in version.lower())
-RUNNING_WINDOWS = (platform == 'win32')
 RUNNING_LINUX = platform.startswith('linux')
 RUNNING_FREEBSD = (platform.startswith('freebsd')
                    or platform.startswith('gnukfreebsd'))

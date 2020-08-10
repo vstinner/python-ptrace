@@ -1,14 +1,13 @@
-from ptrace.os_tools import RUNNING_LINUX, RUNNING_WINDOWS
+from ptrace.os_tools import RUNNING_LINUX
 if RUNNING_LINUX:
     from ptrace.linux_proc import (ProcError, openProc,
                                    readProcessProcList, readProcessLink, readProcessStat)
 from ptrace.signames import signalName   # noqa
-if not RUNNING_WINDOWS:
-    from os import (
-        WIFSTOPPED, WSTOPSIG,
-        WIFSIGNALED, WTERMSIG,
-        WIFEXITED, WEXITSTATUS,
-        WCOREDUMP)
+from os import (
+    WIFSTOPPED, WSTOPSIG,
+    WIFSIGNALED, WTERMSIG,
+    WIFEXITED, WEXITSTATUS,
+    WCOREDUMP)
 
 
 def dumpProcessInfo(log, pid, max_length=None):
@@ -100,8 +99,6 @@ def formatProcessStatus(status, title="Process"):
     """
     Format a process status (integer) as a string.
     """
-    if RUNNING_WINDOWS:
-        raise NotImplementedError()
     if WIFSTOPPED(status):
         signum = WSTOPSIG(status)
         text = "%s stopped by signal %s" % (title, signalName(signum))
