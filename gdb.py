@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
                              ProcessExit, NewProcessEvent, ProcessSignal,
@@ -18,7 +17,6 @@ from ptrace.process_tools import dumpProcessInfo
 from ptrace.tools import inverseDict
 from ptrace.func_call import FunctionCallOptions
 from ptrace.signames import signalName, SIGNAMES
-from six import PY3, binary_type
 from signal import SIGTRAP, SIGINT
 from ptrace.terminal import enableEchoMode, terminalWidth
 from errno import ESRCH
@@ -265,10 +263,9 @@ class Gdb(Application):
         # FIXME: Validate input
         #        if not BYTES_REGEX.match(text):
         #            raise ValueError('Follow text must be enclosed in quotes!')
-        if PY3:
-            text = 'b' + text.lstrip()
+        text = 'b' + text.lstrip()
         value = eval(text)
-        if not isinstance(value, binary_type):
+        if not isinstance(value, bytes):
             raise TypeError("Input is not a bytes string!")
         return value
 

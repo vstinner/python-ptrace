@@ -6,8 +6,6 @@ import sys
 import tempfile
 import unittest
 
-import six
-
 
 STRACE = os.path.normpath(os.path.join(
     os.path.dirname(__file__), '..', 'strace.py'))
@@ -53,15 +51,11 @@ class TestStrace(unittest.TestCase):
         match = pattern.search(stdout)
         self.assertTrue(match, stdout)
         expected = repr(cwd)
-        if six.PY3:
-            expected = os.fsencode(expected)
+        expected = os.fsencode(expected)
         self.assertEqual(match.group(1), expected)
 
     def test_open(self):
-        if six.PY3:
-            code = 'open(%a).close()' % __file__
-        else:
-            code = 'open(%r).close()' % __file__
+        code = 'open(%a).close()' % __file__
         self.assert_syscall(code,
                             br"^open(at)?\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
 

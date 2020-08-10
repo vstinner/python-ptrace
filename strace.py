@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from __future__ import print_function
 from ptrace import PtraceError
 from ptrace.debugger import (PtraceDebugger, Application,
                              ProcessExit, ProcessSignal, NewProcessEvent, ProcessExecution)

@@ -14,8 +14,6 @@ from ptrace.syscall.socketcall_constants import SOCKETCALL
 import os
 import re
 
-import six
-
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_FREEBSD
 from ptrace.syscall import FILENAME_ARGUMENTS
 from ptrace.syscall.socketcall_constants import formatSocketType
@@ -203,10 +201,7 @@ class SyscallArgument(FunctionArgument):
             max_size = self.options.string_max_length
             data, truncated = self.function.process.readCString(
                 address, max_size)
-            if six.PY3:
-                text = os.fsdecode(data)
-            else:
-                text = data
+            text = os.fsdecode(data)
             text = repr(text)
             if truncated:
                 text += "..."
@@ -220,10 +215,7 @@ class SyscallArgument(FunctionArgument):
             truncated = (max_len < size)
             size = min(size, max_len)
             data = self.function.process.readBytes(address, size)
-            if six.PY3:
-                text = os.fsdecode(data)
-            else:
-                text = data
+            text = os.fsdecode(data)
             text = repr(text)
             if truncated:
                 text += "..."

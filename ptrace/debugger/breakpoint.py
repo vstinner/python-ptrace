@@ -4,7 +4,6 @@ from logging import info
 from weakref import ref
 from ptrace.cpu_info import CPU_POWERPC, CPU_WORD_SIZE
 from ptrace.ctypes_tools import word2bytes
-from six import b
 
 
 class Breakpoint(object):
@@ -33,7 +32,7 @@ class Breakpoint(object):
             new_bytes = word2bytes(0x0cc00000)
         else:
             # Replace instruction with "INT 3"
-            new_bytes = b("\xCC") * size
+            new_bytes = b"\xCC" * size
         process.writeBytes(address, new_bytes)
         self._installed = True
 

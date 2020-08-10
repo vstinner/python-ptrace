@@ -5,15 +5,13 @@ import subprocess
 import sys
 import unittest
 
-import six
-
 GDB = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'gdb.py'))
 
 
 class TestGdb(unittest.TestCase):
 
     def run_command(self, command):
-        if isinstance(command, six.text_type):
+        if isinstance(command, str):
             command = command.encode('ascii')
         command = command + b'\n'
         args = [sys.executable, GDB, '--', sys.executable, '-c', 'pass']

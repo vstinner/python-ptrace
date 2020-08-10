@@ -28,8 +28,6 @@
 #  - git commit -a -m "post-release"
 #  - git push
 
-from __future__ import with_statement
-
 from imp import load_source
 from os import path
 try:
@@ -75,7 +73,6 @@ install_options = {
     "packages": list(PACKAGES.keys()),
     "package_dir": PACKAGES,
     "scripts": SCRIPTS,
-    "install_requires": ["six"],
 }
 
 setup(**install_options)

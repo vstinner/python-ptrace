@@ -28,7 +28,6 @@ from ptrace.debugger.process_error import ProcessError
 from ptrace.debugger.memory_mapping import readProcessMappings
 from ptrace.binding.cpu import CPU_INSTR_POINTER, CPU_STACK_POINTER, CPU_FRAME_POINTER, CPU_SUB_REGISTERS
 from ptrace.debugger.syscall_state import SyscallState
-from six import b
 
 if HAS_PTRACE_SINGLESTEP:
     from ptrace.binding import ptrace_singlestep
@@ -516,7 +515,7 @@ class PtraceProcess(object):
             size -= subsize
             address += CPU_WORD_SIZE
         else:
-            data = b('')
+            data = b''
 
         while size:
             # Read word
@@ -655,7 +654,7 @@ class PtraceProcess(object):
         while True:
             done = False
             data = self.readBytes(address, chunk_length)
-            pos = data.find(b('\0'))
+            pos = data.find(b'\0')
             if pos != -1:
                 done = True
                 data = data[:pos]

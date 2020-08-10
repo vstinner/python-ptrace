@@ -5,7 +5,6 @@ Constant:
 
    - PAGE_SIZE: size of a memory page
 """
-from __future__ import with_statement
 from os import readlink, listdir
 from resource import getpagesize
 from ptrace.tools import timestampUNIX

@@ -1,7 +1,6 @@
 from ptrace.ctypes_tools import formatAddress, formatWordHex
 from ptrace.cpu_info import CPU_WORD_SIZE, CPU_MAX_UINT
 from ptrace import PtraceError
-from six.moves import xrange
 
 
 class BacktraceFrame(object):
@@ -106,7 +105,7 @@ def getBacktraceFrame(process, ip, fp, nargs):
     frame = BacktraceFrame(ip)
     address = fp + CPU_WORD_SIZE
     try:
-        for index in xrange(nargs):
+        for index in range(nargs):
             address += CPU_WORD_SIZE
             word = process.readWord(address)
             frame.arguments.append(word)
