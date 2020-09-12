@@ -1,7 +1,7 @@
 from ctypes import (Structure, Union, sizeof,
                     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
                     c_uint16, c_uint32, c_uint64)
-from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM32
+from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM32, CPU_ARM64
 
 pid_t = c_int
 uid_t = c_ushort

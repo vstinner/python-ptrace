@@ -40,6 +40,7 @@ if HAS_UNAME:
     CPU_I386 = (_machine in ("i386", "i686"))    # compatible Intel 32 bits
     CPU_X86_64 = (_machine in ("x86_64", "amd64"))  # compatible Intel 64 bits
     CPU_ARM32 = _machine.startswith('arm')
+    CPU_ARM64 = _machine.startswith('aarch64')
     del _machine
 else:
     # uname() fallback for Windows
@@ -49,6 +50,7 @@ else:
     CPU_I386 = False
     CPU_X86_64 = False
     CPU_ARM32 = False
+    CPU_ARM64 = False
     bits, linkage = architecture()
     if bits == '32bit':
         CPU_I386 = True
@@ -59,3 +61,4 @@ else:
 
 CPU_INTEL = (CPU_I386 or CPU_X86_64)
 CPU_POWERPC = (CPU_PPC32 or CPU_PPC64)
+CPU_ARM = (CPU_ARM32 or CPU_ARM64)
