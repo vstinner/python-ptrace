@@ -11,6 +11,7 @@ Constants about the CPU:
  - CPU_X86_64 (bool)
  - CPU_INTEL (bool)
  - CPU_POWERPC (bool)
+ - CPU_AARCH64 (bool)
 """
 
 try:
@@ -40,6 +41,7 @@ if HAS_UNAME:
     CPU_I386 = (_machine in ("i386", "i686"))    # compatible Intel 32 bits
     CPU_X86_64 = (_machine in ("x86_64", "amd64"))  # compatible Intel 64 bits
     CPU_ARM = _machine.startswith('arm')
+    CPU_AARCH64 = (_machine == 'aarch64')
     del _machine
 else:
     # uname() fallback for Windows
@@ -49,6 +51,7 @@ else:
     CPU_I386 = False
     CPU_X86_64 = False
     CPU_ARM = False
+    CPU_AARCH64 = False
     bits, linkage = architecture()
     if bits == '32bit':
         CPU_I386 = True
