@@ -110,10 +110,10 @@ class user_regs_struct(Structure):
     elif CPU_ARM32:
         _fields_ = tuple(("r%i" % reg, c_ulong) for reg in range(18))
     elif CPU_ARM64:
-        _fields_ = tuple(*[("r%i" % reg, c_ulong) for reg in range(32)],
+        _fields_ = tuple([*[("r%i" % reg, c_ulong) for reg in range(32)],
                 ('sp', c_ulong), 
                 ('pc', c_ulong), 
-                ('pstate', c_ulong)
+                ('pstate', c_ulong)]
         )
     elif CPU_64BITS:
         _fields_ = (
