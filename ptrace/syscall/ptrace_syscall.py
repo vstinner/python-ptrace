@@ -1,7 +1,7 @@
 from os import strerror
 from errno import errorcode
 
-from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM32
+from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM32, CPU_ARM64
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
 from ptrace.func_call import FunctionCall
 from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, SyscallArgument
@@ -14,6 +14,8 @@ if CPU_POWERPC:
     SYSCALL_REGISTER = "gpr0"
 elif CPU_ARM32:
     SYSCALL_REGISTER = "r7"
+elif CPU_ARM64:
+    SYSCALL_REGISTER = "r8"
 elif RUNNING_LINUX:
     if CPU_X86_64:
         SYSCALL_REGISTER = "orig_rax"
@@ -26,6 +28,8 @@ else:
         SYSCALL_REGISTER = "eax"
 
 if CPU_ARM32:
+    RETURN_VALUE_REGISTER = "r0"
+elif CPU_ARM64:
     RETURN_VALUE_REGISTER = "r0"
 elif CPU_I386:
     RETURN_VALUE_REGISTER = "eax"
