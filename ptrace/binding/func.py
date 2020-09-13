@@ -30,6 +30,8 @@ HAS_PTRACE_IO = False
 HAS_PTRACE_SIGINFO = False
 HAS_PTRACE_GETREGS = False
 HAS_PTRACE_GETREGSET = False
+HAS_PTRACE_SETREGS = False
+HAS_PTRACE_SETREGSET = False
 
 # Special flags that are required to wait for cloned processes (threads)
 # See wait(2)
@@ -82,11 +84,14 @@ else:
     # Linux
     if not CPU_AARCH64:
         HAS_PTRACE_GETREGS = True
+        HAS_PTRACE_SETREGS = True
         PTRACE_GETREGS = 12
         PTRACE_SETREGS = 13
 
     HAS_PTRACE_GETREGSET = True
+    HAS_PTRACE_SETREGSET = True
     PTRACE_GETREGSET = 0x4204
+    PTRACE_SETREGSET = 0x4205
     NT_PRSTATUS = 1
 
     PTRACE_ATTACH = 16
@@ -279,8 +284,16 @@ if RUNNING_LINUX:
             ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, addressof(iov))
             return regs
 
-    def ptrace_setregs(pid, regs):
-        ptrace(PTRACE_SETREGS, pid, 0, addressof(regs))
+    if HAS_PTRACE_SETREGS:
+        def ptrace_setregs(pid, regs):
+            ptrace(PTRACE_SETREGS, pid, 0, addressof(regs))
+
+    elif HAS_PTRACE_SETREGSET:
+        def ptrace_setregs(pid, regs):
+            iov = iovec_struct()
+            setattr(iov, "buf", addressof(regs))
+            setattr(iov, "len", sizeof(regs))
+            ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, addressof(iov))
 
     if HAS_PTRACE_SINGLESTEP:
         def ptrace_singlestep(pid):
