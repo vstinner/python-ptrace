@@ -1,6 +1,6 @@
 from ctypes import (Structure, Union, sizeof,
                     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
-                    c_uint16, c_uint32, c_uint64)
+                    c_uint16, c_uint32, c_uint64, c_size_t)
 from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM
 
 pid_t = c_int
@@ -252,3 +252,9 @@ class siginfo(Structure):
         ("_sifields", _sifields_t)
     )
     _anonymous_ = ("_sifields",)
+
+class iovec_struct(Structure):
+    _fields_ = (
+            ("buf", c_void_p),
+            ("len", c_size_t)
+    )

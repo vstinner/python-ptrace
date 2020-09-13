@@ -1,5 +1,5 @@
 from os import strerror
-from ctypes import addressof, c_int, get_errno, set_errno
+from ctypes import addressof, c_int, get_errno, set_errno, sizeof
 from ptrace import PtraceError
 from ptrace.ctypes_tools import formatAddress
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD, RUNNING_OPENBSD
@@ -17,7 +17,7 @@ elif RUNNING_BSD:
 elif RUNNING_LINUX:
     from ptrace.binding.linux_struct import (
         user_regs_struct as ptrace_registers_t,
-        user_fpregs_struct, siginfo)
+        user_fpregs_struct, siginfo, iovec_struct)
     if not CPU_64BITS:
         from ptrace.binding.linux_struct import user_fpxregs_struct
 else:
@@ -258,9 +258,20 @@ if RUNNING_LINUX:
             ptrace(PTRACE_SETFPXREGS, pid, 0, addressof(fpxregs))
 
     if HAS_PTRACE_GETREGS:
+        """
         def ptrace_getregs(pid):
             regs = ptrace_registers_t()
             ptrace(PTRACE_GETREGS, pid, 0, addressof(regs))
+            return regs
+
+    elif HAS_PTRACE_GETREGSET:
+    """
+        def ptrace_getregs(pid):
+            regs = ptrace_registers_t()
+            iov = iovec_struct()
+            setattr(iov, "buf", addressof(regs))
+            setattr(iov, "len", sizeof(regs))
+            ptrace(0x4204, pid, 1, addressof(iov))
             return regs
 
     def ptrace_setregs(pid, regs):
