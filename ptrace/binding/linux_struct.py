@@ -111,10 +111,10 @@ class user_regs_struct(Structure):
         _fields_ = tuple(("r%i" % reg, c_ulong) for reg in range(18))
     elif CPU_ARM64:
         _fields_ = tuple([*[("r%i" % reg, c_ulong) for reg in range(32)],
-                ('sp', c_ulong), 
-                ('pc', c_ulong), 
-                ('pstate', c_ulong)]
-        )
+                         ('sp', c_ulong),
+                         ('pc', c_ulong),
+                         ('pstate', c_ulong)]
+                         )
     elif CPU_64BITS:
         _fields_ = (
             ("r15", c_ulong),
@@ -259,8 +259,9 @@ class siginfo(Structure):
     )
     _anonymous_ = ("_sifields",)
 
+
 class iovec_struct(Structure):
     _fields_ = (
-            ("buf", c_void_p),
-            ("len", c_size_t)
+        ("buf", c_void_p),
+        ("len", c_size_t)
     )
