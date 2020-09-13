@@ -90,6 +90,8 @@ class PtraceSyscall(FunctionCall):
             return (regs.rdi, regs.rsi, regs.rdx, regs.r10, regs.r8, regs.r9)
         if CPU_ARM32:
             return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6)
+        if CPU_ARM64:
+            return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6, regs.r7)
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
             return [self.process.readWord(sp + index * CPU_WORD_SIZE)
