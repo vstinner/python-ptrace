@@ -1,7 +1,7 @@
 from ptrace.binding.func import (   # noqa
     HAS_PTRACE_SINGLESTEP, HAS_PTRACE_EVENTS,
     HAS_PTRACE_IO, HAS_PTRACE_SIGINFO, HAS_PTRACE_GETREGS,
-    REGISTER_NAMES,
+    HAS_PTRACE_GETREGSET, REGISTER_NAMES,
     ptrace_attach, ptrace_traceme,
     ptrace_detach, ptrace_kill,
     ptrace_cont, ptrace_syscall,
@@ -24,5 +24,5 @@ if HAS_PTRACE_IO:
         ptrace_io_desc,
         PIOD_READ_D, PIOD_WRITE_D,
         PIOD_READ_I, PIOD_WRITE_I)
-if HAS_PTRACE_GETREGS:
+if HAS_PTRACE_GETREGS or HAS_PTRACE_GETREGSET:
     from ptrace.binding.func import ptrace_getregs   # noqa
