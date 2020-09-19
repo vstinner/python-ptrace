@@ -6,13 +6,13 @@ import sys
 import tempfile
 import unittest
 
+STRACE = os.path.normpath(
+    os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
 
-STRACE = os.path.normpath(os.path.join(
-    os.path.dirname(__file__), '..', 'strace.py'))
+AARCH64 = (getattr(os.uname(), 'machine', None) == 'aarch64')
 
 
 class TestStrace(unittest.TestCase):
-
     def strace(self, *args):
         """ Strace the given command and return the strace output. """
         with tempfile.NamedTemporaryFile(mode='wb+') as temp:
@@ -56,29 +56,34 @@ class TestStrace(unittest.TestCase):
 
     def test_open(self):
         code = 'open(%a).close()' % __file__
-        self.assert_syscall(code,
-                            br"^open(at)?\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
+        self.assert_syscall(
+            code, br"^open(at)?\(.*test_strace\.pyc?', O_RDONLY(\|O_CLOEXEC)?")
 
     def test_chdir(self):
-        self.assert_syscall(
-            "import os; os.chdir('directory')",
-            br"^chdir\('directory'\)\s+= -2 ENOENT")
+        self.assert_syscall("import os; os.chdir('directory')",
+                            br"^chdir\('directory'\)\s+= -2 ENOENT")
 
     def test_rename(self):
-        self.assert_syscall(
-            "import os; os.rename('oldpath', 'newpath')",
-            br"^rename\('oldpath', 'newpath'\)")
+        pattern = br"^rename\('oldpath', 'newpath'\)"
+        if AARCH64:
+            pattern = br"^renameat\(.*'oldpath'.*'newpath'\)"
+        self.assert_syscall("import os; os.rename('oldpath', 'newpath')",
+                            pattern)
 
     def test_link(self):
-        self.assert_syscall(
-            "import os; os.link('oldpath', 'newpath')",
-            br"^link\('oldpath', 'newpath'\)")
+        pattern = br"^link\('oldpath', 'newpath'\)"
+        if AARCH64:
+            pattern = br"^linkat\(.*'oldpath'.*'newpath'\)"
+        self.assert_syscall("import os; os.link('oldpath', 'newpath')",
+                            pattern)
 
     def test_symlink(self):
+        pattern = br"^symlink\('target', 'linkpath'\)"
+        if AARCH64:
+            pattern = br"^symlinkat\(.*'target'.*'linkpath'\)"
         try:
-            self.assert_syscall(
-                "import os; os.symlink('target', 'linkpath')",
-                br"^symlink\('target', 'linkpath'\)")
+            self.assert_syscall("import os; os.symlink('target', 'linkpath')",
+                                pattern)
         finally:
             try:
                 os.unlink('linkpath')
