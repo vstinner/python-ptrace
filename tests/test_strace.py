@@ -73,7 +73,7 @@ class TestStrace(unittest.TestCase):
     def test_link(self):
         pattern = br"^link\('oldpath', 'newpath'\)"
         if AARCH64:
-            pattern = br"^linkat\(.*'oldpath'.*'newpath'\)"
+            pattern = br"^linkat\(.*'oldpath'.*'newpath'.*\)"
         self.assert_syscall("import os; os.link('oldpath', 'newpath')",
                             pattern)
 
