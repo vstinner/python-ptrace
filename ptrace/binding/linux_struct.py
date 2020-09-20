@@ -12,7 +12,15 @@ clock_t = c_uint
 # arch/$ARCH/include/uapi/asm/ptrace.h
 
 
-class user_regs_struct(Structure):
+class register_structure(Structure):
+    def __str__(self):
+        regs = {}
+        for reg in self.__class__._fields_:
+            regs.update({reg[0]: getattr(self, reg[0])})
+        return str(regs)
+
+
+class user_regs_struct(register_structure):
     if CPU_PPC32:
         _fields_ = (
             ("gpr0", c_ulong),
@@ -173,7 +181,7 @@ class user_regs_struct(Structure):
         )
 
 
-class user_fpregs_struct(Structure):
+class user_fpregs_struct(register_structure):
     if CPU_64BITS:
         _fields_ = (
             ("cwd", c_uint16),
@@ -202,7 +210,7 @@ class user_fpregs_struct(Structure):
 
 
 if not CPU_64BITS:
-    class user_fpxregs_struct(Structure):
+    class user_fpxregs_struct(register_structure):
         _fields_ = (
             ("cwd", c_ushort),
             ("swd", c_ushort),
