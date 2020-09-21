@@ -1,6 +1,7 @@
 from ptrace.binding import (
     HAS_PTRACE_SINGLESTEP, HAS_PTRACE_EVENTS,
     HAS_PTRACE_SIGINFO, HAS_PTRACE_IO, HAS_PTRACE_GETREGS,
+    HAS_PTRACE_GETREGSET,
     ptrace_attach, ptrace_detach,
     ptrace_cont, ptrace_syscall,
     ptrace_setregs,
@@ -45,7 +46,7 @@ if HAS_PTRACE_EVENTS:
         PTRACE_EVENT_EXEC)
     NEW_PROCESS_EVENT = (
         PTRACE_EVENT_FORK, PTRACE_EVENT_VFORK, PTRACE_EVENT_CLONE)
-if HAS_PTRACE_GETREGS:
+if HAS_PTRACE_GETREGS or HAS_PTRACE_GETREGSET:
     from ptrace.binding import ptrace_getregs
 else:
     from ptrace.binding import ptrace_peekuser, ptrace_registers_t
@@ -411,7 +412,7 @@ class PtraceProcess(object):
             raise ProcessError(self, "Unknown ptrace event: %r" % event)
 
     def getregs(self):
-        if HAS_PTRACE_GETREGS:
+        if HAS_PTRACE_GETREGS or HAS_PTRACE_GETREGSET:
             return ptrace_getregs(self.pid)
         else:
             # FIXME: Optimize getreg() when used with this function

@@ -1,7 +1,7 @@
 from ctypes import (Structure, Union, sizeof,
                     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
-                    c_uint16, c_uint32, c_uint64)
-from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM
+                    c_uint16, c_uint32, c_uint64, c_size_t)
+from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM32, CPU_AARCH64
 
 pid_t = c_int
 uid_t = c_ushort
@@ -12,7 +12,15 @@ clock_t = c_uint
 # arch/$ARCH/include/uapi/asm/ptrace.h
 
 
-class user_regs_struct(Structure):
+class register_structure(Structure):
+    def __str__(self):
+        regs = {}
+        for reg in self.__class__._fields_:
+            regs.update({reg[0]: getattr(self, reg[0])})
+        return str(regs)
+
+
+class user_regs_struct(register_structure):
     if CPU_PPC32:
         _fields_ = (
             ("gpr0", c_ulong),
@@ -107,8 +115,14 @@ class user_regs_struct(Structure):
             ("dsisr", c_ulong),
             ("result", c_ulong),
         )
-    elif CPU_ARM:
+    elif CPU_ARM32:
         _fields_ = tuple(("r%i" % reg, c_ulong) for reg in range(18))
+    elif CPU_AARCH64:
+        _fields_ = tuple([*[("r%i" % reg, c_ulong) for reg in range(31)],
+                         ('sp', c_ulong),
+                         ('pc', c_ulong),
+                         ('pstate', c_ulong)]
+                         )
     elif CPU_64BITS:
         _fields_ = (
             ("r15", c_ulong),
@@ -167,7 +181,7 @@ class user_regs_struct(Structure):
         )
 
 
-class user_fpregs_struct(Structure):
+class user_fpregs_struct(register_structure):
     if CPU_64BITS:
         _fields_ = (
             ("cwd", c_uint16),
@@ -196,7 +210,7 @@ class user_fpregs_struct(Structure):
 
 
 if not CPU_64BITS:
-    class user_fpxregs_struct(Structure):
+    class user_fpxregs_struct(register_structure):
         _fields_ = (
             ("cwd", c_ushort),
             ("swd", c_ushort),
@@ -252,3 +266,10 @@ class siginfo(Structure):
         ("_sifields", _sifields_t)
     )
     _anonymous_ = ("_sifields",)
+
+
+class iovec_struct(Structure):
+    _fields_ = (
+        ("buf", c_void_p),
+        ("len", c_size_t)
+    )

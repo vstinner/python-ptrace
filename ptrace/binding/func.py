@@ -1,9 +1,9 @@
 from os import strerror
-from ctypes import addressof, c_int, get_errno, set_errno
+from ctypes import addressof, c_int, get_errno, set_errno, sizeof
 from ptrace import PtraceError
 from ptrace.ctypes_tools import formatAddress
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD, RUNNING_OPENBSD
-from ptrace.cpu_info import CPU_64BITS, CPU_WORD_SIZE, CPU_POWERPC
+from ptrace.cpu_info import CPU_64BITS, CPU_WORD_SIZE, CPU_POWERPC, CPU_AARCH64
 
 if RUNNING_OPENBSD:
     from ptrace.binding.openbsd_struct import (
@@ -17,7 +17,7 @@ elif RUNNING_BSD:
 elif RUNNING_LINUX:
     from ptrace.binding.linux_struct import (
         user_regs_struct as ptrace_registers_t,
-        user_fpregs_struct, siginfo)
+        user_fpregs_struct, siginfo, iovec_struct)
     if not CPU_64BITS:
         from ptrace.binding.linux_struct import user_fpxregs_struct
 else:
@@ -29,6 +29,9 @@ HAS_PTRACE_EVENTS = False
 HAS_PTRACE_IO = False
 HAS_PTRACE_SIGINFO = False
 HAS_PTRACE_GETREGS = False
+HAS_PTRACE_GETREGSET = False
+HAS_PTRACE_SETREGS = False
+HAS_PTRACE_SETREGSET = False
 
 # Special flags that are required to wait for cloned processes (threads)
 # See wait(2)
@@ -79,9 +82,18 @@ elif RUNNING_BSD:
     PTRACE_IO = 12
 else:
     # Linux
-    HAS_PTRACE_GETREGS = True
-    PTRACE_GETREGS = 12
-    PTRACE_SETREGS = 13
+    if not CPU_AARCH64:
+        HAS_PTRACE_GETREGS = True
+        HAS_PTRACE_SETREGS = True
+        PTRACE_GETREGS = 12
+        PTRACE_SETREGS = 13
+
+    HAS_PTRACE_GETREGSET = True
+    HAS_PTRACE_SETREGSET = True
+    PTRACE_GETREGSET = 0x4204
+    PTRACE_SETREGSET = 0x4205
+    NT_PRSTATUS = 1
+
     PTRACE_ATTACH = 16
     PTRACE_DETACH = 17
     PTRACE_SYSCALL = 24
@@ -263,8 +275,25 @@ if RUNNING_LINUX:
             ptrace(PTRACE_GETREGS, pid, 0, addressof(regs))
             return regs
 
-    def ptrace_setregs(pid, regs):
-        ptrace(PTRACE_SETREGS, pid, 0, addressof(regs))
+    elif HAS_PTRACE_GETREGSET:
+        def ptrace_getregs(pid):
+            regs = ptrace_registers_t()
+            iov = iovec_struct()
+            setattr(iov, "buf", addressof(regs))
+            setattr(iov, "len", sizeof(regs))
+            ptrace(PTRACE_GETREGSET, pid, NT_PRSTATUS, addressof(iov))
+            return regs
+
+    if HAS_PTRACE_SETREGS:
+        def ptrace_setregs(pid, regs):
+            ptrace(PTRACE_SETREGS, pid, 0, addressof(regs))
+
+    elif HAS_PTRACE_SETREGSET:
+        def ptrace_setregs(pid, regs):
+            iov = iovec_struct()
+            setattr(iov, "buf", addressof(regs))
+            setattr(iov, "len", sizeof(regs))
+            ptrace(PTRACE_SETREGSET, pid, NT_PRSTATUS, addressof(iov))
 
     if HAS_PTRACE_SINGLESTEP:
         def ptrace_singlestep(pid):

@@ -1,5 +1,5 @@
 from ptrace.cpu_info import (
-    CPU_POWERPC, CPU_INTEL, CPU_X86_64, CPU_I386, CPU_ARM)
+    CPU_POWERPC, CPU_INTEL, CPU_X86_64, CPU_I386, CPU_ARM32, CPU_AARCH64)
 
 CPU_INSTR_POINTER = None
 CPU_STACK_POINTER = None
@@ -10,10 +10,14 @@ if CPU_POWERPC:
     CPU_INSTR_POINTER = "nip"
     # FIXME: Is it the right register?
     CPU_STACK_POINTER = 'gpr1'
-elif CPU_ARM:
+elif CPU_ARM32:
     CPU_INSTR_POINTER = 'r15'
     CPU_STACK_POINTER = 'r14'
     CPU_FRAME_POINTER = 'r11'
+elif CPU_AARCH64:
+    CPU_INSTR_POINTER = 'pc'
+    CPU_STACK_POINTER = 'sp'
+    CPU_FRAME_POINTER = 'r29'
 elif CPU_X86_64:
     CPU_INSTR_POINTER = "rip"
     CPU_STACK_POINTER = "rsp"
