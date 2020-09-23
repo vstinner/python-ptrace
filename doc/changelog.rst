@@ -6,6 +6,10 @@ Changelog
 python-ptrace 0.9.8
 -------------------
 
+* Added Arm 64bit (AArch64) support.
+* Implemented PTRACE_GETREGSET and PTRACE_SETREGSET required on AArch64 and
+  available on Linux.
+
 python-ptrace 0.9.7 (2020-08-10)
 --------------------------------
 
