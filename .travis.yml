@@ -1,4 +1,7 @@
 language: python
+arch:
+  - amd64
+  - ppc64le
 env:
   - TOXENV=pep8
   - TOXENV=py3
