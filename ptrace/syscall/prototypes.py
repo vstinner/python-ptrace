@@ -1558,6 +1558,13 @@ SYSCALL_PROTOTYPES = {
         ("size_t", "sz"),
         ("struct statfs64 *", "buf"),
     )),
+    "statx": ("long", (
+        ("int", "dirfd"),
+        ("const char *", "pathname"),
+        ("int", "flags"),
+        ("unsigned int", "mask"),
+        ("struct statx *", "statxbuf"),
+    )),
     "stime": ("long", (
         ("time_t *", "tptr"),
     )),
