@@ -21,32 +21,37 @@ class TestStrace(unittest.TestCase):
                 proc = subprocess.Popen(args,
                                         stdout=devnull,
                                         stderr=subprocess.STDOUT)
-                proc.wait()
+                exitcode = proc.wait()
 
             temp.seek(0)
             strace = temp.readlines()
             strace = b''.join(strace)
         self.assertIsNone(re.match(b'^Traceback', strace), strace)
-        return strace
+        return strace, exitcode
 
     def assert_syscall(self, code, regex):
         """
         Strace the given python code and match the strace output against the
         given regular expression.
         """
-        stdout = self.strace(sys.executable, '-c', code)
+        stdout, _ = self.strace(sys.executable, '-c', code)
         pattern = re.compile(regex, re.MULTILINE)
         self.assertTrue(pattern.search(stdout), stdout)
 
     def test_basic(self):
-        stdout = self.strace(sys.executable, '-c', 'pass')
+        stdout, _ = self.strace(sys.executable, '-c', 'pass')
         for syscall in (b'exit', b'mmap', b'open'):
             pattern = re.compile(b'^' + syscall, re.MULTILINE)
             self.assertTrue(pattern.search(stdout), stdout)
 
+    def test_exitcode(self):
+        for ec in range(2):
+            stdout, exitcode = self.strace(sys.executable, '-c', 'exit(%d)' % ec)
+            self.assertEqual(exitcode, ec)
+
     def test_getcwd(self):
         cwd = os.getcwd()
-        stdout = self.strace(sys.executable, '-c', 'import os; os.getcwd()')
+        stdout, _ = self.strace(sys.executable, '-c', 'import os; os.getcwd()')
         pattern = re.compile(b'^getcwd\\((.*),', re.MULTILINE)
         match = pattern.search(stdout)
         self.assertTrue(match, stdout)

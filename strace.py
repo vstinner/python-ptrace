@@ -156,7 +156,7 @@ class SyscallTracer(Application):
     def syscallTrace(self, process):
         # First query to break at next syscall
         self.prepareProcess(process)
-
+        exitcode = 0
         while True:
             # No more process? Exit
             if not self.debugger:
@@ -167,10 +167,13 @@ class SyscallTracer(Application):
                 event = self.debugger.waitSyscall()
             except ProcessExit as event:
                 self.processExited(event)
+                if event.exitcode is not None:
+                    exitcode = event.exitcode
                 continue
             except ProcessSignal as event:
                 event.display()
                 event.process.syscall(event.signum)
+                exitcode = event.signum
                 continue
             except NewProcessEvent as event:
                 self.newProcess(event)
@@ -181,6 +184,7 @@ class SyscallTracer(Application):
 
             # Process syscall enter or exit
             self.syscall(event.process)
+        return exitcode
 
     def syscall(self, process):
         state = process.syscall_state
@@ -234,30 +238,39 @@ class SyscallTracer(Application):
         )
         self.syscall_options.instr_pointer = self.options.show_ip
 
-        self.syscallTrace(process)
+        return self.syscallTrace(process)
 
     def main(self):
         if self.options.profiler:
             from ptrace.profiler import runProfiler
-            runProfiler(getLogger(), self._main)
+            exitcode = runProfiler(getLogger(), self._main)
         else:
-            self._main()
+            exitcode = self._main()
         if self._output is not None:
             self._output.close()
+        return exitcode
 
     def _main(self):
         self.debugger = PtraceDebugger()
+        exitcode = 0
         try:
-            self.runDebugger()
+            exitcode = self.runDebugger()
         except ProcessExit as event:
             self.processExited(event)
+            if event.exitcode is not None:
+                exitcode = event.exitcode
         except PtraceError as err:
             error("ptrace() error: %s" % err)
+            if err.errno is not None:
+                exitcode = err.errno
         except KeyboardInterrupt:
             error("Interrupted.")
+            exitcode = 1
         except PTRACE_ERRORS as err:
             writeError(getLogger(), err, "Debugger error")
+            exitcode = 1
         self.debugger.quit()
+        return exitcode
 
     def createChild(self, program):
         pid = Application.createChild(self, program)
@@ -267,4 +280,4 @@ class SyscallTracer(Application):
 
 
 if __name__ == "__main__":
-    SyscallTracer().main()
+    exit(SyscallTracer().main())
