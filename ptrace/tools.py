@@ -155,12 +155,12 @@ def inverseDict(data):
     return result
 
 
-def signal2ecode(signum):
+def signal_to_exitcode(signum):
     """
+    Converts a signal number to an exit code.
     UNIX: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
-    Converts a signal to an exit code.
 
-    >>> signal2ecode(signal.SIGQUIT)
+    >>> signal_to_exitcode(signal.SIGQUIT)
     131
     """
-    return 128 + int(signum)
+    return 128 + signum
