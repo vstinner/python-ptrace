@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import signal
 
 STRACE = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
@@ -48,6 +49,11 @@ class TestStrace(unittest.TestCase):
         for ec in range(2):
             stdout, exitcode = self.strace(sys.executable, '-c', 'exit(%d)' % ec)
             self.assertEqual(exitcode, ec)
+
+    def test_exitsignal(self):
+        signum = int(signal.SIGQUIT)
+        stdout, exitcode = self.strace(sys.executable, '-c', 'import os; os.kill(os.getpid(), %d)' % signum)
+        self.assertEqual(exitcode, (127 + 1) + signum)
 
     def test_getcwd(self):
         cwd = os.getcwd()

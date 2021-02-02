@@ -10,6 +10,8 @@ from optparse import OptionParser
 from logging import getLogger, error
 from ptrace.error import PTRACE_ERRORS, writeError
 from ptrace.ctypes_tools import formatAddress
+from ptrace.tools import signal2ecode
+import sys
 import re
 
 
@@ -173,7 +175,7 @@ class SyscallTracer(Application):
             except ProcessSignal as event:
                 event.display()
                 event.process.syscall(event.signum)
-                exitcode = event.signum
+                exitcode = signal2ecode(event.signum)
                 continue
             except NewProcessEvent as event:
                 self.newProcess(event)
@@ -280,4 +282,4 @@ class SyscallTracer(Application):
 
 
 if __name__ == "__main__":
-    exit(SyscallTracer().main())
+    sys.exit(SyscallTracer().main())
