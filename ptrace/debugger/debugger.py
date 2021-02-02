@@ -34,8 +34,9 @@ class PtraceDebugger(object):
        - waitSyscall(): wait for the next syscall event
 
      * Options:
-      - traceForks(): enable fork tracing
+      - traceFork(): enable fork() tracing
       - traceExec(): enable exec() tracing
+      - traceClone(): enable clone() tracing
       - enableSysgood(): enable sysgood option
 
      * Other:
@@ -56,6 +57,7 @@ class PtraceDebugger(object):
      - options: ptrace options
      - trace_fork (bool): fork() tracing is enabled?
      - trace_exec (bool): exec() tracing is enabled?
+     - trace_clone (bool): clone() tracing is enabled?
      - use_sysgood (bool): sysgood option is enabled?
     """
 

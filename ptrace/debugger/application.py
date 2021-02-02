@@ -56,6 +56,8 @@ class Application(object):
                 exit(1)
         if self.options.trace_exec:
             self.debugger.traceExec()
+        if self.options.trace_clone:
+            self.debugger.traceClone()
 
     def createProcess(self):
         if self.options.pid:
@@ -79,9 +81,11 @@ class Application(object):
     def createCommonOptions(self, parser):
         parser.add_option("--pid", "-p", help="Attach running process specified by its identifier",
                           type="int", default=None)
-        parser.add_option("--fork", "-f", help="Trace fork and child process",
+        parser.add_option("--fork", "-f", help="Trace fork() event and child processes",
                           action="store_true", default=False)
         parser.add_option("--trace-exec", help="Trace execve() event",
+                          action="store_true", default=False)
+        parser.add_option("--trace-clone", help="Trace clone() event",
                           action="store_true", default=False)
         parser.add_option("--no-stdout", help="Use /dev/null as stdout/stderr, or close stdout and stderr if /dev/null doesn't exist",
                           action="store_true", default=False)
