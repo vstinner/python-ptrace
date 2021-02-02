@@ -153,3 +153,14 @@ def inverseDict(data):
     for key, value in data.items():
         result[value] = key
     return result
+
+
+def signal_to_exitcode(signum):
+    """
+    Converts a signal number to an exit code.
+    UNIX: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
+
+    >>> signal_to_exitcode(signal.SIGQUIT)
+    131
+    """
+    return 128 + signum
