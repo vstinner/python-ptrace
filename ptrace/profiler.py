@@ -18,12 +18,12 @@ def calibrate(n):
 
 def runProfiler(logger, func, args=tuple(), kw={},
                 verbose=True, nb_func=25,
-                sort_by=('time',), calibration=5):
+                sort_by=('time',), nb_cal=0):
     """
     Run a function in a profiler and then display the functions sorted by time.
     """
     profile_filename = "/tmp/profiler"
-    prof = Profile(bias=calibrate(calibration))
+    prof = Profile(bias=calibrate(nb_cal))
     try:
         logger.warning("Run profiler")
         result = prof.runcall(func, *args, **kw)
