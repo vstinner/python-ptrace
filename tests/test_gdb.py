@@ -54,7 +54,7 @@ class TestGdb(unittest.TestCase):
 
     def test_where(self):
         stdout = self.run_command('where')
-        self.check_stdout(b'^CODE: ', stdout)
+        self.check_stdout(b'^CODE:', stdout)
 
     def test_regs(self):
         # Just check that the command doesn't raise an exception
