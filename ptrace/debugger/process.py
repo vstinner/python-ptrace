@@ -113,7 +113,7 @@ class PtraceProcess(object):
 
      * display status:
 
-       - dumpCore(): display the next instructions
+       - dumpCode(): display the next instructions
        - dumpStack(): display some memory words around the stack pointer
        - dumpMaps(): display memory mappings
        - dumpRegs(): display all registers
@@ -226,6 +226,7 @@ class PtraceProcess(object):
             log("CODE: %s" % text)
             return
 
+        log("CODE:")
         if manage_bp:
             address = start
             for line in range(10):
