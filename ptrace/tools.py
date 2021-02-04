@@ -160,6 +160,7 @@ def signal_to_exitcode(signum):
     Converts a signal number to an exit code.
     UNIX: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 
+    >>> import signal
     >>> signal_to_exitcode(signal.SIGQUIT)
     131
     """
