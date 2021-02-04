@@ -733,7 +733,7 @@ class PtraceProcess(object):
         return self.debugger.waitProcessEvent(pid=self.pid)
 
     def waitSignals(self, *signals):
-        return self.debugger.waitSignals(*signals, **{'pid': self.pid})
+        return self.debugger.waitSignals(*signals, pid=self.pid)
 
     def waitSyscall(self):
         self.debugger.waitSyscall(self)
