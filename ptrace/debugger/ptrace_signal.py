@@ -34,6 +34,7 @@ NAMED_WORD_SIZE = {
 # Match any Intel instruction (e.g. "ADD")
 INSTR_REGEX = '(?:[A-Z]{3,10})'
 
+SYSGOOD_FLAG = 0x80
 
 def findDerefSize(match):
     name = match.group("deref_size")

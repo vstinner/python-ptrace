@@ -1,3 +1,4 @@
+from ptrace.debugger import SYSGOOD_FLAG
 from ptrace.syscall import PtraceSyscall
 from signal import SIGTRAP
 
@@ -37,7 +38,10 @@ class SyscallState(object):
                 and not self.process.debugger.trace_exec:
             # Ignore the SIGTRAP after exec() syscall exit
             self.process.syscall()
-            self.process.waitSignals(SIGTRAP, SIGTRAP | 0x80)
+            signum = SIGTRAP
+            if self.process.debugger.use_sysgood:
+                signum |= SYSGOOD_FLAG
+            self.process.waitSignals(signum)
         syscall = self.syscall
         self.clear()
         return syscall

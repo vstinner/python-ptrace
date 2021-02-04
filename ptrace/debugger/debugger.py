@@ -3,7 +3,7 @@ from ptrace import PtraceError
 from os import waitpid, WNOHANG
 from signal import SIGTRAP, SIGSTOP
 from errno import ECHILD
-from ptrace.debugger import PtraceProcess, ProcessSignal
+from ptrace.debugger import PtraceProcess, ProcessSignal, SYSGOOD_FLAG
 from ptrace.binding import HAS_PTRACE_EVENTS
 from time import sleep
 if HAS_PTRACE_EVENTS:
@@ -216,7 +216,7 @@ class PtraceDebugger(object):
         """
         signum = SIGTRAP
         if self.use_sysgood:
-            signum |= 0x80
+            signum |= SYSGOOD_FLAG
         if process:
             return self.waitSignals(signum, pid=process.pid)
         else:
