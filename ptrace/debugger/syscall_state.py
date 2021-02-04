@@ -1,4 +1,5 @@
 from ptrace.syscall import PtraceSyscall
+from signal import SIGTRAP
 
 
 class SyscallState(object):
@@ -36,7 +37,7 @@ class SyscallState(object):
                 and not self.process.debugger.trace_exec:
             # Ignore the SIGTRAP after exec() syscall exit
             self.process.syscall()
-            self.process.waitSyscall()
+            self.process.waitSignals(SIGTRAP, SIGTRAP | 0x80)
         syscall = self.syscall
         self.clear()
         return syscall
