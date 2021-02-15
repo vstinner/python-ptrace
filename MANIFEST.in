@@ -22,7 +22,7 @@ include setup_cptrace.py
 
 # Tests
 include runtests.py
-include test_doc.py
+include check_doc.py
 include tests/test_*.py
 include tests/crash/*.c
 include tests/crash/BSDmakefile
