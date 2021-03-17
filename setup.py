@@ -11,8 +11,8 @@
 #  - Remove untracked files/dirs: git clean -fdx
 #  - run tests, type: tox --parallel auto
 #  - git push
-#  - check Travis status:
-#    https://travis-ci.com/github/vstinner/python-ptrace
+#  - check GitHub Actions status:
+#    https://github.com/vstinner/python-ptrace/actions
 #
 # Release a new version:
 #

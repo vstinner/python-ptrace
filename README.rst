@@ -6,9 +6,9 @@ python-ptrace
    :alt: Latest release on the Python Cheeseshop (PyPI)
    :target: https://pypi.python.org/pypi/python-ptrace
 
-.. image:: https://travis-ci.com/vstinner/python-ptrace.svg?branch=master
-   :alt: Build status of python-ptrace on Travis CI
-   :target: https://travis-ci.com/github/vstinner/python-ptrace
+.. image:: https://github.com/vstinner/python-ptrace/actions/workflows/build.yml/badge.svg
+   :alt: Build status of python-ptrace on GitHub Actions
+   :target: https://github.com/vstinner/python-ptrace/actions
 
 python-ptrace is a debugger using ptrace (Linux, BSD and Darwin system call to
 trace processes) written in Python.
