@@ -15,7 +15,7 @@ PROC_MAP_REGEX = re.compile(
     # Offset: '0804d000'
     r'([0-9a-f]+) '
     # Device (major:minor): 'fe:01 '
-    r'([0-9a-f]{2,3}):([0-9a-f]{2}) '
+    r'([0-9a-f]{2,3}):([0-9a-f]{2,3}) '
     # Inode: '3334030'
     r'([0-9]+)'
     # Filename: '  /usr/bin/synergyc'
