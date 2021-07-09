@@ -3,6 +3,12 @@
 Changelog
 =========
 
+python-ptrace 0.9.9
+--------------------------------
+
+* Introduced support for three-digit minor device IDs in ``PROC_MAP_REGEX``.
+  Patch by fab1ano.
+
 python-ptrace 0.9.8 (2021-03-17)
 --------------------------------
 
