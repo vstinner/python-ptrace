@@ -11,6 +11,7 @@ STRACE = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '..', 'strace.py'))
 
 AARCH64 = (getattr(os.uname(), 'machine', None) == 'aarch64')
+RISCV = (getattr(os.uname(), 'machine', None).startswith('riscv'))
 
 
 class TestStrace(unittest.TestCase):
@@ -78,19 +79,21 @@ class TestStrace(unittest.TestCase):
         pattern = br"^rename\('oldpath', 'newpath'\)"
         if AARCH64:
             pattern = br"^renameat\(.*'oldpath'.*'newpath'\)"
+        if RISCV:
+            pattern = br"^renameat2\(.*'oldpath'.*'newpath', 0\)"
         self.assert_syscall("import os; os.rename('oldpath', 'newpath')",
                             pattern)
 
     def test_link(self):
         pattern = br"^link\('oldpath', 'newpath'\)"
-        if AARCH64:
+        if AARCH64 or RISCV:
             pattern = br"^linkat\(.*'oldpath'.*'newpath'.*\)"
         self.assert_syscall("import os; os.link('oldpath', 'newpath')",
                             pattern)
 
     def test_symlink(self):
         pattern = br"^symlink\('target', 'linkpath'\)"
-        if AARCH64:
+        if AARCH64 or RISCV:
             pattern = br"^symlinkat\(.*'target'.*'linkpath'\)"
         try:
             self.assert_syscall("import os; os.symlink('target', 'linkpath')",
