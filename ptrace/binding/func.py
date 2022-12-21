@@ -3,7 +3,7 @@ from ctypes import addressof, c_int, get_errno, set_errno, sizeof
 from ptrace import PtraceError
 from ptrace.ctypes_tools import formatAddress
 from ptrace.os_tools import RUNNING_LINUX, RUNNING_BSD, RUNNING_OPENBSD
-from ptrace.cpu_info import CPU_64BITS, CPU_WORD_SIZE, CPU_POWERPC, CPU_AARCH64
+from ptrace.cpu_info import CPU_64BITS, CPU_WORD_SIZE, CPU_POWERPC, CPU_AARCH64, CPU_RISCV
 
 if RUNNING_OPENBSD:
     from ptrace.binding.openbsd_struct import (
@@ -82,7 +82,7 @@ elif RUNNING_BSD:
     PTRACE_IO = 12
 else:
     # Linux
-    if not CPU_AARCH64:
+    if not (CPU_AARCH64 or CPU_RISCV):
         HAS_PTRACE_GETREGS = True
         HAS_PTRACE_SETREGS = True
         PTRACE_GETREGS = 12
@@ -161,7 +161,7 @@ def ptrace(command, pid=0, arg1=0, arg2=0, check_errno=False):
             # peek operations may returns -1 with errno=0:
             # it's not an error. For other operations, -1
             # is always an error
-            if not(check_errno) or errno:
+            if not (check_errno) or errno:
                 message = "ptrace(cmd=%s, pid=%s, %r, %r) error #%s: %s" % (
                     command, pid, arg1, arg2,
                     errno, strerror(errno))
