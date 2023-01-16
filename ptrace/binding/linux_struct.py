@@ -1,7 +1,7 @@
 from ctypes import (Structure, Union, sizeof,
                     c_char, c_ushort, c_int, c_uint, c_ulong, c_void_p,
                     c_uint16, c_uint32, c_uint64, c_size_t)
-from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM32, CPU_AARCH64
+from ptrace.cpu_info import CPU_64BITS, CPU_PPC32, CPU_PPC64, CPU_ARM32, CPU_AARCH64, CPU_RISCV
 
 pid_t = c_int
 uid_t = c_ushort
@@ -123,6 +123,41 @@ class user_regs_struct(register_structure):
                          ('pc', c_ulong),
                          ('pstate', c_ulong)]
                          )
+    elif CPU_RISCV:
+        _fields_ = (
+            ("pc", c_ulong),
+            ("ra", c_ulong),
+            ("sp", c_ulong),
+            ("gp", c_ulong),
+            ("tp", c_ulong),
+            ("t0", c_ulong),
+            ("t1", c_ulong),
+            ("t2", c_ulong),
+            ("s0", c_ulong),
+            ("s1", c_ulong),
+            ("a0", c_ulong),
+            ("a1", c_ulong),
+            ("a2", c_ulong),
+            ("a3", c_ulong),
+            ("a4", c_ulong),
+            ("a5", c_ulong),
+            ("a6", c_ulong),
+            ("a7", c_ulong),
+            ("s2", c_ulong),
+            ("s3", c_ulong),
+            ("s4", c_ulong),
+            ("s5", c_ulong),
+            ("s6", c_ulong),
+            ("s7", c_ulong),
+            ("s8", c_ulong),
+            ("s9", c_ulong),
+            ("s10", c_ulong),
+            ("s11", c_ulong),
+            ("t3", c_ulong),
+            ("t4", c_ulong),
+            ("t5", c_ulong),
+            ("t6", c_ulong),
+        )
     elif CPU_64BITS:
         _fields_ = (
             ("r15", c_ulong),

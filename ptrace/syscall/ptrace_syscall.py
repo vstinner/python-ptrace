@@ -1,7 +1,7 @@
 from os import strerror
 from errno import errorcode
 
-from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM32, CPU_AARCH64
+from ptrace.cpu_info import CPU_X86_64, CPU_POWERPC, CPU_I386, CPU_ARM32, CPU_AARCH64, CPU_RISCV
 from ptrace.ctypes_tools import ulong2long, formatAddress, formatWordHex
 from ptrace.func_call import FunctionCall
 from ptrace.syscall import SYSCALL_NAMES, SYSCALL_PROTOTYPES, SyscallArgument
@@ -16,6 +16,8 @@ elif CPU_ARM32:
     SYSCALL_REGISTER = "r7"
 elif CPU_AARCH64:
     SYSCALL_REGISTER = "r8"
+elif CPU_RISCV:
+    SYSCALL_REGISTER = "a7"
 elif RUNNING_LINUX:
     if CPU_X86_64:
         SYSCALL_REGISTER = "orig_rax"
@@ -37,6 +39,8 @@ elif CPU_X86_64:
     RETURN_VALUE_REGISTER = "rax"
 elif CPU_POWERPC:
     RETURN_VALUE_REGISTER = "result"
+elif CPU_RISCV:
+    RETURN_VALUE_REGISTER = "a0"
 else:
     raise NotImplementedError("Unsupported CPU architecture")
 
@@ -92,6 +96,8 @@ class PtraceSyscall(FunctionCall):
             return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6)
         if CPU_AARCH64:
             return (regs.r0, regs.r1, regs.r2, regs.r3, regs.r4, regs.r5, regs.r6, regs.r7)
+        if CPU_RISCV:
+            return (regs.a0, regs.a1, regs.a2, regs.a3, regs.a4, regs.a5, regs.a6)
         if RUNNING_BSD:
             sp = self.process.getStackPointer()
             return [self.process.readWord(sp + index * CPU_WORD_SIZE)
@@ -139,7 +145,7 @@ class PtraceSyscall(FunctionCall):
                 errcode = -self.result
                 text = "%s %s (%s)" % (
                     self.result, errorcode[errcode], strerror(errcode))
-            elif not(0 <= self.result <= 9):
+            elif not (0 <= self.result <= 9):
                 text = "%s (%s)" % (self.result, formatWordHex(uresult))
             else:
                 text = str(self.result)
