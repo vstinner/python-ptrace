@@ -962,10 +962,10 @@ SYSCALL_PROTOTYPES = {
         ("unsigned int", "personality"),
     )),
     "pipe": ("long", (
-        ("int *", "fildes"),
+        ("int[2]", "fildes"),
     )),
     "pipe2": ("long", (
-        ("int *", "fildes"),
+        ("int[2]", "fildes"),
         ("int", "flags"),
     )),
     "pivot_root": ("long", (

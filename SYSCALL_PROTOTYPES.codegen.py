@@ -32,6 +32,9 @@ for m1 in p1.finditer(source):
                 m2 = p2.match(arg)
                 arg_type = m2.group(1).strip()
                 arg_name = m2.group(2).strip()
+            # Workaround for pipe system call
+            if (call_name == 'pipe' or call_name == 'pipe2') and arg_type == "int *":
+                arg_type = "int[2]"
             args_tuple += ((arg_type, arg_name),)
     SYSCALL_PROTOTYPES[call_name] = ("long", args_tuple)
 
