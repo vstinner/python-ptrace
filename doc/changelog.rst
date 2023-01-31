@@ -6,6 +6,8 @@ Changelog
 python-ptrace 0.9.9
 --------------------------------
 
+* Fix arguments of pipe/pipe2 system calls for proper display in call format.
+  Patch by José Pereira.
 * Introduced support for three-digit minor device IDs in ``PROC_MAP_REGEX``.
   Patch by fab1ano.
 * Added RISCV (riscv32/riscv64) support.
