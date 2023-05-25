@@ -106,9 +106,6 @@ def formatProcessStatus(status, title="Process"):
         signum = WTERMSIG(status)
         text = "%s killed by signal %s" % (title, signalName(signum))
     else:
-        if not WIFEXITED(status):
-            raise ValueError("Invalid status: %r" % status)
-
         exitcode = WEXITSTATUS(status)
         if exitcode:
             text = "%s exited with code %s" % (title, exitcode)
