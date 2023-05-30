@@ -1,13 +1,21 @@
 from ptrace.os_tools import RUNNING_LINUX
 if RUNNING_LINUX:
-    from ptrace.linux_proc import (ProcError, openProc,
-                                   readProcessProcList, readProcessLink, readProcessStat)
-from ptrace.signames import signalName   # noqa
+    from ptrace.linux_proc import (
+        ProcError,
+        openProc,
+        readProcessLink,
+        readProcessProcList,
+        readProcessStat,
+    )
+from ptrace.signames import signalName  # noqa
 from os import (
-    WIFSTOPPED, WSTOPSIG,
-    WIFSIGNALED, WTERMSIG,
-    WIFEXITED, WEXITSTATUS,
-    WCOREDUMP)
+    WCOREDUMP,
+    WEXITSTATUS,
+    WIFSIGNALED,
+    WIFSTOPPED,
+    WSTOPSIG,
+    WTERMSIG,
+)
 
 
 def dumpProcessInfo(log, pid, max_length=None):
