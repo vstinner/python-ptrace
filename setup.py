@@ -28,7 +28,7 @@
 #  - git commit -a -m "post-release"
 #  - git push
 
-from imp import load_source
+import importlib.util
 from os import path
 try:
     # setuptools supports bdist_wheel
@@ -55,7 +55,10 @@ CLASSIFIERS = [
 with open('README.rst') as fp:
     LONG_DESCRIPTION = fp.read()
 
-ptrace = load_source("version", path.join("ptrace", "version.py"))
+ptrace_spec = importlib.util.spec_from_file_location("version", path.join("ptrace", "version.py"))
+ptrace = importlib.util.module_from_spec(ptrace_spec)
+ptrace_spec.loader.exec_module(ptrace)
+
 PACKAGES = {}
 for name in MODULES:
     PACKAGES[name] = name.replace(".", "/")
