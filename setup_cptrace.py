@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import importlib.util
+
 SOURCES = ['cptrace/cptrace.c']
 
 CLASSIFIERS = [
@@ -17,7 +19,6 @@ LONG_DESCRIPTION = open('doc/cptrace.rst').read()
 
 
 def main():
-    from imp import load_source
     from os import path
     from sys import argv
 
@@ -29,7 +30,10 @@ def main():
 
     cptrace_ext = Extension('cptrace', sources=SOURCES)
 
-    cptrace = load_source("version", path.join("cptrace", "version.py"))
+    cptrace_spec = importlib.util.spec_from_file_location("version",
+                                                          path.join("cptrace", "version.py"))
+    cptrace = importlib.util.module_from_spec(cptrace_spec)
+    cptrace_spec.loader.exec_module(cptrace)
 
     install_options = {
         "name": cptrace.PACKAGE,
