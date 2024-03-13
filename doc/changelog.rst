@@ -3,7 +3,7 @@
 Changelog
 =========
 
-python-ptrace 0.9.9
+python-ptrace 0.9.9 (2024-03-13)
 --------------------------------
 
 * Fix arguments of pipe/pipe2 system calls for proper display in call format.
@@ -13,7 +13,9 @@ python-ptrace 0.9.9
 * Added RISCV (riscv32/riscv64) support.
   Patch by Andreas Schwab and vimer/yuzibo.
 * Fix stray exception raised by child processes terminating with exit code 255.
-  Path by Duane Voth/duanev
+  Patch by Duane Voth/duanev.
+* Removed usage of the ``imp`` module.
+  Collaboration between Mario Haustein/hamarituc and Stephen Kitt/skitt.
 
 python-ptrace 0.9.8 (2021-03-17)
 --------------------------------
