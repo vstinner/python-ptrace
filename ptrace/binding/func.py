@@ -23,6 +23,7 @@ elif RUNNING_LINUX:
 else:
     raise NotImplementedError("Unknown OS!")
 REGISTER_NAMES = tuple(name for name, type in ptrace_registers_t._fields_)
+REGISTER_OFFSETS = {n: getattr(ptrace_registers_t, n).offset for n, t in ptrace_registers_t._fields_}
 
 HAS_PTRACE_SINGLESTEP = True
 HAS_PTRACE_EVENTS = False

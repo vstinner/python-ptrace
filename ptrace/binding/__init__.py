@@ -1,7 +1,7 @@
 from ptrace.binding.func import (   # noqa
     HAS_PTRACE_SINGLESTEP, HAS_PTRACE_EVENTS,
     HAS_PTRACE_IO, HAS_PTRACE_SIGINFO, HAS_PTRACE_GETREGS,
-    HAS_PTRACE_GETREGSET, REGISTER_NAMES,
+    HAS_PTRACE_GETREGSET, REGISTER_NAMES, REGISTER_OFFSETS,
     ptrace_attach, ptrace_traceme,
     ptrace_detach, ptrace_kill,
     ptrace_cont, ptrace_syscall,

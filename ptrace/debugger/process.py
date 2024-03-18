@@ -4,9 +4,9 @@ from ptrace.binding import (
     HAS_PTRACE_GETREGSET,
     ptrace_attach, ptrace_detach,
     ptrace_cont, ptrace_syscall,
-    ptrace_setregs,
+    ptrace_setregs, ptrace_peekuser,
     ptrace_peektext, ptrace_poketext,
-    REGISTER_NAMES)
+    REGISTER_NAMES, REGISTER_OFFSETS)
 from ptrace.os_tools import HAS_PROC, RUNNING_BSD, RUNNING_PYTHON3
 from ptrace.tools import dumpRegs
 from ptrace.cpu_info import CPU_WORD_SIZE
@@ -49,7 +49,7 @@ if HAS_PTRACE_EVENTS:
 if HAS_PTRACE_GETREGS or HAS_PTRACE_GETREGSET:
     from ptrace.binding import ptrace_getregs
 else:
-    from ptrace.binding import ptrace_peekuser, ptrace_registers_t
+    from ptrace.binding import ptrace_registers_t
 if HAS_DISASSEMBLER:
     from ptrace.disasm import disassemble, disassembleOne, MAX_INSTR_SIZE
 if HAS_PROC:
@@ -416,13 +416,10 @@ class PtraceProcess(object):
         if HAS_PTRACE_GETREGS or HAS_PTRACE_GETREGSET:
             return ptrace_getregs(self.pid)
         else:
-            # FIXME: Optimize getreg() when used with this function
             words = []
-            nb_words = sizeof(ptrace_registers_t) // CPU_WORD_SIZE
-            for offset in range(nb_words):
-                word = ptrace_peekuser(self.pid, offset * CPU_WORD_SIZE)
-                bytes = word2bytes(word)
-                words.append(bytes)
+            for name in REGISTER_OFFSETS:
+                word = ptrace_peekuser(self.pid, REGISTER_OFFSETS[name])
+                words.append(word2bytes(word))
             bytes = ''.join(words)
             return bytes2type(bytes, ptrace_registers_t)
 
@@ -434,8 +431,7 @@ class PtraceProcess(object):
             mask = None
         if name not in REGISTER_NAMES:
             raise ProcessError(self, "Unknown register: %r" % name)
-        regs = self.getregs()
-        value = getattr(regs, name)
+        value = ptrace_peekuser(self.pid, REGISTER_OFFSETS[name])
         value >>= shift
         if mask:
             value &= mask
