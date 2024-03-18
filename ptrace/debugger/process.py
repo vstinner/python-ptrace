@@ -720,7 +720,11 @@ class PtraceProcess(object):
 
     def cont(self, signum=0):
         signum = self.filterSignal(signum)
-        ptrace_cont(self.pid, signum)
+        try:
+            ptrace_cont(self.pid, signum)
+        except PtraceError as error:
+            if error.errno != 3:
+                raise
         self.is_stopped = False
 
     def setoptions(self, options):
