@@ -2,6 +2,7 @@
 from doctest import testfile, ELLIPSIS, testmod
 from sys import exit, path as sys_path
 from os.path import dirname
+import importlib
 
 
 def testDoc(filename, name=None):
@@ -13,17 +14,9 @@ def testDoc(filename, name=None):
     print("--- %s: End of tests" % filename)
 
 
-def importModule(name):
-    mod = __import__(name)
-    components = name.split('.')
-    for comp in components[1:]:
-        mod = getattr(mod, comp)
-    return mod
-
-
 def testModule(name):
     print("--- Test module %s" % name)
-    module = importModule(name)
+    module = importlib.import_module(name)
     failure, nb_test = testmod(module)
     if failure:
         exit(1)

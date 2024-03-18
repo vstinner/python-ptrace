@@ -84,7 +84,7 @@ Run tests manually
 Type::
 
     python3 runtests.py
-    python3 test_doc.py
+    python3 check_doc.py
 
 It's also possible to run a specific test::
 
