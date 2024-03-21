@@ -18,7 +18,7 @@ trace processes) written in Python.
 * `python-ptrace at the Python Cheeseshop (PyPI)
   <https://pypi.python.org/pypi/python-ptrace>`_
 
-python-ptrace is an opensource project written in Python under GNU GPLv2
+python-ptrace is an opensource project written in Python under GNU GPL-2.0-only
 license. It supports Python 3.6 and newer.
 
 

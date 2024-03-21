@@ -8,7 +8,7 @@ CLASSIFIERS = [
     'Intended Audience :: Developers',
     'Development Status :: 4 - Beta',
     'Environment :: Console',
-    'License :: OSI Approved :: GNU General Public License (GPL)',
+    'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
     'Operating System :: OS Independent',
     'Natural Language :: English',
     'Programming Language :: C',
