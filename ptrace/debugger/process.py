@@ -663,7 +663,7 @@ class PtraceProcess(object):
             if max_size <= size + chunk_length:
                 data = data[:(max_size - size)]
                 string.append(data)
-                truncated = True
+                truncated = (pos == -1)
                 break
             string.append(data)
             if done:
